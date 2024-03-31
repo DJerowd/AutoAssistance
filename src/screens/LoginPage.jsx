@@ -38,11 +38,11 @@ const LoginPage = ({ navigation }) => {
 
       <View style={styles.buttonsContainer}>
         <TouchableOpacity title="Login" style={styles.loginButton} onPress={handleLogin} >
-          <Text style={styles.loginButtonText}>Login</Text>
+          <Text style={styles.loginButtonText}>Entrar</Text>
         </TouchableOpacity>
 
         <TouchableOpacity title="Registrar" style={styles.registrarButton} onPress={handleRegister} >
-          <Text style={styles.registrarButtonText}>Register</Text>
+          <Text style={styles.registrarButtonText}>Criar conta</Text>
         </TouchableOpacity>
       </View>
 
