@@ -14,11 +14,19 @@ const NewVehiclePage = ({ navigation }) => {
   const [mileage, setMileage] = useState('');
 
   const handleAddVehicle = () => {
-    // Aqui você pode adicionar a lógica para salvar os dados do novo veículo
-    // por exemplo, enviá-los para um servidor, armazená-los localmente, etc.
-    // Depois de salvar com sucesso, você pode navegar de volta para a página anterior
     navigation.goBack();
   };
+
+//   const handleAdd = () => {
+//     const newVehicle = {
+// // Gera um ID único para o novo veículo
+//       id: (Math.random() * 1000000).toString(),
+// // Nome padrão para o novo veículo
+//       name: `Carro ${vehicles.length + 1}`, 
+//     };
+// // Adiciona o novo veículo à lista de veículos
+//     setVehicles([...vehicles, newVehicle]);
+//   };
 
   return (
     <ScrollView style={styles.container}
@@ -105,7 +113,12 @@ const NewVehiclePage = ({ navigation }) => {
 
 
       <TouchableOpacity style={styles.addButton} onPress={handleAddVehicle}>
-        <Text style={styles.addButtonText}>Adicionar Veículo</Text>
+        <Text 
+        style={styles.addButtonText}
+        // onPress={() => handleAdd()}
+        >
+          Adicionar Veículo
+        </Text>
       </TouchableOpacity>
     </ScrollView>
   );

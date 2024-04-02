@@ -7,6 +7,8 @@ import RegisterPage from './src/screens/RegisterPage.jsx';
 import SelectPage from './src/screens/SelectPage.jsx';
 import VehiclesPage from './src/screens/VehiclesPage.jsx';
 import NewVehiclePage from './src/screens/NewVehiclePage.jsx';
+import MaintencePage from './src/screens/MaintenancePage.jsx';
+import NewMaintencePage from './src/screens/NewMaintencePage.jsx';
 
 const Stack = createStackNavigator();
 
@@ -59,6 +61,30 @@ const App = () => {
             headerTitleStyle: { fontWeight: 'bold' },
           }}
         />
+
+        <Stack.Screen 
+          name="MaintencePage" 
+          component={MaintencePage} 
+          options={{
+            title: 'Manutenções',
+            headerStyle: { backgroundColor: '#009F4D' },
+            headerTintColor: '#ffffff',
+            headerTitleAlign: 'center',
+            headerTitleStyle: { fontWeight: 'bold' },
+          }}
+        />
+        <Stack.Screen 
+          name="NewMaintencePage" 
+          component={NewMaintencePage} 
+          options={{
+            title: 'Novo Lembrete',
+            headerStyle: { backgroundColor: '#009F4D' },
+            headerTintColor: '#ffffff',
+            headerTitleAlign: 'center',
+            headerTitleStyle: { fontWeight: 'bold' },
+          }}
+        />
+
         <Stack.Screen 
           name="VehiclesPage" 
           component={VehiclesPage} 

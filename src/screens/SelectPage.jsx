@@ -1,17 +1,12 @@
 import { React } from 'react';
-import { View, TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, Image, StyleSheet, ImageBackground } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Tab = createBottomTabNavigator();
 
-const SelectPage  = ({ navigation }) => {
-
-  const handleItemPress = (item) => {
-    console.log('Item Selecionado:', item);
-    navigation.navigate(item);
-  };
+const SelectPage  = () => {
 
   return (
     <Tab.Navigator
@@ -52,6 +47,7 @@ const SelectPage  = ({ navigation }) => {
   );
 };
 
+
 const SelecaoScreen = ({ navigation }) => {
 
     const handleItemPress = (item) => {
@@ -61,6 +57,10 @@ const SelecaoScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+    <ImageBackground
+    source={{ uri: 'https://www.creativefabrica.com/wp-content/uploads/2020/03/05/Black-Triangle-Polygon-Background-Graphics-3128551-1-580x387.jpg' }}
+    style={styles.backgroundImage}
+    >
 
       <View style={styles.buttonsContainer}>
         
@@ -68,7 +68,7 @@ const SelecaoScreen = ({ navigation }) => {
           <View style={styles.item}>
             <TouchableOpacity
               style={styles.button}
-              // onPress={() => handleItemPress('manutencoesPage')}
+              onPress={() => handleItemPress('MaintencePage')}
             >
               <IconMCI 
               name="car-wrench" 
@@ -155,15 +155,16 @@ const SelecaoScreen = ({ navigation }) => {
         </View>
 
       </View>
-      
+
+    </ImageBackground>
     </View>
   );
 };
 
+
 const PerfilScreen = () => {
   return (
     <View style={styles.containerPerfil}>
-      
 
       <View style={styles.perfil}>
         <Image
@@ -191,7 +192,7 @@ const PerfilScreen = () => {
         <Text style={styles.textTitle}>Localização</Text>
         <Text style={styles.text}>local</Text>
       </View>
-      
+
     </View>
   );
 };
@@ -201,6 +202,10 @@ const styles = StyleSheet.create({
   container: {
     flex:  1,
     backgroundColor: '#F9F9F9',
+  },
+
+  backgroundImage: {
+    flex: 1,
     padding:  10,
   },
 
