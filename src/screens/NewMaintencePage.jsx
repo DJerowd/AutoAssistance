@@ -1,3 +1,4 @@
+import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
@@ -24,15 +25,32 @@ const NewMaintencePage = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Tipo:</Text>
-      <TextInput
-        style={styles.input}
-        value={type}
-        onChangeText={setType}
-        placeholder="Tipo de manutenção"
-      />
+      <Picker
+        selectedValue={type}
+        style={styles.picker}
+        onValueChange={(itemValue, itemIndex) => setType(itemValue)}
+        mode={'dropdown'}
+      >
+        <Picker.Item label="Tipo de Manutenção" />
+        <Picker.Item label="_____________________________________" />
+        <Picker.Item label="Ar Condicionado" value="ar condicionado" />
+        <Picker.Item label="Bateria" value="bateria" />
+        <Picker.Item label="Correia" value="correia" />
+        <Picker.Item label="Filtro de Ar" value="filtro de ar" />
+        <Picker.Item label="Filtro de Combustível" value="Filtro de Combustível" />
+        <Picker.Item label="Filtro de Óleo" value="Filtro de Óleo" />
+        <Picker.Item label="Fluído de Freio" value="Fluído de Freio" />
+        <Picker.Item label="Luzes" value="Luzes" />
+        <Picker.Item label="Pastilha de Freio" value="Pastilha de Freio" />
+        <Picker.Item label="Pneus" value="Pneus" />
+        <Picker.Item label="Revisão" value="Revisão" />
+        <Picker.Item label="Suspensão" value="Suspensão" />
+        <Picker.Item label="Amortecedores" value="Amortecedores" />
+        <Picker.Item label="Troca de Óleo" value="Troca de Óleo" />
+      </Picker>
 
-      <Text style={styles.label}>Frequência:</Text>
-      
+
+      <Text style={styles.label}>Frequência:</Text> 
       <View style={styles.linha}>
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
@@ -42,7 +60,6 @@ const NewMaintencePage = ({ navigation }) => {
             <Text style={styles.checkboxLabel}>Repetir</Text>
           </TouchableOpacity>
         </View>
-
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
             style={[styles.repeatCheckbox, !isRepeat && styles.checkedCheckbox]}
@@ -55,15 +72,15 @@ const NewMaintencePage = ({ navigation }) => {
       
 
       <Text style={styles.label}>Notificar a cada:</Text>
-
+      
       <View style={styles.linha}>
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
             style={[styles.checkbox, isKilometersEnabled && styles.checkedCheckbox]}
             onPress={() => setIsKilometersEnabled(!isKilometersEnabled)}
           />
-          <Text style={styles.checkboxLabel}>Quilometros:</Text>
 
+          <Text style={styles.checkboxLabel}>Quilometros:</Text>
         </View>
         {isKilometersEnabled && (
           <TextInput
@@ -82,9 +99,9 @@ const NewMaintencePage = ({ navigation }) => {
             style={[styles.checkbox, isMonthsEnabled && styles.checkedCheckbox]}
             onPress={() => setIsMonthsEnabled(!isMonthsEnabled)}
           />
+
           <Text style={styles.checkboxLabel}>Meses:</Text>
         </View>
-
         {isMonthsEnabled && (
           <TextInput
             style={styles.checkboxInput}
@@ -98,9 +115,8 @@ const NewMaintencePage = ({ navigation }) => {
 
 
     <Text style={styles.label}>Descrição:</Text>
-
       <TextInput
-        style={styles.input}
+        style={styles.descriptionInput}
         value={description}
         onChangeText={setDescription}
         placeholder="Descrição da manutenção"
@@ -121,20 +137,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    paddingTop: 40,
+    paddingTop: 30,
     backgroundColor: '#FFFFFF',
   },
+
   label: {
     color: '#6A6A6A',
     fontSize: 20,
     fontWeight: 'bold',
   },
+
+  picker: {
+    color: '#6A6A6A',
+    borderBottomColor: '#6A6A6A99',
+    borderBottomWidth: 2,
+    fontSize: 18,
+    height: 40,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
   input: {
     color: '#6A6A6A',
     borderBottomColor: '#6A6A6A99',
+    borderBottomWidth: 2,
     fontSize: 18,
     height: 40,
-    borderBottomWidth: 2,
     marginBottom: 20,
     paddingHorizontal: 10,
   },
@@ -157,6 +184,7 @@ const styles = StyleSheet.create({
   },
   checkboxLabel: {
     color: '#6A6A6A',
+    textShadowColor: '#FFFFFF',
     fontSize: 20,
   },
   checkboxInput: {
@@ -167,6 +195,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 10,
     paddingHorizontal: 10,
+  },
+
+  descriptionInput: {
+    color: '#6A6A6A',
+    borderColor: '#6A6A6A99',
+    borderWidth: 2,
+    height: 160,
+    borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 20,
+    fontSize: 18,
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    textAlignVertical: 'top',
   },
 
   repeatCheckbox: {
@@ -204,8 +246,8 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     padding: 20,
     borderRadius: 12,
-    alignItems: 'center',
     marginBottom: 10,
+    alignItems: 'center',
   },
   cancelButtonText: {
     color: '#009F4D',

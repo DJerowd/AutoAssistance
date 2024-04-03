@@ -1,4 +1,4 @@
-import { React } from 'react';
+import { React, useState } from 'react';
 import { View, TouchableOpacity, Text, Image, StyleSheet, ImageBackground } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import IconFA from 'react-native-vector-icons/FontAwesome';
@@ -57,6 +57,9 @@ const SelecaoScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.carPicker}>
+        
+      </View>
     <ImageBackground
     source={{ uri: 'https://www.creativefabrica.com/wp-content/uploads/2020/03/05/Black-Triangle-Polygon-Background-Graphics-3128551-1-580x387.jpg' }}
     style={styles.backgroundImage}
@@ -204,9 +207,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9F9F9',
   },
 
+  carPicker:{
+    color: '#FFFFFF',
+    backgroundColor: '#009F4D',
+    fontSize: 20,
+    height: 50,
+    fontWeight: 'bold',
+    paddingHorizontal: 10,
+  },
+
   backgroundImage: {
     flex: 1,
-    padding:  10,
+    padding: 10,
   },
 
   buttonsContainer: {
@@ -216,7 +228,7 @@ const styles = StyleSheet.create({
     width: 140,
     alignItems: 'center',
     marginHorizontal: 20,
-    marginVertical: 10,
+    marginVertical: 4,
   },
   linha: {
     justifyContent: 'center',
