@@ -115,7 +115,6 @@ const NewVehiclePage = ({ navigation }) => {
       <TouchableOpacity style={styles.addButton} onPress={handleAddVehicle}>
         <Text 
         style={styles.addButtonText}
-        // onPress={() => handleAdd()}
         >
           Adicionar Veículo
         </Text>
@@ -127,10 +126,9 @@ const NewVehiclePage = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 0,
     paddingHorizontal: 30,
     paddingVertical: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F9F9F9',
   },
 
   label: {

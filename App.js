@@ -1,6 +1,8 @@
 import { React } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { TouchableOpacity } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import StartPage from './src/screens/StartPage.jsx';
 import LoginPage from './src/screens/LoginPage';
 import RegisterPage from './src/screens/RegisterPage.jsx';
@@ -9,6 +11,8 @@ import VehiclesPage from './src/screens/VehiclesPage.jsx';
 import NewVehiclePage from './src/screens/NewVehiclePage.jsx';
 import MaintencePage from './src/screens/MaintenancePage.jsx';
 import NewMaintencePage from './src/screens/NewMaintencePage.jsx';
+import VehicleDetailsPage from './src/screens/VehicleDetailsPage.jsx';
+import MaintenanceDetailsPage from './src/screens/MaintenanceDetailsPage.jsx';
 
 const Stack = createStackNavigator();
 
@@ -25,7 +29,6 @@ const App = () => {
             headerTintColor: '#ffffff',
             headerTitleAlign: 'center',
             headerTitleStyle: { fontWeight: 'bold' },
-            
           }}
         />
         <Stack.Screen 
@@ -59,6 +62,11 @@ const App = () => {
             headerTintColor: '#ffffff',
             headerTitleAlign: 'center',
             headerTitleStyle: { fontWeight: 'bold' },
+            headerRight: () => (
+              <TouchableOpacity style={{ marginRight: 20 }}>
+                <MaterialIcons name="settings" size={30} color="white" />
+              </TouchableOpacity>
+            ),
           }}
         />
 
@@ -84,6 +92,17 @@ const App = () => {
             headerTitleStyle: { fontWeight: 'bold' },
           }}
         />
+        <Stack.Screen 
+          name="MaintenanceDetailsPage" 
+          component={MaintenanceDetailsPage} 
+          options={{
+            title: 'Detalhes do Lembrete',
+            headerStyle: { backgroundColor: '#009F4D' },
+            headerTintColor: '#ffffff',
+            headerTitleAlign: 'center',
+            headerTitleStyle: { fontWeight: 'bold' },
+          }}
+        />
 
         <Stack.Screen 
           name="VehiclesPage" 
@@ -101,6 +120,17 @@ const App = () => {
           component={NewVehiclePage} 
           options={{
             title: 'Novo Veículo',
+            headerStyle: { backgroundColor: '#009F4D' },
+            headerTintColor: '#ffffff',
+            headerTitleAlign: 'center',
+            headerTitleStyle: { fontWeight: 'bold' },
+          }}
+        />
+        <Stack.Screen 
+          name="VehicleDetailsPage" 
+          component={VehicleDetailsPage} 
+          options={{
+            title: 'Detalhes do Veículo',
             headerStyle: { backgroundColor: '#009F4D' },
             headerTintColor: '#ffffff',
             headerTitleAlign: 'center',

@@ -4,11 +4,23 @@ import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const MaintencePage = ({ navigation }) => {
     const [notes, setNotes] = useState([
-        { id: '1', name: 'Lembrete 1' },
+        { id: '1', name: 'Lembrete 1', type: 'Pneus', isRepeat: true, isKilometersEnabled: true, isMonthsEnabled: true, kilometers: 100, months: 10, description: 'abcdefghijklmnopqrstuvwxyz' },
+        { id: '2', name: 'Lembrete 2', type: 'Pneus', isRepeat: true, isKilometersEnabled: true, isMonthsEnabled: false, kilometers: 100, description: 'abcdefghijklmnopqrstuvwxyz' },
+        { id: '3', name: 'Lembrete 3', type: 'Pneus', isRepeat: true, isKilometersEnabled: false, isMonthsEnabled: true, months: 10, description: 'abcdefghijklmnopqrstuvwxyz'  },
+        { id: '4', name: 'Lembrete 4', type: 'Pneus', isRepeat: false, isKilometersEnabled: false, isMonthsEnabled: false, description: 'abcdefghijklmnopqrstuvwxyz'  },
+        { id: '5', name: 'Lembrete 5' },
+        { id: '6', name: 'Lembrete 6' },
+        { id: '7', name: 'Lembrete 7' },
+        { id: '8', name: 'Lembrete 8' },
+        { id: '9', name: 'Lembrete 9' },
+        { id: '10', name: 'Lembrete 10' },
     ]);
 
     const renderItem = ({ item }) => (
-        <TouchableOpacity style={styles.item}>
+        <TouchableOpacity 
+          style={styles.item}
+          onPress={() => handleItemDetailsPress(item)}
+        >
 
           <View style={styles.coluna}>
             <IconMCI 
@@ -20,11 +32,33 @@ const MaintencePage = ({ navigation }) => {
 
           <View style={styles.coluna}>
             <Text style={styles.itemText}>{item.name}</Text>
-            <Text style={styles.itemText}>=========================</Text>
+
+            {item.isKilometersEnabled && (
+            <View>
+              <Text style={styles.text}>
+                {item.isKilometersEnabled ? `${item.kilometers} KM ` : ''}
+              </Text>
+              <Text style={styles.itemText}>=========================</Text>
+            </View>
+            )}
+
+            {item.isMonthsEnabled && (
+            <View>
+              <Text style={styles.text}>
+                {item.isMonthsEnabled ? `${item.months} Meses ` : ''}
+              </Text>
+              <Text style={styles.itemText}>=========================</Text>
+            </View>
+            )}
           </View>
 
         </TouchableOpacity>
       );
+
+    const handleItemDetailsPress = (item) => {
+      console.log('Item Selecionado:', item);
+      navigation.navigate('MaintenanceDetailsPage', { maintenance: item });
+    };
 
     const handleItemPress = (item) => {
         console.log('Item Selecionado:', item);
@@ -65,8 +99,14 @@ const styles = StyleSheet.create({
   item: {
     borderColor: '#6A6A6A',
     borderWidth: 1,
-    padding: 10,
+    padding: 4,
     flexDirection: 'row',
+  },
+  text: {
+    color: '#6A6A6A',
+    fontSize: 12,
+    fontWeight: 'bold',
+    alignSelf: 'flex-end',
   },
   itemText: {
     color: '#6A6A6A',
