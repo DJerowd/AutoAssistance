@@ -44,7 +44,7 @@ const MaintencePage = ({ navigation }) => {
         style={styles.addButton} 
         onPress={() => handleItemPress('NewMaintencePage')}
         >
-        <Text style={styles.addButtonText}>Adicionar Novo Veículo +</Text>
+        <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
 
     </View>
@@ -77,15 +77,18 @@ const styles = StyleSheet.create({
 
   addButton: {
     backgroundColor: '#009F4D',
-    padding: 20,
+    width: 60,
+    height: 60,
     marginVertical: 30,
     marginHorizontal: 30,
     borderRadius: 12,
+    justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'flex-end',
   },
   addButtonText: {
     color: '#FFFFFF',
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold',
   },
 });
