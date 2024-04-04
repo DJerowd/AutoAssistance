@@ -1,16 +1,31 @@
 import { React } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import Swiper from 'react-native-swiper';
+
 
 const StartPage = ({ navigation }) => {
 
   const handleItemPress = (item) => {
-    console.log('Item Pressed:', item);
+    console.log('Item Selecionado:', item);
     navigation.navigate(item);
   };
 
+  const ads = [
+    { id: 1, imageUrl: 'https://img.freepik.com/psd-gratuitas/modelo-de-cartaz-de-anuncio-de-oficina-mecanica_23-2148747133.jpg' },
+    { id: 2, imageUrl: 'https://img.freepik.com/psd-gratuitas/modelo-de-anuncio-de-oficina-mecanica-de-poster_23-2148747129.jpg' },
+    { id: 3, imageUrl: 'https://img.freepik.com/psd-gratuitas/modelo-de-folheto-de-oficina-mecanica_23-2148747126.jpg?size=626&ext=jpg' },
+  ];
+  
 return (
     <View style={styles.container}>
-      
+
+      <Swiper autoplay={true} autoplayTimeout={10} loop={true}>
+        {ads.map(ad => (
+          <View key={ad.id} style={styles.slide}>
+            <Image source={{ uri: ad.imageUrl }} style={styles.adImage} />
+          </View>
+        ))}
+      </Swiper>
 
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
@@ -28,43 +43,40 @@ return (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9F9F9',
+    backgroundColor: '#009F4D',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
 
+  slide: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  adImage: {
+    width: '100%',
+    height: '100%',
+  },
+
   buttonsContainer: {
     alignItems: 'center',
-    margin: 20,
+    margin: 10,
   },
   button: {
     height:  50,
     width: 200,
     backgroundColor: '#6A6A6A',
-    marginTop:  20,
+    borderColor: '#FFFFFF',
+    borderWidth: 2,
     borderRadius: 40,
     justifyContent: 'center',
   },
   buttonText: {
-    color: '#F9F9F9',
+    color: '#FFFFFF',
     fontSize: 20,
     textAlign: 'center',
     fontWeight: 'bold',
   },
-
-  logo: {
-    width: 300,
-    height: 300,
-    backgroundColor: '#000000',
-    marginTop: 100,
-    marginBottom: 50,
-  },
-
-  Text: {
-    color: '#000000',
-    fontSize: 40,
-    fontWeight: 'bold',
-  }
 });
 
 export default StartPage;

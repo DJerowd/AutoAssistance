@@ -1,11 +1,33 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Alert  } from 'react-native';
 
 const VehicleDetailsPage = ({ route }) => {
   const { vehicle } = route.params;
 
   const handleDeleteVehicle = () => {
+    Alert.alert(
+      'Excluir Veículo',
+      'Tem certeza que deseja excluir este veículo?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Confirmar',
+          onPress: () => {
+            Alert.alert('Veículo excluído com sucesso', { alertContainerStyle: styles.alertContainer });
+            console.log('Veículo excluído com sucesso');
+          },
+          style: 'destructive',
+        },
+      ],
+      { cancelable: false, alertContainerStyle: styles.alertContainer }
+    );
+  };
 
+  const handleEditVehicle = () => {
+    // navigation.navigate('EditVehiclePage', { vehicle });
   };
 
   return (
@@ -52,13 +74,14 @@ const VehicleDetailsPage = ({ route }) => {
       <Text style={styles.label}>Quilometragem:</Text> 
       <Text style={styles.text}>{vehicle.mileage} Km</Text>
 
-      <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteVehicle}>
-        <Text 
-        style={styles.deleteButtonText}
-        >
-          Excluir Veículo
-        </Text>
+      <TouchableOpacity style={styles.editButton} onPress={handleEditVehicle}>
+        <Text style={styles.editButtonText}>Editar Informações</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteVehicle}>
+        <Text style={styles.deleteButtonText}>Excluir Veículo</Text>
+      </TouchableOpacity>
+
     </ScrollView>
   );
 };
@@ -111,6 +134,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
 
+  editButton: {
+    backgroundColor: '#009F4D',
+    borderColor: '#009F4D',
+    borderWidth: 4,
+    padding: 20,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  editButtonText: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+
   deleteButton: {
     backgroundColor: '#F9F9F9',
     borderColor: '#009F4D',
@@ -125,6 +163,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
+  
+  alertContainer: {
+    borderRadius: 10,
+    backgroundColor: '#009F4D',
+    elevation: 5,
+  },
+
+
 });
 
 export default VehicleDetailsPage;

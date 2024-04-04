@@ -1,6 +1,6 @@
 import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 
 const NewMaintencePage = ({ navigation }) => {
   const [type, setType] = useState('');
@@ -12,13 +12,22 @@ const NewMaintencePage = ({ navigation }) => {
   const [description, setDescription] = useState('');
 
   const handleAddReminder = () => {
-    console.log('Novo lembrete adicionado:');
-    console.log('Tipo de manutenção:', type);
-    console.log('Repetição:', isRepeat ? 'Ligada' : 'Desligada');
-    console.log('Quilometros:', isKilometersEnabled ? kilometers : 'Não habilitado');
-    console.log('Meses:', isMonthsEnabled ? months : 'Não habilitado');
-    console.log('Descrição:', description);
+    console.log(
+      'Novo lembrete adicionado:',
+      'Tipo de manutenção:', type,
+      ', Repetição:', isRepeat ? 'Ligada' : 'Desligada',
+      ', Quilometros:', isKilometersEnabled ? kilometers : 'Não habilitado',
+      ', Meses:', isMonthsEnabled ? months : 'Não habilitado',
+      ', Descrição:', description
+    );
 
+    navigation.goBack();
+    Alert.alert(
+      'Novo Lembrete Salvo com Sucesso!'
+    );
+  };
+
+  const handleCancelReminder = () => {
     navigation.goBack();
   };
 
@@ -126,7 +135,7 @@ const NewMaintencePage = ({ navigation }) => {
         <Text style={styles.addButtonText}>Salvar</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.cancelButton} onPress={handleAddReminder}>
+      <TouchableOpacity style={styles.cancelButton} onPress={handleCancelReminder}>
         <Text style={styles.cancelButtonText}>Cancelar</Text>
       </TouchableOpacity>
     </View>

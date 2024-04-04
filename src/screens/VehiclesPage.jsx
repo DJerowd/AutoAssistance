@@ -13,16 +13,6 @@ const VehiclesPage = ({ navigation }) => {
     { id: '7', name: 'Carro 7', brand: 'Citroen', model: 'C3', mileage: 10000 },
     { id: '8', name: 'Carro 8', brand: 'Nissan', model: 'March', mileage: 10000 },
     { id: '9', name: 'Carro 9', brand: 'Honda', model: 'Fit', mileage: 10000 },
-    { id: '10', name: 'Carro 10', mileage: 10000 },
-    { id: '11', name: 'Carro 11', mileage: 10000 },
-    { id: '12', name: 'Carro 12', mileage: 10000 },
-    { id: '13', name: 'Carro 13', mileage: 10000 },
-    { id: '14', name: 'Carro 14', mileage: 10000 },
-    { id: '15', name: 'Carro 15', mileage: 10000 },
-    { id: '16', name: 'Carro 16', mileage: 10000 },
-    { id: '17', name: 'Carro 17', mileage: 10000 },
-    { id: '18', name: 'Carro 18', mileage: 10000 },
-    { id: '19', name: 'Carro 19', mileage: 10000 },
   ]);  
 
   const renderItem = ({ item }) => (
@@ -32,7 +22,7 @@ const VehiclesPage = ({ navigation }) => {
     >
       <IconI 
                 name="car-sport-sharp" 
-                color={'#6A6A6A'} 
+                style={styles.icon} 
                 size={40}
             />
 
@@ -59,7 +49,9 @@ const VehiclesPage = ({ navigation }) => {
       <FlatList
         data={vehicles}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id}  
+        borderBottomWidth={4}
+        borderBottomColor={'#6A6A6A11'}
       />
 
       <TouchableOpacity 
@@ -83,9 +75,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
 
+  icon: {
+    backgroundColor: '#6A6A6A99',
+    color: '#6A6A6A',
+    borderRadius: 30,
+    padding: 6,
+  },
+
   item: {
-    borderColor: '#6A6A6A',
-    borderWidth: 1,
+    borderColor: '#6A6A6A11',
+    borderWidth: 2,
     padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
   addButton: {
     backgroundColor: '#009F4D',
     padding: 20,
-    marginVertical: 30,
+    marginVertical: 10,
     marginHorizontal: 30,
     borderRadius: 12,
     alignItems: 'center',

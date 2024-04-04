@@ -1,5 +1,5 @@
 import { React, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
 const NewVehiclePage = ({ navigation }) => {
@@ -16,7 +16,24 @@ const NewVehiclePage = ({ navigation }) => {
   const [mileage, setMileage] = useState('');
 
   const handleAddVehicle = () => {
+    console.log(
+      'Novo veículo adicionado:',
+      ', Marca:', brand,
+      ', Modelo:', model,
+      ', Versão:', version,
+      ', Cor:', color,
+      ', Ano de fabricação:', manufactureYear,
+      ', Placa:', licensePlate,
+      ', Combustivel:', fuelType,
+      ', Transmissão:', transmissionType,
+      ', Motor:', engine,
+      ', Quilometragem:', mileage
+    );
+
     navigation.goBack();
+    Alert.alert(
+      'Veículo Salvo com Sucesso!'
+    );
   };
 
 //   const handleAdd = () => {
@@ -145,7 +162,7 @@ const NewVehiclePage = ({ navigation }) => {
         style={styles.input}
         value={manufactureYear}
         onChangeText={setManufactureYear}
-        placeholder="DD/MM/AAAA"
+        placeholder="Ano"
         keyboardType="numeric"
       />
 
@@ -156,6 +173,7 @@ const NewVehiclePage = ({ navigation }) => {
         value={licensePlate}
         onChangeText={setLicensePlate}
         placeholder="Placa (Opcional)"
+        maxLength={7}
       />
 
 
@@ -170,13 +188,9 @@ const NewVehiclePage = ({ navigation }) => {
 
 
       <TouchableOpacity style={styles.addButton} onPress={handleAddVehicle}>
-        <Text 
-        style={styles.addButtonText}
-        >
-          Adicionar Veículo
-        </Text>
+        <Text style={styles.addButtonText}>Adicionar Veículo</Text>
       </TouchableOpacity>
-    
+      
     </ScrollView>
   );
 };

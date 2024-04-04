@@ -24,8 +24,8 @@ const App = () => {
           name="StartPage" 
           component={StartPage} 
           options={{
-            title: 'Página Inicial',
-            headerStyle: { backgroundColor: '#009F4D' },
+            title: '',
+            headerStyle: { backgroundColor: '#009F4D', height: 40 },
             headerTintColor: '#ffffff',
             headerTitleAlign: 'center',
             headerTitleStyle: { fontWeight: 'bold' },
@@ -35,7 +35,7 @@ const App = () => {
           name="LoginPage" 
           component={LoginPage} 
           options={{
-            title: 'Login',
+            title: '',
             headerStyle: { backgroundColor: '#009F4D' },
             headerTintColor: '#ffffff',
             headerTitleAlign: 'center',
@@ -46,7 +46,7 @@ const App = () => {
         name="RegisterPage" 
         component={RegisterPage} 
         options={{
-          title: 'Registro',
+          title: '',
           headerStyle: { backgroundColor: '#009F4D' },
           headerTintColor: '#ffffff',
           headerTitleAlign: 'center',
@@ -57,7 +57,7 @@ const App = () => {
           name="SelectPage" 
           component={SelectPage} 
           options={{
-            title: 'Seleção',
+            title: '',
             headerStyle: { backgroundColor: '#009F4D' },
             headerTintColor: '#ffffff',
             headerTitleAlign: 'center',
