@@ -4,7 +4,7 @@ import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const MaintencePage = ({ navigation }) => {
     const [notes, setNotes] = useState([
-        { id: '1', name: 'Lembrete 1', type: 'Pneus', isRepeat: true, isKilometersEnabled: true, isMonthsEnabled: true, kilometersEnd: 100, kilometers: 80, monthsEnd: 24, months: 5, description: 'abcdefghijklmnopqrstuvwxyz' },
+        { id: '1', name: 'Lembrete 1', type: 'Pneus', isRepeat: true, isKilometersEnabled: true, isMonthsEnabled: true, kilometersEnd: 100, kilometers: 80, monthsEnd: 24, months: 5, description: 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz' },
         { id: '2', name: 'Lembrete 2', type: 'Filtro de Ar', isRepeat: true, isKilometersEnabled: true, isMonthsEnabled: false, kilometersEnd: 100, kilometers: 60, description: 'abcdefghijklmnopqrstuvwxyz' },
         { id: '3', name: 'Lembrete 3', type: 'Filtro de Combustível', isRepeat: true, isKilometersEnabled: false, isMonthsEnabled: true, monthsEnd: 12, months: 6, description: 'abcdefghijklmnopqrstuvwxyz'  },
         { id: '4', name: 'Lembrete 4', type: 'Fluído de Freio', isRepeat: false, isKilometersEnabled: false, isMonthsEnabled: false, description: 'abcdefghijklmnopqrstuvwxyz'  },

@@ -118,6 +118,7 @@ const NewMaintencePage = ({ navigation }) => {
             onChangeText={setMonths}
             placeholder="M"
             keyboardType="numeric"
+            scrollEnabled={true}
           />
         )}
       </View>
@@ -127,6 +128,8 @@ const NewMaintencePage = ({ navigation }) => {
       <TextInput
         style={styles.descriptionInput}
         value={description}
+        multiline={true}
+        rows={6}
         onChangeText={setDescription}
         placeholder="Descrição da manutenção"
       />

@@ -63,6 +63,7 @@ return (
       style={styles.input}
       value={email}
       placeholder="E-mail"
+      keyboardType="email-address"
       onChangeText={setEmail}
       autoCapitalize="none"
     />

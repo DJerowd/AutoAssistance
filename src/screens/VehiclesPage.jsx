@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    backgroundColor: '#6A6A6A99',
+    backgroundColor: '#6A6A6A55',
     color: '#6A6A6A',
     borderRadius: 30,
     padding: 6,
