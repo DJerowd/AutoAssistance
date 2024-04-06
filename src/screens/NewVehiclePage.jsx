@@ -124,7 +124,8 @@ const NewVehiclePage = ({ navigation }) => {
         <Picker.Item label="Combustível" />
         <Picker.Item label="_____________________________________" />
         <Picker.Item label="Gasolina" value="gasolina" />
-        <Picker.Item label="Etanol (Flex)" value="etanol" />
+        <Picker.Item label="Etanol" value="etanol" />
+        <Picker.Item label="Flex (Gasolina e Etanol)" value="flex" />
         <Picker.Item label="Diesel" value="diesel" />
         <Picker.Item label="Eletrico" value="eletrico" />
         <Picker.Item label="Híbrido" value="hibrido" />

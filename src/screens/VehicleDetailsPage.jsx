@@ -38,7 +38,7 @@ const VehicleDetailsPage = ({ route }) => {
 
       <View style={styles.imageLabel}>
         <Image
-            source={{ uri: 'https://images.cars.com/in/v2/stock_photos/77aeca88-d0af-4824-bbfd-d84ce2538524/1af0ca3f-5236-47a5-a487-32b49ec94f27.png?w=1000' }}
+            source={{ uri: 'https://cdn.vectorstock.com/i/preview-1x/75/52/modern-car-hatchback-abstract-silhouette-vector-45697552.jpg' }}
             style={styles.image}
             resizeMode="contain"
         />

@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {Picker} from '@react-native-picker/picker';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
+import { VehiclesDB } from '../components/VehiclesDB';
 
 const Tab = createBottomTabNavigator();
 
@@ -55,6 +56,7 @@ const SelectPage  = () => {
 
 
 const SelecaoScreen = ({ navigation }) => {
+  const {vehicles, setVehicles} = VehiclesDB(); 
 
     const handleItemPress = (item) => {
       console.log('Item Selecionado:', item);
@@ -66,7 +68,7 @@ const SelecaoScreen = ({ navigation }) => {
       <View style={{ height: 50, justifyContent: 'center', backgroundColor: '#009F4D'}}>
       <View style={styles.carPicker}>
         <Picker
-          // selectedValue={selectedVehicle}
+          selectedValue={vehicles}
           style={styles.picker}
           // onValueChange={(itemValue, itemIndex) => handleVehicleChange(itemValue)}
           mode={'dropdown'}
