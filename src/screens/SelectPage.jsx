@@ -1,7 +1,7 @@
 import { React, useState } from 'react';
-import { View, TouchableOpacity, Text, Image, StyleSheet, ImageBackground } from 'react-native';
+import { View, TouchableOpacity, Text, Image, StyleSheet, ImageBackground, FlatList } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {Picker} from '@react-native-picker/picker';
+import Modal from 'react-native-modal';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import { VehiclesDB } from '../components/VehiclesDB';
@@ -9,11 +9,6 @@ import { VehiclesDB } from '../components/VehiclesDB';
 const Tab = createBottomTabNavigator();
 
 const SelectPage  = () => {
-  // const [selectedVehicle, setSelectedVehicle] = useState('');
-
-  // const handleVehicleChange = (itemValue) => {
-  //   setSelectedVehicle(itemValue);
-  // };
 
   return (
     <Tab.Navigator
@@ -56,29 +51,51 @@ const SelectPage  = () => {
 
 
 const SelecaoScreen = ({ navigation }) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const {vehicles, setVehicles} = VehiclesDB(); 
+  const [selectedVehicle, setSelectedVehicle] = useState('');
 
     const handleItemPress = (item) => {
       console.log('Item Selecionado:', item);
       navigation.navigate(item);
     };
 
+    const toggleModal = () => {
+      setIsModalVisible(!isModalVisible);
+    };
+
+    const handleVehicleChange = (item) => {
+      console.log('Veículo Selecionado:', item);
+      setSelectedVehicle(item);
+    };
+
   return (
     <View style={styles.container}>
-      <View style={{ height: 50, justifyContent: 'center', backgroundColor: '#009F4D'}}>
-      <View style={styles.carPicker}>
-        <Picker
-          selectedValue={vehicles}
-          style={styles.picker}
-          // onValueChange={(itemValue, itemIndex) => handleVehicleChange(itemValue)}
-          mode={'dropdown'}
-        >
-          <Picker.Item label="Selecione um veículo" value="" />
-          <Picker.Item label="Veículo 1" value="vehicle1" />
-          <Picker.Item label="Veículo 2" value="vehicle2" />
-          <Picker.Item label="Veículo 3" value="vehicle3" />
-        </Picker>
-      </View>
+      <View style={{ height: 50, paddingHorizontal: 40, justifyContent: 'center', backgroundColor: '#009F4D'}}>
+        
+      <TouchableOpacity onPress={toggleModal}>
+      {(!selectedVehicle == '') && (
+        <Text style={styles.carPicker}>{selectedVehicle.name} | {selectedVehicle.brand} {selectedVehicle.model}</Text>
+      )}
+      {(selectedVehicle == '') && (
+        <Text style={styles.carPicker}>Selecione aqui um veículo.</Text>
+      )}
+      </TouchableOpacity>
+
+        <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
+          <View style={styles.modalContainer}>
+            <FlatList
+              data={vehicles}
+              renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => handleVehicleChange(item)}>
+                  <Text style={styles.modalContainerText}>{item.id} - {item.name} - {item.brand} {item.model}</Text>
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item) => item.id}
+            />
+          </View>
+        </Modal>
+
       </View>
     <ImageBackground
     source={{ uri: 'https://www.creativefabrica.com/wp-content/uploads/2020/03/05/Black-Triangle-Polygon-Background-Graphics-3128551-1-580x387.jpg' }}
@@ -235,11 +252,21 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     height: 40,
     paddingHorizontal: 10,
-    marginHorizontal: 36,
-    justifyContent: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlignVertical: 'center',
   },
-  picker: {
+  modalContainer: {
     color: '#FFFFFF',
+    backgroundColor: '#009F4D',
+    marginHorizontal: 16,
+  },
+  modalContainerText: {
+    color: '#FFFFFF',
+    borderBottomColor: '#6A6A6A99',
+    borderBottomWidth: 2,
+    fontSize: 18,
+    paddingHorizontal: 10,
   },
 
   backgroundImage: {
