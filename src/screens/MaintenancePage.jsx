@@ -35,14 +35,6 @@ const MaintencePage = ({ navigation }) => {
             size={30} 
           />
           )}
-
-          {(!item.isKilometersEnabled && !item.isMonthsEnabled) && (
-          <IconMCI 
-            name="alert-outline" 
-            color={'#FF9900'}
-            size={30} 
-          />
-          )}
           
           <View style={styles.coluna}>
             <View style={styles.linha}>
@@ -52,8 +44,17 @@ const MaintencePage = ({ navigation }) => {
                 <IconMCI 
                   name="alert" 
                   color={'#DD0000'}
-                  size={20} 
-                  marginHorizontal={6}
+                  size={30} 
+                  marginHorizontal={10}
+                />
+              )}
+
+              {(!item.isKilometersEnabled && !item.isMonthsEnabled) && (
+                <IconMCI 
+                  name="alert-outline" 
+                  color={'#FF9900'}
+                  size={30} 
+                  marginHorizontal={10}
                 />
               )}
             </View>
@@ -173,12 +174,13 @@ const styles = StyleSheet.create({
   progressBar: {
     backgroundColor: '#009F4D',
     height: 10,
-    width: '10%',
+    borderRadius: 6,
   },
   progressBarTotal: {
     backgroundColor: '#6A6A6A99',
-    width: 320,
     height: 10,
+    width: 320,
+    borderRadius: 6,
   },
 
   addButton: {

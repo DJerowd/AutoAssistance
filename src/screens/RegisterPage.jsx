@@ -10,16 +10,17 @@ const RegisterPage = ({ navigation }) => {
   
 
   const handleRegister = () => {
-
-// Validação do formato do email
+{/* Validação do formato do email */}
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
-// Validação do email e senha
+{/* Conclusão Com Sucesso do Registro */}
     if (username.length >= 1 && email.match(emailPattern) && email.length >= 10 && password.length >= 6 && isValidPassword(password)) {
       setError('');
       navigation.navigate('LoginPage');
       console.log('Registro Concluido.');
       Alert.alert('Registro Concluído', 'Registrado com sucesso!');
+
+{/* Validação do email e senha */}
     } else if (email.match(emailPattern) && email.length >= 10 && password.length >= 6 && !isValidPassword(password)) {
       setError('A senha deve conter letras e números.');
     } else if (email.match(emailPattern) && email.length >= 10 && password.length < 6) {
@@ -28,13 +29,13 @@ const RegisterPage = ({ navigation }) => {
       setError('Todos os campos devem ser preenchidos corretamente.');
     }
 
-// Verifica se a senha e a confirmação de senha são iguais
+{/* Verifica se a senha e a confirmação de senha são iguais */}
     if (password !== confirmPassword) {
       setError('As senhas não coincidem.');
     }
   };
 
-  // Validação da composição da senha
+{/* Validação da composição da senha */}
   const isValidPassword = (password) => {
     const hasLetter = /[a-zA-Z]/.test(password);
     const hasNumber = /\d/.test(password);
@@ -44,14 +45,18 @@ const RegisterPage = ({ navigation }) => {
 return (
   <View style={styles.container}>
 
+{/* Logo */}
     <Image
       source={require('../assets/Logo.png')}
       style={styles.image}
     />
+
+{/* Titulo */}
     <Text style={styles.title}>
       Criar conta
     </Text>
 
+{/* Nome de Usuário */}
     <TextInput
       style={styles.input}
       value={username}
@@ -59,6 +64,8 @@ return (
       onChangeText={setUsername}
       autoCapitalize="none"
     />
+
+{/* E-mail */}
     <TextInput
       style={styles.input}
       value={email}
@@ -67,6 +74,8 @@ return (
       onChangeText={setEmail}
       autoCapitalize="none"
     />
+
+{/* Senha */}
     <TextInput
       style={styles.input}
       value={password}
@@ -74,6 +83,8 @@ return (
       secureTextEntry
       onChangeText={setPassword}
     />
+
+{/* Confirmação da Senha */}
     <TextInput
       style={styles.input}
       value={confirmPassword}
@@ -82,21 +93,23 @@ return (
       onChangeText={setConfirmPassword}
     />
     
+{/* Botão de Criar Conta */}
     <View style={styles.buttonsContainer}>
     {error ? <Text style={styles.error}>{error}</Text> : null}
       <TouchableOpacity title="Registrar" style={styles.registrarButton} onPress={handleRegister} >
             <Text style={styles.registrarButtonText}>Criar conta</Text>
       </TouchableOpacity>
     </View>
+
   </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
     flex:  1,
     backgroundColor: '#F9F9F9',
-    // justifyContent: 'center',
     padding:  40,
     paddingTop:  0,
   },

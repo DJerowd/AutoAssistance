@@ -1,67 +1,44 @@
-import {React, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, ScrollView, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const NewMaintencePage = ({ navigation }) => {
-  const [type, setType] = useState('');
-  const [isRepeat, setIsRepeat] = useState(false);
-  const [isKilometersEnabled, setIsKilometersEnabled] = useState(false);
-  const [isMonthsEnabled, setIsMonthsEnabled] = useState(false);
-  const [kilometers, setKilometers] = useState('');
-  const [months, setMonths] = useState('');
-  const [description, setDescription] = useState('');
+const EditMaintenancePage = ({ route }) => {
+  const { maintenance } = route.params;
+  const [editedMaintenance, setEditedMaintenance] = useState({ ...maintenance });
+  const [type, setType] = useState(maintenance.type);
+  const [isRepeat, setIsRepeat] = useState(maintenance.isRepeat);
+  const [isKilometersEnabled, setIsKilometersEnabled] = useState(maintenance.isKilometersEnabled);
+  const [isMonthsEnabled, setIsMonthsEnabled] = useState(maintenance.isMonthsEnabled);
+  const [kilometers, setKilometers] = useState(maintenance.kilometers);
+  const [months, setMonths] = useState(maintenance.months);
+  const [description, setDescription] = useState(editedMaintenance.description);
 
-{/* Salvar */}
-  const handleAddReminder = () => {
-{/* Alerta ao Tentar Salvar sem Preencher os Campos Necessários */}
-    if (!type) {
-      Alert.alert(
-        'Campos não preenchidos',
-        'Por favor, preencha todos os campos obrigatórios.',
-        [
-          {
-            text: 'OK',
-            onPress: () => console.log('OK Pressed'),
-            style: 'cancel',
-          },
-        ],
-        { cancelable: false }
-      );
-      return;
-    }
-
-{/* Mensagem no Console */}
+  const handleSaveChanges = () => {
     console.log(
-      'Novo lembrete adicionado:',
-      'Tipo de manutenção:', type,
-      ', Repetição:', isRepeat ? 'Ligada' : 'Desligada',
-      ', Quilometros:', isKilometersEnabled ? kilometers : 'Não habilitado',
-      ', Meses:', isMonthsEnabled ? months : 'Não habilitado',
-      ', Descrição:', description
-    );
-    navigation.goBack();
+        'Lembrete alterado:',
+        'Tipo de manutenção:', editedMaintenance.type,
+        ', Repetição:', editedMaintenance.isRepeat ? 'Ligada' : 'Desligada',
+        ', Quilometros:', editedMaintenance.isKilometersEnabled ? editedMaintenance.kilometers : 'Não habilitado',
+        ', Meses:', editedMaintenance.isMonthsEnabled ? editedMaintenance.months : 'Não habilitado',
+        ', Descrição:', editedMaintenance.description
+      );
 
-{/* Alerta de Sucesso ao Salvar */}
-    Alert.alert(
-      'Novo Lembrete Salvo com Sucesso!'
-    ); 
+    Alert.alert('Alterações salvas com sucesso');
   };
 
-{/* Cancelar */}
-  const handleCancelReminder = () => {
-    navigation.goBack();
+  const handleChangeText = (key, value) => {
+    setEditedMaintenance({ ...editedMaintenance, [key]: value });
   };
-
 
   return (
     <View style={styles.container}>
-    
-{/* Tipo do Lembrete */}
-      <Text style={styles.label}>Tipo:</Text>
+      <Text style={styles.label}>Tipo de Manutenção:</Text>
       <Picker
         selectedValue={type}
         style={styles.picker}
         onValueChange={(itemValue, itemIndex) => setType(itemValue)}
+        // onChangeText={(text) => handleChangeText('type', text)}
         mode={'dropdown'}
       >
         <Picker.Item label="Tipo de Manutenção" />
@@ -81,8 +58,8 @@ const NewMaintencePage = ({ navigation }) => {
         <Picker.Item label="Amortecedores" value="Amortecedores" />
         <Picker.Item label="Troca de Óleo" value="Troca de Óleo" />
       </Picker>
+      
 
-{/* Frequência de Repetição */}
       <Text style={styles.label}>Frequência:</Text> 
       <View style={styles.linha}>
         <View style={styles.checkboxContainer}>
@@ -104,15 +81,39 @@ const NewMaintencePage = ({ navigation }) => {
       </View>
       
 
-      <Text style={styles.label}>Notificar a cada:</Text>
+      {/* <Text style={styles.label} marginBottom={10}>Notificação:</Text>
+        <View style={styles.linha} marginBottom={10}>
+      
+        <Text style={[styles.checkbox, maintenance.isRepeat && styles.checkedCheckbox]}>{maintenance.isRepeat ? 'Ligada' : 'Desligada'}</Text>
+      </View> */}
 
-{/* Quilometros para Notificar */}
+
+      <View style={styles.linha} marginBottom={10}>
+        <Text style={styles.label} >Notificação:</Text>
+        {(!isKilometersEnabled && !isMonthsEnabled) && (
+          <IconMCI 
+            name="alert-outline" 
+            color={'#FF9900'}
+            size={30} 
+            marginLeft={10}
+          />
+        )}
+        <TextInput
+            style={[styles.checkbox1, isRepeat && styles.checkedCheckbox1]}
+            value={editedMaintenance.isRepeat ? 'Ligada' : 'Desligada'}
+            editable={false}
+        />
+      </View>
+
+      <Text style={styles.label}>Notificar a cada:</Text>
+      
       <View style={styles.linha}>
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
             style={[styles.checkbox, isKilometersEnabled && styles.checkedCheckbox]}
             onPress={() => setIsKilometersEnabled(!isKilometersEnabled)}
           />
+
           <Text style={styles.checkboxLabel}>Quilometros:</Text>
         </View>
         {isKilometersEnabled && (
@@ -120,19 +121,20 @@ const NewMaintencePage = ({ navigation }) => {
             style={styles.checkboxInput}
             value={kilometers}
             onChangeText={setKilometers}
-            placeholder="Km"
+            // onChangeText={(text) => handleChangeText('kilometers', text)}
+            placeholder={`${kilometers}`}
             keyboardType="numeric"
           />
         )}
       </View>
 
-{/* Meses para notificar */}
       <View style={styles.linha}>
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
             style={[styles.checkbox, isMonthsEnabled && styles.checkedCheckbox]}
             onPress={() => setIsMonthsEnabled(!isMonthsEnabled)}
           />
+
           <Text style={styles.checkboxLabel}>Meses:</Text>
         </View>
         {isMonthsEnabled && (
@@ -140,45 +142,50 @@ const NewMaintencePage = ({ navigation }) => {
             style={styles.checkboxInput}
             value={months}
             onChangeText={setMonths}
-            placeholder="M"
+            // onChangeText={(text) => handleChangeText('months', text)}
+            placeholder={`${months}`}
             keyboardType="numeric"
             scrollEnabled={true}
           />
         )}
       </View>
 
-{/* Descrição do Lembrete */}
-      <Text style={styles.label}>Descrição:</Text>
+      {/* <TextInput
+        style={styles.textInput}
+        value={editedMaintenance.type}
+        onChangeText={(text) => handleChangeText('type', text)}
+      /> */}
+
+
+    <Text style={styles.label}>Descrição:</Text>
       <TextInput
         style={styles.descriptionInput}
         value={description}
         multiline={true}
         rows={6}
         onChangeText={setDescription}
-        placeholder="Descrição da manutenção"
+        // onChangeText={(text) => handleChangeText('description', text)}
       />
-
-{/* Botão Salvar */}
-      <TouchableOpacity style={styles.addButton} onPress={handleAddReminder}>
-        <Text style={styles.addButtonText}>Salvar</Text>
+      
+      
+      <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
+        <Text style={styles.saveButtonText}>Salvar Alterações</Text>
       </TouchableOpacity>
-
-{/* Botão Cancelar */}
-      <TouchableOpacity style={styles.cancelButton} onPress={handleCancelReminder}>
-        <Text style={styles.cancelButtonText}>Cancelar</Text>
-      </TouchableOpacity>
-
     </View>
+    
   );
 };
 
-
 const styles = StyleSheet.create({
-  container: {
+container: {
     flex: 1,
     padding: 20,
-    paddingTop: 30,
     backgroundColor: '#FFFFFF',
+  },
+
+  linha: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 
   label: {
@@ -196,6 +203,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 10,
   },
+  
   input: {
     color: '#6A6A6A',
     borderBottomColor: '#6A6A6A99',
@@ -204,6 +212,21 @@ const styles = StyleSheet.create({
     height: 40,
     marginBottom: 20,
     paddingHorizontal: 10,
+  },
+
+  checkbox1: {
+    borderColor: '#6A6A6A',
+    color: '#6A6A6A',
+    borderRadius: 6,
+    borderWidth: 2,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    fontSize: 16,
+    marginHorizontal: 10,
+  },
+  checkedCheckbox1: {
+    backgroundColor: '#009F4D',
+    color: '#FFFFFF'
   },
 
   checkboxContainer: {
@@ -219,6 +242,7 @@ const styles = StyleSheet.create({
     borderColor: '#6A6A6A99',
     marginRight: 10,
   },
+  
   checkedCheckbox: {
     backgroundColor: '#009F4D',
   },
@@ -249,7 +273,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 18,
     paddingHorizontal: 10,
-    paddingTop: 10,
+    paddingVertical: 10,
     textAlignVertical: 'top',
   },
 
@@ -263,11 +287,15 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 
-  linha: {
-    flexDirection: 'row',
+  textInput: {
+    borderColor: '#6A6A6A99',
+    borderBottomWidth: 2,
+    marginTop: 10,
+    fontSize: 18,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
   },
-
-  addButton: {
+  saveButton: {
     backgroundColor: '#009F4D',
     borderColor: '#009F4D',
     borderWidth: 4,
@@ -276,26 +304,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
-  addButtonText: {
+  saveButtonText: {
     color: '#FFFFFF',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-
-  cancelButton: {
-    backgroundColor: '#FFFFFF',
-    borderColor: '#009F4D',
-    borderWidth: 4,
-    padding: 20,
-    borderRadius: 12,
-    marginBottom: 10,
-    alignItems: 'center',
-  },
-  cancelButtonText: {
-    color: '#009F4D',
     fontSize: 20,
     fontWeight: 'bold',
   },
 });
 
-export default NewMaintencePage;
+export default EditMaintenancePage;

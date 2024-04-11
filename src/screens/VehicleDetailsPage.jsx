@@ -4,10 +4,11 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Alert  } f
 const VehicleDetailsPage = ({ route }) => {
   const { vehicle } = route.params;
 
+{/* Alerta ae Confirmação de Excluir Veículo */}
   const handleDeleteVehicle = () => {
     Alert.alert(
       'Excluir Veículo',
-      'Tem certeza que deseja excluir este veículo?',
+      'Tem certeza que deseja excluir este veículo permanentemente?',
       [
         {
           text: 'Cancelar',
@@ -16,7 +17,7 @@ const VehicleDetailsPage = ({ route }) => {
         {
           text: 'Confirmar',
           onPress: () => {
-            Alert.alert('Veículo excluído com sucesso', { alertContainerStyle: styles.alertContainer });
+            Alert.alert('Veículo excluído com sucesso');
             console.log('Veículo excluído com sucesso');
           },
           style: 'destructive',
@@ -26,6 +27,7 @@ const VehicleDetailsPage = ({ route }) => {
     );
   };
 
+{/* Navegação para a Página de Editar Veículo */}
   const handleEditVehicle = () => {
     // navigation.navigate('EditVehiclePage', { vehicle });
   };
@@ -33,9 +35,8 @@ const VehicleDetailsPage = ({ route }) => {
   return (
     <ScrollView style={styles.container}>
         
-
+{/* Identificação do Veículo */}
     <Text style={styles.title}>{vehicle.id} - {vehicle.name}</Text>
-
       <View style={styles.imageLabel}>
         <Image
             source={{ uri: 'https://cdn.vectorstock.com/i/preview-1x/75/52/modern-car-hatchback-abstract-silhouette-vector-45697552.jpg' }}
@@ -44,40 +45,52 @@ const VehicleDetailsPage = ({ route }) => {
         />
       </View>
 
+{/* Marca do Veículo */}
       <Text style={styles.label}>Marca:</Text>
       <Text style={styles.text}>{vehicle.brand}</Text>
 
+{/* Modelo do Veículo */}
       <Text style={styles.label}>Modelo:</Text> 
       <Text style={styles.text}>{vehicle.model}</Text>
       
+{/* Versão do Veículo */}
       <Text style={styles.label}>Versão:</Text> 
       <Text style={styles.text}>{vehicle.version}</Text>
 
+{/* Cor do Veículo */}
       <Text style={styles.label}>Cor:</Text> 
       <Text style={styles.text}>{vehicle.color}</Text>
 
+{/* Ano de Fabricação do Veículo */}
       <Text style={styles.label}>Ano de Fabricação:</Text> 
       <Text style={styles.text}>{vehicle.manufactureYear}</Text>
 
+{/* Placa do Veículo */}
       <Text style={styles.label}>Placa:</Text> 
       <Text style={styles.text}>{vehicle.licensePlate}</Text>
 
+{/* Tipo de Combustível do Veículo */}
       <Text style={styles.label}>Tipo de Combustível:</Text> 
       <Text style={styles.text}>{vehicle.fuelType}</Text>
 
+{/* Tipo de Câmbio do Veículo */}
       <Text style={styles.label}>Câmbio:</Text> 
       <Text style={styles.text}>{vehicle.transmission}</Text>
       
+{/* Motor do Veículo */}
       <Text style={styles.label}>Motor:</Text> 
       <Text style={styles.text}>{vehicle.engine}</Text>
 
+{/* Quilometragem do Veículo */}
       <Text style={styles.label}>Quilometragem:</Text> 
       <Text style={styles.text}>{vehicle.mileage} Km</Text>
 
+{/* Botão de Editar Informações */}
       <TouchableOpacity style={styles.editButton} onPress={handleEditVehicle}>
         <Text style={styles.editButtonText}>Editar Informações</Text>
       </TouchableOpacity>
 
+{/* Botão de Excluir Veículo */}
       <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteVehicle}>
         <Text style={styles.deleteButtonText}>Excluir Veículo</Text>
       </TouchableOpacity>
@@ -85,6 +98,7 @@ const VehicleDetailsPage = ({ route }) => {
     </ScrollView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -167,7 +181,7 @@ const styles = StyleSheet.create({
   alertContainer: {
     borderRadius: 10,
     backgroundColor: '#009F4D',
-    elevation: 5,
+    elevation: 6,
   },
 
 

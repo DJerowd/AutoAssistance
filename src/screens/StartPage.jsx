@@ -2,14 +2,15 @@ import { React } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import Swiper from 'react-native-swiper';
 
-
 const StartPage = ({ navigation }) => {
 
+{/* Navegação para a Página Inicial */}
   const handleItemPress = (item) => {
     console.log('Item Selecionado:', item);
     navigation.navigate(item);
   };
 
+{/* Anúncios da Página de Rolagem */}  
   const ads = [
     { id: 1, imageUrl: 'https://img.freepik.com/psd-gratuitas/modelo-de-cartaz-de-anuncio-de-oficina-mecanica_23-2148747133.jpg' },
     { id: 2, imageUrl: 'https://img.freepik.com/psd-gratuitas/modelo-de-anuncio-de-oficina-mecanica-de-poster_23-2148747129.jpg' },
@@ -19,6 +20,7 @@ const StartPage = ({ navigation }) => {
 return (
     <View style={styles.container}>
 
+{/* Página de Rolagem */}  
       <Swiper autoplay={true} autoplayTimeout={10} loop={true}>
         {ads.map(ad => (
           <View key={ad.id} style={styles.slide}>
@@ -27,6 +29,7 @@ return (
         ))}
       </Swiper>
 
+{/* Botão de Navegação para a Página Inicial */}  
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
             style={styles.button}
@@ -39,6 +42,7 @@ return (
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

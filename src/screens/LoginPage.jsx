@@ -5,11 +5,13 @@ const LoginPage = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+{/* Realizar Login */}
   const handleLogin = () => {
     console.log('Item Selecionado:', 'SelectPage');
     navigation.navigate('SelectPage');
   };
 
+{/* Registrar-se */}
   const handleRegister = () => {
     console.log('Item Selecionado:', 'RegisterPage');
     navigation.navigate('RegisterPage');
@@ -17,12 +19,14 @@ const LoginPage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      
+
+{/* Logo */}
       <Image
           source={require('../assets/Logo.png')}
           style={styles.image}
       />
 
+{/* Nome de Usuário */}
       <TextInput
         style={styles.input}
         value={username}
@@ -30,6 +34,8 @@ const LoginPage = ({ navigation }) => {
         onChangeText={setUsername}
         autoCapitalize="none"
       />
+
+{/* Senha */}
       <TextInput
         style={styles.input}
         value={password}
@@ -38,11 +44,13 @@ const LoginPage = ({ navigation }) => {
         onChangeText={setPassword}
       />
 
+{/* Botão de Realizar Login */}
       <View style={styles.buttonsContainer}>
         <TouchableOpacity title="Login" style={styles.loginButton} onPress={handleLogin} >
           <Text style={styles.loginButtonText}>Entrar</Text>
         </TouchableOpacity>
 
+{/* Botão de Criar uma Nova Conta */}
         <TouchableOpacity title="Registrar" style={styles.registrarButton} onPress={handleRegister} >
           <Text style={styles.registrarButtonText}>Criar conta</Text>
         </TouchableOpacity>
@@ -51,6 +59,7 @@ const LoginPage = ({ navigation }) => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

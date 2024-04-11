@@ -1,9 +1,10 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
 const NewVehiclePage = ({ navigation }) => {
   const [name, setName] = useState('');
+  const [brands, setBrands] = useState([]);
   const [brand, setBrand] = useState('');
   const [model, setModel] = useState('');
   const [version, setVersion] = useState('');
@@ -15,7 +16,41 @@ const NewVehiclePage = ({ navigation }) => {
   const [engine, setEngine] = useState('');
   const [mileage, setMileage] = useState('');
 
+  {/* Requisição da API */}
+  {/* Documentação da Api https://deividfortuna.github.io/fipe/v2/#tag/Fipe/operation/GetFipeInfo */}
+  useEffect(() => {
+    fetchBrands();
+  }, []);
+  const fetchBrands = async () => {
+    try {
+      const response = await fetch('https://fipe.parallelum.com.br/api/v2/cars/brands');
+      const data = await response.json();
+      setBrands(data);
+    } catch (error) {
+      console.error('Error ao Encontrar Marcas: ', error);
+    }
+  };
+
+{/* Salvar */}
   const handleAddVehicle = () => {
+{/* Alerta ao Tentar Salvar sem Preencher os Campos Necessários */}
+    if (!brand || !model || !color || !mileage) {
+      Alert.alert(
+        'Campos não preenchidos',
+        'Por favor, preencha todos os campos obrigatórios.',
+        [
+          {
+            text: 'OK',
+            onPress: () => console.log('OK Pressed'),
+            style: 'cancel',
+          },
+        ],
+        { cancelable: false }
+      );
+      return;
+   }
+
+{/* Mensagem no Console */}
     console.log(
       'Novo veículo adicionado:',
       ', Marca:', brand,
@@ -29,27 +64,65 @@ const NewVehiclePage = ({ navigation }) => {
       ', Motor:', engine,
       ', Quilometragem:', mileage
     );
-
     navigation.goBack();
+
+{/* Alerta de Sucesso ao Salvar */}
     Alert.alert(
       'Veículo Salvo com Sucesso!'
     );
   };
 
-//   const handleAdd = () => {
+{/* Cancelar */}
+  const handleCancelReminder = () => {
+    navigation.goBack();
+  };
+
+  
+{/* Identificação do Codigo HEX de Cor */}
+  const getColorCode = (colorName) => {
+    switch (colorName.toLowerCase()) {
+      case 'preto':
+        return '#000000DD';
+      case 'cinza':
+        return '#4A4A4ADD';
+      case 'prata':
+        return '#C3BFBFDD';
+      case 'branco':
+        return '#EEEEEEDD';
+      case 'vermelho':
+        return '#FF0000DD';
+      case 'azul':
+        return '#2400FFDD';
+      case 'verde':
+        return '#21A400DD';
+      case 'amarelo':
+        return '#FAFF00DD';
+      case 'laranja':
+        return '#FF9900DD';
+      case 'marrom':
+        return '#523100DD';
+      case 'rosa':
+        return '#FF00D6DD';
+     
+      default:
+        return '#6A6A6A55';
+    }
+  };
+
+{/* Adicionar Novo Veículo */}  
+  const handleAdd = () => {
 //     const newVehicle = {
-// // Gera um ID único para o novo veículo
 //       id: (Math.random() * 1000000).toString(),
-// // Nome padrão para o novo veículo
 //       name: `Carro ${vehicles.length + 1}`, 
 //     };
-// // Adiciona o novo veículo à lista de veículos
 //     setVehicles([...vehicles, newVehicle]);
-//   };
+  };
 
+  
   return (
     <ScrollView style={styles.container}>
-      
+
+{/* Nome do Veículo */}
       <Text style={styles.label}>Nome do veículo:</Text>
       <TextInput
         style={styles.input}
@@ -58,17 +131,22 @@ const NewVehiclePage = ({ navigation }) => {
         placeholder="Carro"
       />
 
-
+{/* Marca do Veículo */}
       <Text style={styles.label}>Marca do veículo:</Text>
-      <TextInput
-        style={styles.input}
-        value={brand}
-        onChangeText={setBrand}
-        placeholder="Marca"
-      />
+      <Picker
+        selectedValue={brand}
+        style={styles.picker}
+        onValueChange={(itemValue, itemIndex) => setBrand(itemValue)}
+        mode={'dropdown'}
+      >
+        <Picker.Item label="Selecione a marca" value="" />
+        <Picker.Item label="_____________________________________" />
+        {brands.map((brand) => (
+          <Picker.Item key={brand.code} label={brand.name} value={brand.name} />
+        ))}
+      </Picker>
 
-
-      <Text style={styles.label}>Modelo do veículo:</Text>
+{/* Modelo do Veículo */}
       <TextInput
         style={styles.input}
         value={model}
@@ -76,7 +154,7 @@ const NewVehiclePage = ({ navigation }) => {
         placeholder="Modelo"
       />
 
-
+{/* Versão do Veículo */}
       <Text style={styles.label}>Versão do veículo:</Text>
       <TextInput
         style={styles.input}
@@ -85,11 +163,11 @@ const NewVehiclePage = ({ navigation }) => {
         placeholder="Versão"
       />
 
-
-      <View style={styles.linha}>
+{/* Cor do Veículo */}
+      <View style={styles.linha} justifyContent={'space-between'}>
       <Text style={styles.label}>Cor do veículo:</Text>
       <View
-        style={[styles.colorButton, { backgroundColor: color }]}
+        style={[styles.colorButton, { backgroundColor: getColorCode(color) }]}
       />
       </View>
       <Picker
@@ -100,20 +178,20 @@ const NewVehiclePage = ({ navigation }) => {
       >
         <Picker.Item label="Cor" />
         <Picker.Item label="_____________________________________" />
-        <Picker.Item label="Preto" value="#000000" />
-        <Picker.Item label="Cinza" value="#4A4A4A" />
-        <Picker.Item label="Prata" value="#C3BFBF" />
-        <Picker.Item label="Branco" value="#FFFFFF" />
-        <Picker.Item label="Vermelho" value="#FF0000" />
-        <Picker.Item label="Azul" value="#2400FF" />
-        <Picker.Item label="Verde" value="#21A400" />
-        <Picker.Item label="Amarelo" value="#FAFF00" />
-        <Picker.Item label="Laranja" value="#FF9900" />
-        <Picker.Item label="Marrom" value="#523100" />
-        <Picker.Item label="Rosa" value="#FF00D6" />
+        <Picker.Item label="Preto" value="Preto" />
+        <Picker.Item label="Cinza" value="Cinza" />
+        <Picker.Item label="Prata" value="Prata" />
+        <Picker.Item label="Branco" value="Branco" />
+        <Picker.Item label="Vermelho" value="Vermelho" />
+        <Picker.Item label="Azul" value="Azul" />
+        <Picker.Item label="Verde" value="Verde" />
+        <Picker.Item label="Amarelo" value="Amarelo" />
+        <Picker.Item label="Laranja" value="Laranja" />
+        <Picker.Item label="Marrom" value="Marrom" />
+        <Picker.Item label="Rosa" value="Rosa" />
       </Picker>
 
-
+{/* Tipo de Combustível do Veículo */}
       <Text style={styles.label}>Tipo de Combustível:</Text>
       <Picker
         selectedValue={fuelType}
@@ -132,7 +210,7 @@ const NewVehiclePage = ({ navigation }) => {
         <Picker.Item label="GNV" value="gnv" />
       </Picker>
 
-
+{/* Tipo de Câmbio do Veículo */}
       <Text style={styles.label}>Tipo de Câmbio:</Text>
       <Picker
         selectedValue={transmissionType}
@@ -148,7 +226,7 @@ const NewVehiclePage = ({ navigation }) => {
         <Picker.Item label="Eletrico" value="eletrico" />
       </Picker>
 
-
+{/* Motor do Veículo */}
       <Text style={styles.label}>Motor do veículo:</Text>
       <TextInput
         style={styles.input}
@@ -157,7 +235,7 @@ const NewVehiclePage = ({ navigation }) => {
         placeholder="Motor"
       />
 
-
+{/* Ano de Fabricação do Veículo */}
       <Text style={styles.label}>Ano de Fabricação:</Text>
       <TextInput
         style={styles.input}
@@ -167,7 +245,7 @@ const NewVehiclePage = ({ navigation }) => {
         keyboardType="numeric"
       />
 
-
+{/* Placa do Veículo */}
       <Text style={styles.label}>Placa do Veículo:</Text>
       <TextInput
         style={styles.input}
@@ -177,7 +255,7 @@ const NewVehiclePage = ({ navigation }) => {
         maxLength={7}
       />
 
-
+{/* Quilometragem do Veículo */}
       <Text style={styles.label}>Quilometragem:</Text>
       <TextInput
         style={styles.input}
@@ -187,7 +265,7 @@ const NewVehiclePage = ({ navigation }) => {
         keyboardType="numeric"
       />
 
-
+{/* Botão de Salvar */}
       <TouchableOpacity style={styles.addButton} onPress={handleAddVehicle}>
         <Text style={styles.addButtonText}>Adicionar Veículo</Text>
       </TouchableOpacity>
@@ -195,6 +273,7 @@ const NewVehiclePage = ({ navigation }) => {
     </ScrollView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -216,8 +295,8 @@ const styles = StyleSheet.create({
 
   input: {
     color: '#6A6A6A',
-    borderBottomColor: '#6A6A6A99',
-    borderBottomWidth: 2,
+    borderColor: '#6A6A6A99',
+    borderWidth: 1,
     fontSize: 18,
     height: 40,
     marginBottom: 20,
@@ -226,17 +305,17 @@ const styles = StyleSheet.create({
 
   colorButton: {
     borderColor: '#6A6A6A',
-    borderWidth: 2,
-    borderRadius: 20,
-    width: '56%',
+    borderWidth: 1,
+    borderRadius: 10,
+    width: '50%',
     height: 20,
     marginLeft: 10,
     alignSelf: 'center',
   },
   picker: {
     color: '#6A6A6A',
-    borderBottomColor: '#6A6A6A99',
-    borderBottomWidth: 2,
+    borderColor: '#6A6A6A99',
+    borderWidth: 1,
     fontSize: 18,
     height: 40,
     marginBottom: 20,

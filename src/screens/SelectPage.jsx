@@ -55,15 +55,18 @@ const SelecaoScreen = ({ navigation }) => {
   const {vehicles, setVehicles} = VehiclesDB(); 
   const [selectedVehicle, setSelectedVehicle] = useState('');
 
+{/* Navegação para a Página de Detalhes Do Item Selecionado */}
     const handleItemPress = (item) => {
       console.log('Item Selecionado:', item);
       navigation.navigate(item);
     };
 
+{/* Definição da Visibilidade da Lista de Veículo Ativo */}
     const toggleModal = () => {
       setIsModalVisible(!isModalVisible);
     };
 
+{/* Seleção do Veículo Ativo */}
     const handleVehicleChange = (item) => {
       console.log('Veículo Selecionado:', item);
       setSelectedVehicle(item);
@@ -203,6 +206,8 @@ const SelecaoScreen = ({ navigation }) => {
 
 
 const PerfilScreen = () => {
+  const {vehicles, setVehicles} = VehiclesDB(); 
+  
   return (
     <View style={styles.containerPerfil}>
 
@@ -214,22 +219,22 @@ const PerfilScreen = () => {
       </View>
 
       <View>
-        <Text style={styles.textTitle}>Nome de Usuário</Text>
-        <Text style={styles.text}>usuario</Text>
+        <Text style={styles.textTitle}>Nome de Usuário:</Text>
+        <Text style={styles.text}>Usuario</Text>
       </View>
 
       <View>
-        <Text style={styles.textTitle}>E-mail</Text>
-        <Text style={styles.text}>email</Text>
+        <Text style={styles.textTitle}>E-mail:</Text>
+        <Text style={styles.text}>email@email.com</Text>
       </View>
 
-      <View>
+      <View style={styles.linha} justifyContent={'flex-start'}>
         <Text style={styles.textTitle}>Veiculos Registrados:</Text>
-        <Text style={styles.text}>veiculos</Text>
+        <Text style={styles.text} marginHorizontal={10}>{vehicles.length}</Text>
       </View>
 
       <View>
-        <Text style={styles.textTitle}>Localização</Text>
+        <Text style={styles.textTitle}>Localização: </Text>
         <Text style={styles.text}>local</Text>
       </View>
 

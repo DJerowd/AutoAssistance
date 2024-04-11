@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import IconI from 'react-native-vector-icons/Ionicons';
 import { VehiclesDB } from '../components/VehiclesDB';
@@ -6,6 +6,44 @@ import { VehiclesDB } from '../components/VehiclesDB';
 const VehiclesPage = ({ navigation }) => {
   const {vehicles, setVehicles} = VehiclesDB();  
 
+{/* Identificação do Codigo HEX de Cor */}
+  const getColorCode = (colorName) => {
+    switch (colorName.toLowerCase()) {
+      case 'preto':
+        return '#00000077';
+      case 'cinza':
+        return '#4A4A4A77';
+      case 'prata':
+        return '#C3BFBF77';
+      case 'branco':
+        return '#EEEEEE77';
+      case 'vermelho':
+        return '#FF000077';
+      case 'azul':
+        return '#2400FF77';
+      case 'verde':
+        return '#21A40077';
+      case 'amarelo':
+        return '#FAFF0077';
+      case 'laranja':
+        return '#FF990077';
+      case 'marrom':
+        return '#52310077';
+      case 'rosa':
+        return '#FF00D677';
+     
+      default:
+        return '#6A6A6A55';
+    }
+  };
+
+{/* Navegação para a Página de Detalhes Do Veículo Selecionado */}
+  const handleItemDetailsPress = (item) => {
+    console.log('Item Selecionado:', item);
+    navigation.navigate('VehicleDetailsPage', { vehicle: item });
+  };
+  
+{/* Padrão dos Itens da Lista */}
   const renderItem = ({ item }) => (
     <TouchableOpacity 
       style={styles.item}
@@ -13,22 +51,18 @@ const VehiclesPage = ({ navigation }) => {
     >
       <IconI 
                 name="car-sport-sharp" 
-                style={styles.icon} 
+                style={[styles.icon, { backgroundColor: getColorCode(item.color) }]}
                 size={40}
             />
 
       <View style={styles.coluna}>
-        <Text style={styles.itemText}>{item.id} - {item.name}</Text>
+        <Text style={styles.itemTitle}>{item.id} - {item.name}</Text>
         <Text style={styles.itemText}>Veículo: {item.brand} {item.model}</Text>
       </View>
     </TouchableOpacity>
   );
 
-  const handleItemDetailsPress = (item) => {
-    console.log('Item Selecionado:', item);
-    navigation.navigate('VehicleDetailsPage', { vehicle: item });
-  };
-
+{/* Navegação para a Página de Adicionar Novo Veículo */}
   const handleItemPress = (item) => {
     console.log('Item Selecionado:', item);
     navigation.navigate(item);
@@ -36,7 +70,8 @@ const VehiclesPage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-        
+
+{/* Lista de Veículos */}  
       <FlatList
         data={vehicles}
         renderItem={renderItem}
@@ -45,6 +80,7 @@ const VehiclesPage = ({ navigation }) => {
         borderBottomColor={'#6A6A6A11'}
       />
 
+{/* Botão de Navegação para a Página de Adicionar Veículo */}
       <TouchableOpacity 
         style={styles.addButton} 
         onPress={() => handleItemPress('NewVehiclePage')}
@@ -55,6 +91,7 @@ const VehiclesPage = ({ navigation }) => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -67,7 +104,6 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    backgroundColor: '#6A6A6A55',
     color: '#6A6A6A',
     borderRadius: 30,
     padding: 6,
@@ -80,10 +116,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  itemText: {
+  itemTitle: {
     color: '#6A6A6A',
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  itemText: {
+    color: '#6A6A6A',
+    fontSize: 20,
   },
 
   addButton: {

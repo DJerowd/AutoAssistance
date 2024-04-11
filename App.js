@@ -13,6 +13,7 @@ import MaintencePage from './src/screens/MaintenancePage.jsx';
 import NewMaintencePage from './src/screens/NewMaintencePage.jsx';
 import VehicleDetailsPage from './src/screens/VehicleDetailsPage.jsx';
 import MaintenanceDetailsPage from './src/screens/MaintenanceDetailsPage.jsx';
+import EditMaintenancePage from './src/screens/EditMaintenancePage.jsx';
 
 const Stack = createStackNavigator();
 
@@ -74,7 +75,7 @@ const App = () => {
           name="MaintencePage" 
           component={MaintencePage} 
           options={{
-            title: 'Manutenções',
+            title: 'Lembretes de Manutenções',
             headerStyle: { backgroundColor: '#009F4D' },
             headerTintColor: '#ffffff',
             headerTitleAlign: 'center',
@@ -97,6 +98,17 @@ const App = () => {
           component={MaintenanceDetailsPage} 
           options={{
             title: 'Detalhes do Lembrete',
+            headerStyle: { backgroundColor: '#009F4D' },
+            headerTintColor: '#ffffff',
+            headerTitleAlign: 'center',
+            headerTitleStyle: { fontWeight: 'bold' },
+          }}
+        />
+        <Stack.Screen 
+          name="EditMaintenancePage" 
+          component={EditMaintenancePage} 
+          options={{
+            title: 'Editar Lembrete',
             headerStyle: { backgroundColor: '#009F4D' },
             headerTintColor: '#ffffff',
             headerTitleAlign: 'center',
