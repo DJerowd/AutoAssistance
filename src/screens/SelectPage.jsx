@@ -9,7 +9,7 @@ import { VehiclesDB } from '../components/VehiclesDB';
 const Tab = createBottomTabNavigator();
 
 const SelectPage  = () => {
-
+{/* Navegação Entre a Página de seleção e o Perfil do Usuário */}
   return (
     <Tab.Navigator
     screenOptions={{
@@ -76,6 +76,7 @@ const SelecaoScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View style={{ height: 50, paddingHorizontal: 40, justifyContent: 'center', backgroundColor: '#009F4D'}}>
         
+{/* Seleção do Veículo Ativo */}
       <TouchableOpacity onPress={toggleModal}>
       {(!selectedVehicle == '') && (
         <Text style={styles.carPicker}>{selectedVehicle.name} | {selectedVehicle.brand} {selectedVehicle.model}</Text>
@@ -85,6 +86,7 @@ const SelecaoScreen = ({ navigation }) => {
       )}
       </TouchableOpacity>
 
+{/* Lista de Veículo Ativo */}
         <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
           <View style={styles.modalContainer}>
             <FlatList
@@ -98,8 +100,9 @@ const SelecaoScreen = ({ navigation }) => {
             />
           </View>
         </Modal>
-
       </View>
+
+{/* Background da Página */}
     <ImageBackground
     source={{ uri: 'https://www.creativefabrica.com/wp-content/uploads/2020/03/05/Black-Triangle-Polygon-Background-Graphics-3128551-1-580x387.jpg' }}
     style={styles.backgroundImage}
@@ -107,6 +110,7 @@ const SelecaoScreen = ({ navigation }) => {
 
       <View style={styles.buttonsContainer}>
         
+{/* Botão Manutenções Pendentes */}
         <View style={styles.linha}>
           <View style={styles.item}>
             <TouchableOpacity
@@ -124,7 +128,7 @@ const SelecaoScreen = ({ navigation }) => {
             </Text>
           </View>
 
-          
+{/* Botão Veículos Salvos */}
           <View style={styles.item}>
             <TouchableOpacity
               style={styles.button}
@@ -142,7 +146,7 @@ const SelecaoScreen = ({ navigation }) => {
           </View>
         </View>
 
-        
+{/* Botão Histórico de Problemas */}
         <View style={styles.linha}>
           <View style={styles.item}>
             <TouchableOpacity
@@ -160,7 +164,7 @@ const SelecaoScreen = ({ navigation }) => {
             </Text>
           </View>
           
-          
+{/* Botão identificação de Problemas */}
           <View style={styles.item}>
             <TouchableOpacity
               style={styles.button}
@@ -178,7 +182,7 @@ const SelecaoScreen = ({ navigation }) => {
           </View>
         </View>
 
-        
+{/* Botão Mapa */}
         <View style={styles.linha}>
           <View style={styles.item}>
             <TouchableOpacity
@@ -211,6 +215,7 @@ const PerfilScreen = () => {
   return (
     <View style={styles.containerPerfil}>
 
+{/* Imagem de Perfil */}
       <View style={styles.perfil}>
         <Image
         source={require('../assets/Logo.png')}
@@ -218,21 +223,25 @@ const PerfilScreen = () => {
         />
       </View>
 
+{/* Nome de Usuários */}
       <View>
         <Text style={styles.textTitle}>Nome de Usuário:</Text>
         <Text style={styles.text}>Usuario</Text>
       </View>
 
+{/* E-mail */}
       <View>
         <Text style={styles.textTitle}>E-mail:</Text>
         <Text style={styles.text}>email@email.com</Text>
       </View>
 
+{/* Quantidade de Veículos Registrados */}
       <View style={styles.linha} justifyContent={'flex-start'}>
         <Text style={styles.textTitle}>Veiculos Registrados:</Text>
         <Text style={styles.text} marginHorizontal={10}>{vehicles.length}</Text>
       </View>
 
+{/* Localização do Usuário */}
       <View>
         <Text style={styles.textTitle}>Localização: </Text>
         <Text style={styles.text}>local</Text>

@@ -28,6 +28,7 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
     );
   };
 
+{/* Calcular Percentual de Quilometros */}
   const calculateKilometersProgress = (item) => {
     if (item.isKilometersEnabled) {
         return (3.4 *(item.kilometers / (item.kilometersEnd / 100)));
@@ -36,6 +37,7 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
     }
   };
 
+{/* Calcular Percentual de Meses */}
   const calculateMonthsProgress = (item) => {
     if (item.isMonthsEnabled) {
         return (3.4 *(item.months / (item.monthsEnd / 100)));
@@ -44,16 +46,19 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
     }
   };
 
+{/* Navegação Para a Página de Edição da Manutenção */}
   const handleEditMaintenance = () => {
     navigation.navigate('EditMaintenancePage', { maintenance });
   };
 
   return (
     <ScrollView style={styles.container}>
-      
+
+{/* Tipo de Manutenção */}
       <Text style={styles.label}>Tipo de Manutenção:</Text>
       <Text style={styles.text}>{maintenance.type}</Text>
 
+{/* Estado da Notifição */}
       <View style={styles.linha} marginBottom={10}>
         <Text style={styles.label}>Notificação:</Text>
         {(!maintenance.isKilometersEnabled && !maintenance.isMonthsEnabled) && (
@@ -67,26 +72,26 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
         <Text style={[styles.checkbox, maintenance.isRepeat && styles.checkedCheckbox]}>{maintenance.isRepeat ? 'Ligada' : 'Desligada'}</Text>
       </View>
 
+{/* Notificações */}
       {maintenance.isRepeat && (
         <View>
           <Text style={styles.label}>Notificar a cada:</Text>
 
+{/* Barra de Progresso em Quilometros */}
           {maintenance.isKilometersEnabled && (
             <View>
               <View style={styles.linha} justifyContent={'space-between'}>
                 <Text style={styles.itemText}>
                   {maintenance.isKilometersEnabled ? `${maintenance.kilometers} KM ` : ''}
                 </Text>
-
-                {((maintenance.kilometers == maintenance.kilometersEnd && !maintenance.kilometersEnd == '')) && (
-                  <IconMCI 
-                    name="alert" 
-                    color={'#DD0000'}
-                    size={30} 
-                    marginRight={10}
-                  />
-                )}
-
+                  {((maintenance.kilometers == maintenance.kilometersEnd && !maintenance.kilometersEnd == '')) && (
+                    <IconMCI 
+                      name="alert" 
+                      color={'#DD0000'}
+                      size={30} 
+                      marginRight={10}
+                    />
+                  )}
                 <Text style={styles.itemText}>
                   {maintenance.isKilometersEnabled ? `${maintenance.kilometersEnd} KM ` : ''}
                 </Text>
@@ -95,24 +100,21 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
             </View>
           )}
 
-
-          
+{/* Barra de Progresso em Meses */}
           {maintenance.isMonthsEnabled && (
             <View>
               <View style={styles.linha} justifyContent={'space-between'}>
                 <Text style={styles.itemText}>
                   {maintenance.isMonthsEnabled ? `${maintenance.months} Meses ` : ''}
                 </Text>
-
-                {((maintenance.months == maintenance.monthsEnd && !maintenance.monthsEnd == '')) && (
-                  <IconMCI 
-                    name="alert" 
-                    color={'#DD0000'}
-                    size={30} 
-                    marginRight={10}
-                  />
-                )}
-
+                  {((maintenance.months == maintenance.monthsEnd && !maintenance.monthsEnd == '')) && (
+                    <IconMCI 
+                      name="alert" 
+                      color={'#DD0000'}
+                      size={30} 
+                      marginRight={10}
+                    />
+                  )}
                 <Text style={styles.itemText}>
                   {maintenance.isMonthsEnabled ? `${maintenance.monthsEnd} Meses ` : ''}
                 </Text>
@@ -125,13 +127,16 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
         </View>
       )}
 
+{/* Descrição do Lembrete */}
       <Text style={styles.label} marginTop={20}>Descrição:</Text>
       <Text style={styles.descriptionInput}>{maintenance.description}</Text>
       
+{/* Botão de Editar Informações */}
       <TouchableOpacity style={styles.editButton} onPress={handleEditMaintenance}>
         <Text style={styles.editButtonText}>Editar Informações</Text>
       </TouchableOpacity>
 
+{/* Botão de Excluir Lembrete */}
       <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteMaintenance}>
         <Text style={styles.deleteButtonText}>Excluir Lembrete</Text>
       </TouchableOpacity>

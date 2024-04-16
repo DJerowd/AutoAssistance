@@ -6,6 +6,7 @@ import { MaintenanceDB } from '../components/MaintenanceDB';
 const MaintencePage = ({ navigation }) => {
     const {notes, setNotes} = MaintenanceDB();
 
+{/* Calcular Percentual de Quilometros */}
     const calculateKilometersProgress = (item) => {
       if (item.isKilometersEnabled) {
           return (3.2 *(item.kilometers / (item.kilometersEnd / 100)));
@@ -14,6 +15,7 @@ const MaintencePage = ({ navigation }) => {
       }
     };
 
+{/* Calcular Percentual de Meses */}
     const calculateMonthsProgress = (item) => {
       if (item.isMonthsEnabled) {
           return (3.2 *(item.months / (item.monthsEnd / 100)));
@@ -22,6 +24,13 @@ const MaintencePage = ({ navigation }) => {
       }
     };
 
+{/* Navegação para a Página de Detalhes Do Veículo Selecionado */}
+    const handleItemDetailsPress = (item) => {
+      console.log('Item Selecionado:', item);
+      navigation.navigate('MaintenanceDetailsPage', { maintenance: item });
+    };
+
+{/* Padrão dos Itens da Lista */}
     const renderItem = ({ item }) => (
         <TouchableOpacity 
           style={styles.item}
@@ -40,6 +49,7 @@ const MaintencePage = ({ navigation }) => {
             <View style={styles.linha}>
               <Text style={styles.itemText}>{item.name} - {item.type}</Text>
 
+{/* Alerta de Barra de Progresso Completa */}
               {((item.months == item.monthsEnd && !item.monthsEnd == '') || (item.kilometers == item.kilometersEnd && !item.kilometersEnd == '')) && (
                 <IconMCI 
                   name="alert" 
@@ -49,6 +59,7 @@ const MaintencePage = ({ navigation }) => {
                 />
               )}
 
+{/* Alerta de Ausencia de Avisos */}
               {(!item.isKilometersEnabled && !item.isMonthsEnabled) && (
                 <IconMCI 
                   name="alert-outline" 
@@ -59,49 +70,42 @@ const MaintencePage = ({ navigation }) => {
               )}
             </View>
 
+{/* Barra de Progresso em Quilometros */}
             {item.isKilometersEnabled && (
-            <View>
-
-              <View style={styles.linha} justifyContent={'space-between'}>
-                <Text style={styles.text}>
-                  {item.isKilometersEnabled ? `${item.kilometers} KM ` : ''}
-                </Text>
-
-                <Text style={styles.text}>
-                  {item.isKilometersEnabled ? `${item.kilometersEnd} KM ` : ''}
-                </Text>
+              <View>
+                <View style={styles.linha} justifyContent={'space-between'}>
+                  <Text style={styles.text}>
+                    {item.isKilometersEnabled ? `${item.kilometers} KM ` : ''}
+                  </Text>
+                  <Text style={styles.text}>
+                    {item.isKilometersEnabled ? `${item.kilometersEnd} KM ` : ''}
+                  </Text>
+                </View>
+                <View style={styles.progressBarTotal}><View style={styles.progressBar} width={calculateKilometersProgress(item)}></View></View>
               </View>
-
-              <View style={styles.progressBarTotal}><View style={styles.progressBar} width={calculateKilometersProgress(item)}></View></View>
-            </View>
             )}
 
+{/* Barra de Progresso em Meses */}
             {item.isMonthsEnabled && (
-            <View>
-
-              <View style={styles.linha} justifyContent={'space-between'}>
-                <Text style={styles.text}>
-                  {item.isMonthsEnabled ? `${item.months} Meses ` : ''}
-                </Text>
-
-                <Text style={styles.text}>
-                  {item.isMonthsEnabled ? `${item.monthsEnd} Meses ` : ''}
-                </Text>
+              <View>
+                <View style={styles.linha} justifyContent={'space-between'}>
+                  <Text style={styles.text}>
+                    {item.isMonthsEnabled ? `${item.months} Meses ` : ''}
+                  </Text>
+                  <Text style={styles.text}>
+                    {item.isMonthsEnabled ? `${item.monthsEnd} Meses ` : ''}
+                  </Text>
+                </View>
+                <View style={styles.progressBarTotal}><View style={styles.progressBar} width={calculateMonthsProgress(item)}></View></View>
               </View>
-
-              <View style={styles.progressBarTotal}><View style={styles.progressBar} width={calculateMonthsProgress(item)}></View></View>
-            </View>
             )}
-          </View>
 
+          </View>
         </TouchableOpacity>
       );
 
-    const handleItemDetailsPress = (item) => {
-      console.log('Item Selecionado:', item);
-      navigation.navigate('MaintenanceDetailsPage', { maintenance: item });
-    };
 
+{/* Navegação para a Página de Adicionar Novo Veículo */}
     const handleItemPress = (item) => {
         console.log('Item Selecionado:', item);
         navigation.navigate(item);
@@ -109,15 +113,17 @@ const MaintencePage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-        
+
+{/* Lista de Lembretes */}  
       <FlatList
         data={notes}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         borderBottomWidth={4}
         borderBottomColor={'#6A6A6A11'}
-      ></FlatList>
+      />
 
+{/* Botão de Navegação para a Página de Adicionar Novo Lembrete */}
       <TouchableOpacity 
         style={styles.addButton} 
         onPress={() => handleItemPress('NewMaintencePage')}

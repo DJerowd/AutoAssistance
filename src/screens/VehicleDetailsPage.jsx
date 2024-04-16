@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Alert  } from 'react-native';
 
-const VehicleDetailsPage = ({ route }) => {
+const VehicleDetailsPage = ({ route, navigation }) => {
   const { vehicle } = route.params;
 
 {/* Alerta ae Confirmação de Excluir Veículo */}
@@ -19,6 +19,7 @@ const VehicleDetailsPage = ({ route }) => {
           onPress: () => {
             Alert.alert('Veículo excluído com sucesso');
             console.log('Veículo excluído com sucesso');
+            navigation.goBack();
           },
           style: 'destructive',
         },
@@ -29,7 +30,7 @@ const VehicleDetailsPage = ({ route }) => {
 
 {/* Navegação para a Página de Editar Veículo */}
   const handleEditVehicle = () => {
-    // navigation.navigate('EditVehiclePage', { vehicle });
+    navigation.navigate('EditVehiclePage', { vehicle });
   };
 
   return (
@@ -183,8 +184,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#009F4D',
     elevation: 6,
   },
-
-
 });
 
 export default VehicleDetailsPage;

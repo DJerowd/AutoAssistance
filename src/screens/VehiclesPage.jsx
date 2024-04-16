@@ -62,6 +62,7 @@ const VehiclesPage = ({ navigation }) => {
     </TouchableOpacity>
   );
 
+
 {/* Navegação para a Página de Adicionar Novo Veículo */}
   const handleItemPress = (item) => {
     console.log('Item Selecionado:', item);
@@ -80,7 +81,7 @@ const VehiclesPage = ({ navigation }) => {
         borderBottomColor={'#6A6A6A11'}
       />
 
-{/* Botão de Navegação para a Página de Adicionar Veículo */}
+{/* Botão de Navegação para a Página de Adicionar Novo Veículo */}
       <TouchableOpacity 
         style={styles.addButton} 
         onPress={() => handleItemPress('NewVehiclePage')}

@@ -3,15 +3,17 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+
 import StartPage from './src/screens/StartPage.jsx';
 import LoginPage from './src/screens/LoginPage';
 import RegisterPage from './src/screens/RegisterPage.jsx';
 import SelectPage from './src/screens/SelectPage.jsx';
 import VehiclesPage from './src/screens/VehiclesPage.jsx';
 import NewVehiclePage from './src/screens/NewVehiclePage.jsx';
+import VehicleDetailsPage from './src/screens/VehicleDetailsPage.jsx';
+import EditVehiclePage from './src/screens/EditVehiclePage.jsx';
 import MaintencePage from './src/screens/MaintenancePage.jsx';
 import NewMaintencePage from './src/screens/NewMaintencePage.jsx';
-import VehicleDetailsPage from './src/screens/VehicleDetailsPage.jsx';
 import MaintenanceDetailsPage from './src/screens/MaintenanceDetailsPage.jsx';
 import EditMaintenancePage from './src/screens/EditMaintenancePage.jsx';
 
@@ -143,6 +145,17 @@ const App = () => {
           component={VehicleDetailsPage} 
           options={{
             title: 'Detalhes do Veículo',
+            headerStyle: { backgroundColor: '#009F4D' },
+            headerTintColor: '#ffffff',
+            headerTitleAlign: 'center',
+            headerTitleStyle: { fontWeight: 'bold' },
+          }}
+        />
+        <Stack.Screen 
+          name="EditVehiclePage" 
+          component={EditVehiclePage} 
+          options={{
+            title: 'Editar Veículo',
             headerStyle: { backgroundColor: '#009F4D' },
             headerTintColor: '#ffffff',
             headerTitleAlign: 'center',

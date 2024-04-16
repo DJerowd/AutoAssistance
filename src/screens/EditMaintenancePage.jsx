@@ -119,7 +119,7 @@ const EditMaintenancePage = ({ route }) => {
         {isKilometersEnabled && (
           <TextInput
             style={styles.checkboxInput}
-            value={kilometers}
+            value={`${kilometers}`}
             onChangeText={setKilometers}
             // onChangeText={(text) => handleChangeText('kilometers', text)}
             placeholder={`${kilometers}`}
@@ -140,7 +140,7 @@ const EditMaintenancePage = ({ route }) => {
         {isMonthsEnabled && (
           <TextInput
             style={styles.checkboxInput}
-            value={months}
+            value={`${months}`}
             onChangeText={setMonths}
             // onChangeText={(text) => handleChangeText('months', text)}
             placeholder={`${months}`}
