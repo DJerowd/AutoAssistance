@@ -1,5 +1,6 @@
 import { React, useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert, Image } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const LoginPage = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -18,7 +19,7 @@ const LoginPage = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <LinearGradient style={styles.container} colors={['#F9F9F9', '#6A6A6A55']}>
 
 {/* Logo */}
       <Image
@@ -56,7 +57,7 @@ const LoginPage = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-    </View>
+    </LinearGradient>
   );
 };
 
