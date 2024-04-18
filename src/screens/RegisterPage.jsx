@@ -1,7 +1,8 @@
 import { React, useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import CheckBox from 'expo-checkbox';
 import IconI from 'react-native-vector-icons/Ionicons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const RegisterPage = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -29,6 +30,12 @@ const RegisterPage = ({ navigation }) => {
     return null;
    };
 
+   {/* Registrar-se */}
+  const handleLogin = () => {
+    console.log('Item Selecionado:', 'LoginPage');
+    navigation.navigate('LoginPage');
+  };
+
   const handleRegister = () => {
 {/* Formato do email e telefone */}
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -41,7 +48,7 @@ const RegisterPage = ({ navigation }) => {
    };
 
 {/* Conclusão Com Sucesso do Registro */}
-    if (username.length >= 6 && email.match(emailPattern) && email.length >= 10 && formatPhoneNumber(phoneNumber) && password.length >= 8 && isValidPassword(password) && password == confirmPassword) {
+    if (username.length >= 6 && email.match(emailPattern) && email.length >= 10 && formatPhoneNumber(phoneNumber) && password.length >= 8 && isValidPassword(password) && password == confirmPassword && isChecked == true) {
       setError('');
       // navigation.navigate('LoginPage');
       console.log('Registro Concluido.');
@@ -61,7 +68,7 @@ const RegisterPage = ({ navigation }) => {
       setError('');
 
 {/* Validação do número de telefone */}
-    } else if (!formatPhoneNumber(phoneNumber)) {
+    } else if (phoneNumber.length > 0 && !formatPhoneNumber(phoneNumber)) {
       newErrors.phoneNumber = 'O número de telefone é inválido.';
       setError('');
 
@@ -76,10 +83,15 @@ const RegisterPage = ({ navigation }) => {
       newErrors.confirmPassword = 'A senha e a confirmação da senha não coincidem.';
       setError('');
 
-{/* Se alguma informação foi inserida, mas de forma incorreta */}
-    } if (username.length <= 0 || email.length <= 0 || phoneNumber.length <= 0 || password.length <= 0) {
+{/* Verificar se alguma informação não foi inserida*/}
+    } else if (username.length <= 0 || email.length <= 0 || phoneNumber.length <= 0 || password.length <= 0) {
       setError('Todos os campos devem ser preenchidos corretamente.');
+
+{/* Verificar se foram confirmados os termos e condições */}
+    } else if (isChecked == false){
+      setError('Aceite os termos e condições.');
     }
+
 
     setErrors(newErrors);
   };
@@ -92,41 +104,46 @@ const RegisterPage = ({ navigation }) => {
   };
 
 return (
-  <LinearGradient style={styles.container} colors={['#F9F9F9', '#6A6A6A55']}>
+  <LinearGradient style={styles.container} colors={['#F9F9F9', '#6A6A6A22']}>
 
 {/* Titulo */}
     <Text style={styles.title}>Criar conta:</Text>
 
 {/* Nome de Usuário */}
-    <Text style={styles.text}>Nome de usuário</Text>
+    <Text style={styles.text}>Nome de usuário:</Text>
+    <View style={styles.input}>
     <TextInput
-      style={styles.input}
+      style={styles.textInput}
       value={username}
       placeholder="Nome de Usuário"
       onChangeText={setUsername}
       autoCapitalize="none"
     />
+    </View>
     {errors.username ? <Text style={styles.error}>{errors.username}</Text> : null}
 
 {/* E-mail */}
-    <Text style={styles.text}>E-mail</Text>
+    <Text style={styles.text}>E-mail:</Text>
+    <View style={styles.input}>
     <TextInput
-      style={styles.input}
+      style={styles.textInput}
       value={email}
       placeholder="E-mail"
       keyboardType="email-address"
       onChangeText={setEmail}
       autoCapitalize="none"
     />
+    </View>
     {errors.email ? <Text style={styles.error}>{errors.email}</Text> : null}
 
 {/* Número de Telefone */}
-    <Text style={styles.text}>Número de telefone</Text>
-    <View style={styles.linha}>
-    <Text style={styles.input} width={'16%'}>+55</Text>
+    <Text style={styles.text}>Número de telefone:</Text>
+    <View style={styles.input} flexDirection={'row'} alignItems={'center'}>
+    <Text style={styles.textInput} width={'14%'} height={'100%'} borderRightWidth={1}>+55</Text>
     <TextInput
-      style={styles.input}
-      width={'84%'}
+      style={styles.textInput}
+      paddingLeft={10}
+      width={'86%'}
       value={formatPhoneNumber(phoneNumber)}
       keyboardType='numeric'
       placeholder="Número de Telefone"
@@ -137,37 +154,60 @@ return (
     {errors.phoneNumber ? <Text style={styles.error}>{errors.phoneNumber}</Text> : null}
 
 {/* Senha */}
-    <Text style={styles.text}>Senha</Text>
-    <View style={styles.input}>
+    <Text style={styles.text}>Senha:</Text>
+    <View style={styles.input} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
       <TextInput
+          style={styles.textInput}
+          width={'86%'}
           value={password}
           placeholder="Senha"
           secureTextEntry={!passwordShown}
           onChangeText={setPassword}
       />
-      <TouchableOpacity style={{position: 'absolute', right: 10, top: 4}} onPress={() => setPasswordShown(!passwordShown)}>
-          <IconI name={passwordShown ? "eye" : "eye-off"} size={30} color="#6A6A6A"/>
+      <TouchableOpacity width={'14%'} onPress={() => setPasswordShown(!passwordShown)}>
+          <IconI name={passwordShown ? "eye" : "eye-off"} size={30} marginRight={10} color="#6A6A6A"/>
       </TouchableOpacity>
     </View>
     {errors.password ? <Text style={styles.error}>{errors.password}</Text> : null}
 
 {/* Confirmação da Senha */}
-    <Text style={styles.text}>Confirmar senha</Text>
+    <Text style={styles.text}>Confirmar senha:</Text>
+    <View style={styles.input}>
     <TextInput
-      style={styles.input}
+      style={styles.textInput}
       value={confirmPassword}
       placeholder="Confirmar Senha"
       secureTextEntry
       onChangeText={setConfirmPassword}
     />
+    </View>
     {errors.confirmPassword ? <Text style={styles.error}>{errors.confirmPassword}</Text> : null}
     
+{/* Confirmar termos e condições */}
+    <View style={styles.linha}>
+      <CheckBox
+        disabled={false}
+        value={isChecked}
+        onValueChange={() => setIsChecked(!isChecked)}
+        color={isChecked ? '#009F4D' : undefined}
+      />
+      <Text style={styles.text}>  Aceito os Termos e Condições.</Text>
+    </View>
+
 {/* Botão de Criar Conta */}
     <View style={styles.buttonsContainer}>
-    {error ? <Text style={styles.error}>{error}</Text> : null}
+      {error ? <Text style={styles.error}>{error}</Text> : null}
       <TouchableOpacity title="Registrar" style={styles.registrarButton} onPress={handleRegister} >
             <Text style={styles.registrarButtonText}>Criar conta</Text>
       </TouchableOpacity>
+
+{/* Botão de Realizar Login */}
+      <View style={styles.linha}>
+        <Text style={styles.text}>Já tenho uma conta: </Text>
+        <TouchableOpacity title="Registrar" style={styles.loginButton} onPress={handleLogin} >
+              <Text style={styles.loginButtonText}>Fazer login</Text>
+        </TouchableOpacity>
+      </View>
     </View>
 
   </LinearGradient>
@@ -179,7 +219,7 @@ const styles = StyleSheet.create({
   container: {
     flex:  1,
     backgroundColor: '#F9F9F9',
-    padding:  40,
+    padding:  30,
     paddingTop:  0,
   },
 
@@ -191,23 +231,31 @@ const styles = StyleSheet.create({
   title: {
     color: '#000000',
     marginTop:  20,
+    marginBottom:  10,
     fontSize: 32,
     fontWeight: 'bold',
   },
 
   text: {
     color: '#000000',
-    marginTop:  10,
     fontSize: 18,
   },
 
+  textInput:{
+    color: '#000000',
+    fontSize: 16,
+    textAlignVertical: 'center'
+  },
   input: {
     width: '100%',
-    height:  40,
-    borderColor: '#262626',
-    backgroundColor: '#6A6A6A99',
+    height:  48,
+    borderColor: '#000000',
+    backgroundColor: '#6A6A6A22',
     borderWidth:  1,
-    padding:  10,
+    borderRadius: 8,
+    paddingLeft:  10,
+    marginBottom:  10,
+    justifyContent: 'center',
   },
 
   buttonsContainer: {
@@ -215,15 +263,24 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   registrarButton: {
-    height:  50,
-    width: 200,
+    height:  60,
     backgroundColor: '#6A6A6A',
     marginTop:  20,
+    marginBottom: 20,
+    paddingHorizontal: 40,
     borderRadius: 40,
     justifyContent: 'center',
   },
   registrarButtonText: {
     color: '#F9F9F9',
+    fontSize: 20,
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  loginButton: {
+  },
+  loginButtonText: {
+    color: '#009F4D',
     fontSize: 20,
     textAlign: 'center',
     fontWeight: 'bold',

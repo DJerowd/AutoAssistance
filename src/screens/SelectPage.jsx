@@ -5,6 +5,7 @@ import Modal from 'react-native-modal';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import { VehiclesDB } from '../components/VehiclesDB';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Tab = createBottomTabNavigator();
 
@@ -103,10 +104,7 @@ const SelecaoScreen = ({ navigation }) => {
       </View>
 
 {/* Background da Página */}
-    <ImageBackground
-    source={{ uri: 'https://www.creativefabrica.com/wp-content/uploads/2020/03/05/Black-Triangle-Polygon-Background-Graphics-3128551-1-580x387.jpg' }}
-    style={styles.backgroundImage}
-    >
+    <LinearGradient style={styles.container} colors={['#F9F9F9', '#00000022']}>
 
       <View style={styles.buttonsContainer}>
         
@@ -203,7 +201,7 @@ const SelecaoScreen = ({ navigation }) => {
 
       </View>
 
-    </ImageBackground>
+    </LinearGradient>
     </View>
   );
 };

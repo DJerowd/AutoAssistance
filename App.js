@@ -1,7 +1,7 @@
 import { React } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity } from 'react-native';
+import { StatusBar, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import StartPage from './src/screens/StartPage.jsx';
@@ -22,16 +22,14 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
+      <StatusBar backgroundColor={'#008F45'} barStyle={'light-content'}/>
       <Stack.Navigator initialRouteName="StartPage">
         <Stack.Screen 
           name="StartPage" 
           component={StartPage} 
           options={{
             title: '',
-            headerStyle: { backgroundColor: '#009F4D', height: 40 },
-            headerTintColor: '#ffffff',
-            headerTitleAlign: 'center',
-            headerTitleStyle: { fontWeight: 'bold' },
+            headerShown: false,
           }}
         />
         <Stack.Screen 
@@ -41,8 +39,6 @@ const App = () => {
             title: '',
             headerStyle: { backgroundColor: '#009F4D' },
             headerTintColor: '#ffffff',
-            headerTitleAlign: 'center',
-            headerTitleStyle: { fontWeight: 'bold' },
           }}
         />
         <Stack.Screen 
@@ -52,8 +48,6 @@ const App = () => {
           title: '',
           headerStyle: { backgroundColor: '#009F4D' },
           headerTintColor: '#ffffff',
-          headerTitleAlign: 'center',
-          headerTitleStyle: { fontWeight: 'bold' },
         }}
       />
       <Stack.Screen 
@@ -63,8 +57,6 @@ const App = () => {
             title: '',
             headerStyle: { backgroundColor: '#009F4D' },
             headerTintColor: '#ffffff',
-            headerTitleAlign: 'center',
-            headerTitleStyle: { fontWeight: 'bold' },
             headerRight: () => (
               <TouchableOpacity style={{ marginRight: 20 }}>
                 <MaterialIcons name="settings" size={30} color="white" />

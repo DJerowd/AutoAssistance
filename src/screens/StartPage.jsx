@@ -21,13 +21,15 @@ return (
     <View style={styles.container}>
 
 {/* Página de Rolagem */}  
-      <Swiper autoplay={true} autoplayTimeout={10} loop={true}>
+      <View style={styles.swiperContainer}>
+      <Swiper autoplay={true} autoplayTimeout={30} loop={true}>
         {ads.map(ad => (
-          <View key={ad.id} style={styles.slide}>
+          <View key={ad.id} style={styles.swiper}>
             <Image source={{ uri: ad.imageUrl }} style={styles.adImage} />
           </View>
         ))}
       </Swiper>
+      </View>
 
 {/* Botão de Navegação para a Página Inicial */}  
       <View style={styles.buttonsContainer}>
@@ -47,12 +49,17 @@ return (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#009F4D',
+    backgroundColor: '#F9F9F9',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
 
-  slide: {
+  swiperContainer: {
+    paddingTop: 160,
+    paddingBottom: 40,
+    paddingHorizontal: 20,
+  },
+  swiper: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -67,12 +74,11 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   button: {
-    height:  50,
+    height:  60,
     width: 200,
     backgroundColor: '#6A6A6A',
-    borderColor: '#FFFFFF',
-    borderWidth: 2,
     borderRadius: 40,
+    marginBottom: 40,
     justifyContent: 'center',
   },
   buttonText: {

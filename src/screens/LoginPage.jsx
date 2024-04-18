@@ -1,15 +1,25 @@
 import { React, useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { UsersDB } from '../components/UsersDB';
 
 const LoginPage = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const { user } = UsersDB();
 
 {/* Realizar Login */}
   const handleLogin = () => {
-    console.log('Item Selecionado:', 'SelectPage');
-    navigation.navigate('SelectPage');
+    const userFound = user.find(user => user.username === username && user.password === password)
+    if (userFound) {
+      setError('');
+      console.log('Login bem sucedido:', 'SelectPage');
+      navigation.navigate('SelectPage');
+    } else {
+      Alert.alert('Erro', 'Usuário não encontrado.');
+      setError('Usuário não encontrado.');
+    }
   };
 
 {/* Registrar-se */}
@@ -19,7 +29,7 @@ const LoginPage = ({ navigation }) => {
   };
 
   return (
-    <LinearGradient style={styles.container} colors={['#F9F9F9', '#6A6A6A55']}>
+    <LinearGradient style={styles.container} colors={['#F9F9F9', '#6A6A6A22']}>
 
 {/* Logo */}
       <Image
@@ -28,33 +38,41 @@ const LoginPage = ({ navigation }) => {
       />
 
 {/* Nome de Usuário */}
-      <TextInput
-        style={styles.input}
-        value={username}
-        placeholder="Username"
-        onChangeText={setUsername}
-        autoCapitalize="none"
-      />
+      <View style={styles.input}>
+        <TextInput
+          style={styles.textInput}
+          value={username}
+          placeholder="Username"
+          onChangeText={setUsername}
+          autoCapitalize="none"
+        />
+      </View>
 
 {/* Senha */}
-      <TextInput
-        style={styles.input}
-        value={password}
-        placeholder="Password"
-        secureTextEntry
-        onChangeText={setPassword}
-      />
+      <View style={styles.input}>
+        <TextInput
+          style={styles.textInput}
+          value={password}
+          placeholder="Password"
+          secureTextEntry
+          onChangeText={setPassword}
+        />
+      </View>
 
 {/* Botão de Realizar Login */}
+      {error ? <Text style={styles.error}>{error}</Text> : null}
       <View style={styles.buttonsContainer}>
         <TouchableOpacity title="Login" style={styles.loginButton} onPress={handleLogin} >
           <Text style={styles.loginButtonText}>Entrar</Text>
         </TouchableOpacity>
 
 {/* Botão de Criar uma Nova Conta */}
-        <TouchableOpacity title="Registrar" style={styles.registrarButton} onPress={handleRegister} >
-          <Text style={styles.registrarButtonText}>Criar conta</Text>
-        </TouchableOpacity>
+        <View style={styles.linha}>
+          <Text style={styles.text}>Não tenho uma conta ainda: </Text>
+          <TouchableOpacity title="Registrar" style={styles.registrarButton} onPress={handleRegister} >
+            <Text style={styles.registrarButtonText}>Criar conta</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
     </LinearGradient>
@@ -67,23 +85,41 @@ const styles = StyleSheet.create({
     flex:  1,
     backgroundColor: '#F9F9F9',
     padding:  40,
-    paddingTop:  0,
+    paddingTop:  10,
+  },
+
+  linha: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 
   image: {
     height: 300,
     width: 300,
     alignSelf: 'center',
-    marginBottom:  40,
+    marginBottom:  20,
   },
 
+  text: {
+    color: '#000000',
+    fontSize: 18,
+  },
+
+  textInput:{
+    color: '#000000',
+    fontSize: 16,
+    textAlignVertical: 'center'
+  },
   input: {
-    height:  40,
-    borderColor: '#262626',
-    backgroundColor: '#6A6A6A99',
+    width: '100%',
+    height:  48,
+    borderColor: '#000000',
+    backgroundColor: '#6A6A6A22',
     borderWidth:  1,
-    marginTop:  20,
-    padding:  10,
+    borderRadius: 8,
+    paddingLeft:  10,
+    marginBottom:  20,
+    justifyContent: 'center',
   },
 
   buttonsContainer: {
@@ -91,10 +127,11 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   loginButton: {
-    height:  50,
-    width: 200,
+    height:  60,
     backgroundColor: '#6A6A6A',
-    marginTop:  20,
+    marginTop:  10,
+    marginBottom: 20,
+    paddingHorizontal: 60,
     borderRadius: 40,
     justifyContent: 'center',
   },
@@ -105,20 +142,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   registrarButton: {
-    height:  50,
-    width: 140,
-    backgroundColor: '#00000000',
-    borderColor: '#6A6A6A',
-    borderRadius: 40,
-    borderWidth:  2,
-    marginTop:  20,
-    justifyContent: 'center',
   },
   registrarButtonText: {
-    color: '#6A6A6A',
+    color: '#009F4D',
     fontSize: 20,
     textAlign: 'center',
     fontWeight: 'bold',
+  },
+
+  error: {
+    color: '#ff0000',
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 
