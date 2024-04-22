@@ -1,5 +1,5 @@
 import { React, useState } from 'react';
-import { View, TouchableOpacity, Text, Image, StyleSheet, ImageBackground, FlatList } from 'react-native';
+import { View, TouchableOpacity, Text, Image, StyleSheet, FlatList } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Modal from 'react-native-modal';
 import IconFA from 'react-native-vector-icons/FontAwesome';
@@ -207,7 +207,7 @@ const SelecaoScreen = ({ navigation }) => {
 };
 
 
-const PerfilScreen = () => {
+const PerfilScreen = ({ route }) => {
   const {vehicles, setVehicles} = VehiclesDB(); 
   
   return (
@@ -224,7 +224,7 @@ const PerfilScreen = () => {
 {/* Nome de Usuários */}
       <View>
         <Text style={styles.textTitle}>Nome de Usuário:</Text>
-        <Text style={styles.text}>Usuario</Text>
+        <Text style={styles.text}>user</Text>
       </View>
 
 {/* E-mail */}

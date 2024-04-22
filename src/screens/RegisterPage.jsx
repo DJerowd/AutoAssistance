@@ -112,27 +112,27 @@ return (
 {/* Nome de Usuário */}
     <Text style={styles.text}>Nome de usuário:</Text>
     <View style={styles.input}>
-    <TextInput
-      style={styles.textInput}
-      value={username}
-      placeholder="Nome de Usuário"
-      onChangeText={setUsername}
-      autoCapitalize="none"
-    />
+      <TextInput
+        style={styles.textInput}
+        value={username}
+        placeholder="Nome de Usuário"
+        onChangeText={setUsername}
+        autoCapitalize="none"
+      />
     </View>
     {errors.username ? <Text style={styles.error}>{errors.username}</Text> : null}
 
 {/* E-mail */}
     <Text style={styles.text}>E-mail:</Text>
     <View style={styles.input}>
-    <TextInput
-      style={styles.textInput}
-      value={email}
-      placeholder="E-mail"
-      keyboardType="email-address"
-      onChangeText={setEmail}
-      autoCapitalize="none"
-    />
+      <TextInput
+        style={styles.textInput}
+        value={email}
+        placeholder="E-mail"
+        keyboardType="email-address"
+        onChangeText={setEmail}
+        autoCapitalize="none"
+      />
     </View>
     {errors.email ? <Text style={styles.error}>{errors.email}</Text> : null}
 
@@ -140,16 +140,16 @@ return (
     <Text style={styles.text}>Número de telefone:</Text>
     <View style={styles.input} flexDirection={'row'} alignItems={'center'}>
     <Text style={styles.textInput} width={'14%'} height={'100%'} borderRightWidth={1}>+55</Text>
-    <TextInput
-      style={styles.textInput}
-      paddingLeft={10}
-      width={'86%'}
-      value={formatPhoneNumber(phoneNumber)}
-      keyboardType='numeric'
-      placeholder="Número de Telefone"
-      maxLength={13}
-      onChangeText={(text) => setPhoneNumber(text)}
-    />
+      <TextInput
+        style={styles.textInput}
+        paddingLeft={10}
+        width={'86%'}
+        value={formatPhoneNumber(phoneNumber)}
+        keyboardType='numeric'
+        placeholder="Número de Telefone"
+        maxLength={13}
+        onChangeText={(text) => setPhoneNumber(text)}
+      />
     </View>
     {errors.phoneNumber ? <Text style={styles.error}>{errors.phoneNumber}</Text> : null}
 
@@ -173,13 +173,13 @@ return (
 {/* Confirmação da Senha */}
     <Text style={styles.text}>Confirmar senha:</Text>
     <View style={styles.input}>
-    <TextInput
-      style={styles.textInput}
-      value={confirmPassword}
-      placeholder="Confirmar Senha"
-      secureTextEntry
-      onChangeText={setConfirmPassword}
-    />
+      <TextInput
+        style={styles.textInput}
+        value={confirmPassword}
+        placeholder="Confirmar Senha"
+        secureTextEntry
+        onChangeText={setConfirmPassword}
+      />
     </View>
     {errors.confirmPassword ? <Text style={styles.error}>{errors.confirmPassword}</Text> : null}
     

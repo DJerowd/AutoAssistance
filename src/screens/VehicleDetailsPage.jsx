@@ -37,7 +37,7 @@ const VehicleDetailsPage = ({ route, navigation }) => {
     <ScrollView style={styles.container}>
         
 {/* Identificação do Veículo */}
-    <Text style={styles.title}>{vehicle.id} - {vehicle.name}</Text>
+    <Text style={styles.title}>{vehicle.name}</Text>
       <View style={styles.imageLabel}>
         <Image
             source={{ uri: 'https://cdn.vectorstock.com/i/preview-1x/75/52/modern-car-hatchback-abstract-silhouette-vector-45697552.jpg' }}
@@ -47,44 +47,64 @@ const VehicleDetailsPage = ({ route, navigation }) => {
       </View>
 
 {/* Marca do Veículo */}
-      <Text style={styles.label}>Marca:</Text>
-      <Text style={styles.text}>{vehicle.brand}</Text>
+      <View style={styles.linha}>
+        <Text style={styles.label}>Marca:</Text>
+        <Text style={styles.text}>{vehicle.brand}</Text>
+      </View>
 
 {/* Modelo do Veículo */}
+      <View style={styles.linha}>
       <Text style={styles.label}>Modelo:</Text> 
       <Text style={styles.text}>{vehicle.model}</Text>
+      </View>
       
 {/* Versão do Veículo */}
+      <View style={styles.linha}>
       <Text style={styles.label}>Versão:</Text> 
       <Text style={styles.text}>{vehicle.version}</Text>
+      </View>
 
 {/* Cor do Veículo */}
+      <View style={styles.linha}>
       <Text style={styles.label}>Cor:</Text> 
       <Text style={styles.text}>{vehicle.color}</Text>
+      </View>
 
 {/* Ano de Fabricação do Veículo */}
+      <View style={styles.linha}>
       <Text style={styles.label}>Ano de Fabricação:</Text> 
       <Text style={styles.text}>{vehicle.manufactureYear}</Text>
+      </View>
 
 {/* Placa do Veículo */}
+      <View style={styles.linha}>
       <Text style={styles.label}>Placa:</Text> 
       <Text style={styles.text}>{vehicle.licensePlate}</Text>
+      </View>
 
 {/* Tipo de Combustível do Veículo */}
+      <View style={styles.linha}>
       <Text style={styles.label}>Tipo de Combustível:</Text> 
       <Text style={styles.text}>{vehicle.fuelType}</Text>
+      </View>
 
 {/* Tipo de Câmbio do Veículo */}
+      <View style={styles.linha}>
       <Text style={styles.label}>Câmbio:</Text> 
       <Text style={styles.text}>{vehicle.transmission}</Text>
+      </View>
       
 {/* Motor do Veículo */}
+      <View style={styles.linha}>
       <Text style={styles.label}>Motor:</Text> 
       <Text style={styles.text}>{vehicle.engine}</Text>
+      </View>
 
 {/* Quilometragem do Veículo */}
+      <View style={styles.linha}>
       <Text style={styles.label}>Quilometragem:</Text> 
       <Text style={styles.text}>{vehicle.mileage} Km</Text>
+      </View>
 
 {/* Botão de Editar Informações */}
       <TouchableOpacity style={styles.editButton} onPress={handleEditVehicle}>
@@ -109,42 +129,42 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9F9F9',
   },
 
+  linha: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomColor: '#6A6A6A',
+    borderBottomWidth: 1,
+  },
+
   title: {
-    backgroundColor: '#009F4D',
-    color: '#FFFFFF',
-    borderColor: '#6A6A6A',
-    borderWidth: 4,
-    borderBottomWidth: 0,
-    paddingHorizontal: 10,
+    color: '#000000',
     paddingVertical: 4,
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
   },
 
   imageLabel: {
-    borderColor: '#6A6A6A',
-    borderWidth: 4,
-    width: '100%',
+    borderColor: '#000000',
+    borderWidth: 2,
+    borderRadius: 10,
+    marginBottom: 10,
     aspectRatio: 16 / 9,
+    width: '100%',
     alignSelf: 'center',
-    marginBottom: 20,
   },
   image: {
     flex: 1,
   },
 
   label: {
-    color: '#6A6A6A',
+    color: '#000000',
     fontSize: 20,
-    fontWeight: 'bold',
+    marginVertical: 4,
   },
 
   text: {
     color: '#6A6A6A',
-    borderBottomColor: '#6A6A6A99',
-    borderBottomWidth: 2,
-    marginBottom: 20,
-    marginTop: 10,
+    marginVertical: 6,
     fontSize: 18,
     paddingHorizontal: 10,
   },
@@ -152,10 +172,10 @@ const styles = StyleSheet.create({
   editButton: {
     backgroundColor: '#009F4D',
     borderColor: '#009F4D',
-    borderWidth: 4,
     padding: 20,
     borderRadius: 12,
     alignItems: 'center',
+    marginTop: 20,
     marginBottom: 10,
   },
   editButtonText: {

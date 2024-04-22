@@ -4,8 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { UsersDB } from '../components/UsersDB';
 
 const LoginPage = ({ navigation }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('DJerowd');
+  const [password, setPassword] = useState('Senha123');
   const [error, setError] = useState('');
   const { user } = UsersDB();
 
@@ -14,7 +14,7 @@ const LoginPage = ({ navigation }) => {
     const userFound = user.find(user => user.username === username && user.password === password)
     if (userFound) {
       setError('');
-      console.log('Login bem sucedido:', 'SelectPage');
+      console.log('Login bem sucedido:', 'SelectPage', {userFound});
       navigation.navigate('SelectPage');
     } else {
       Alert.alert('Erro', 'Usuário não encontrado.');

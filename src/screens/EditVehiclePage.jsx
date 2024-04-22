@@ -5,7 +5,6 @@ import {Picker} from '@react-native-picker/picker';
 const EditVehiclePage = ({ navigation, route }) => {
  const { vehicle } = route.params;
  const [name, setName] = useState(vehicle.name);
- const [brands, setBrands] = useState([]);
  const [brand, setBrand] = useState(vehicle.brand);
  const [model, setModel] = useState(vehicle.model);
  const [version, setVersion] = useState(vehicle.version);
@@ -13,29 +12,17 @@ const EditVehiclePage = ({ navigation, route }) => {
  const [manufactureYear, setManufactureYear] = useState(vehicle.manufactureYear);
  const [licensePlate, setLicensePlate] = useState(vehicle.licensePlate);
  const [fuelType, setFuelType] = useState(vehicle.fuelType);
- const [transmissionType, setTransmissionType] = useState(vehicle.transmissionType);
+ const [transmission, setTransmission] = useState(vehicle.transmission);
  const [engine, setEngine] = useState(vehicle.engine);
  const [mileage, setMileage] = useState(vehicle.mileage);
+ const [additionalMileage, setAdditionalMileage] = useState(0);
 
-{/* Requisição da API */}
-{/* Documentação da Api https://deividfortuna.github.io/fipe/v2/#tag/Fipe/operation/GetFipeInfo */}
- useEffect(() => {
-    fetchBrands();
- }, []);
- const fetchBrands = async () => {
-    try {
-      const response = await fetch('https://fipe.parallelum.com.br/api/v2/cars/brands');
-      const data = await response.json();
-      setBrands(data);
-    } catch (error) {
-      console.error('Error ao Encontrar Marcas: ', error);
-    }
- };
+ const totalMileage = additionalMileage ? parseInt(mileage, 10) + parseInt(additionalMileage, 10) : parseInt(mileage, 10) + 0;
 
 {/* Salvar */}
  const handleUpdateVehicle = () => {
 {/* Alerta ao Tentar Salvar sem Preencher os Campos Necessários */}
-    if (!brand || !model || !color || !mileage) {
+    if (!brand || !model || !color || !additionalMileage) {
       Alert.alert(
         'Campos não preenchidos',
         'Por favor, preencha todos os campos obrigatórios.',
@@ -51,11 +38,21 @@ const EditVehiclePage = ({ navigation, route }) => {
       return;
     }
 
-    // Aqui você deve implementar a lógica para atualizar o veículo no seu backend ou estado global
-    console.log('Veículo atualizado:', vehie.id, name, brand, model, version, color, manufactureYear, licensePlate, fuelType, transmissionType, engine, mileage);
-    navigation.goBack();
+    // Salvar atualizações do veículo
     Alert.alert(
-        'Veículo Atualizado com Sucesso!'
+      "Confirmar Atualização",
+      "Você tem certeza de que deseja salvar as alterações?",
+      [
+        { text: "Cancelar", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
+        { text: "Confirmar", onPress: () => {
+          console.log('Veículo atualizado:', vehicle.id, vehicle.name, vehicle.brand, vehicle.model, vehicle.version, vehicle.color, vehicle.manufactureYear, vehicle.licensePlate, vehicle.fuelType, vehicle.transmission, vehicle.engine, vehicle.mileage);
+          navigation.goBack();
+          Alert.alert(
+            'Veículo Atualizado com Sucesso!'
+          );
+          }
+        }
+      ]
     );
  };
 
@@ -105,33 +102,38 @@ const EditVehiclePage = ({ navigation, route }) => {
 
 
 {/* Marca do Veículo */}
+      <View style={styles.linha}>
       <Text style={styles.label}>Marca do veículo:</Text>
       <Text style={styles.text}>{vehicle.brand}</Text>
+      </View>
 
 {/* Modelo do Veículo */}
+      <View style={styles.linha}>
       <Text style={styles.label}>Modelo do Veículo:</Text>
       <Text style={styles.text}>{vehicle.model}</Text>
+      </View>
 
 {/* Versão do Veículo */}
+      <View style={styles.linha}>
       <Text style={styles.label}>Versão do veículo:</Text>
       <Text style={styles.text}>{vehicle.version}</Text>
+      </View>
 
 
 {/* Cor do Veículo */}
-      <View style={styles.linha} justifyContent={'space-between'}>
+      <View style={{flexDirection: 'row', marginTop: 10,}}>
       <Text style={styles.label}>Cor do veículo:</Text>
       <View
         style={[styles.colorButton, { backgroundColor: getColorCode(color) }]}
       />
       </View>
+      <View style={styles.pickerLabel}>
       <Picker
         selectedValue={color}
         style={styles.picker}
         onValueChange={(itemValue, itemIndex) => setColor(itemValue)}
         mode={'dropdown'}
       >
-        <Picker.Item label="Cor" value="" />
-        <Picker.Item label="_____________________________________" value="" />
         <Picker.Item label="Preto" value="Preto" />
         <Picker.Item label="Cinza" value="Cinza" />
         <Picker.Item label="Prata" value="Prata" />
@@ -144,41 +146,42 @@ const EditVehiclePage = ({ navigation, route }) => {
         <Picker.Item label="Marrom" value="Marrom" />
         <Picker.Item label="Rosa" value="Rosa" />
       </Picker>
+      </View>
 
 {/* Tipo de Combustível do Veículo */}
       <Text style={styles.label}>Tipo de Combustível:</Text>
+      <View style={styles.pickerLabel}>
       <Picker
         selectedValue={fuelType}
         style={styles.picker}
         onValueChange={(itemValue, itemIndex) => setFuelType(itemValue)}
         mode={'dropdown'}
       >
-        <Picker.Item label="Combustível" />
-        <Picker.Item label="_____________________________________" />
-        <Picker.Item label="Gasolina" value="gasolina" />
-        <Picker.Item label="Etanol" value="etanol" />
-        <Picker.Item label="Flex (Gasolina e Etanol)" value="flex" />
-        <Picker.Item label="Diesel" value="diesel" />
-        <Picker.Item label="Eletrico" value="eletrico" />
-        <Picker.Item label="Híbrido" value="hibrido" />
-        <Picker.Item label="GNV" value="gnv" />
+        <Picker.Item label="Gasolina" value="Gasolina" />
+        <Picker.Item label="Etanol" value="Etanol" />
+        <Picker.Item label="Flex (Gasolina e Etanol)" value="Flex" />
+        <Picker.Item label="Diesel" value="Diesel" />
+        <Picker.Item label="Eletrico" value="Eletrico" />
+        <Picker.Item label="Híbrido" value="Hibrido" />
+        <Picker.Item label="GNV" value="GNV" />
       </Picker>
+      </View>
 
 {/* Tipo de Câmbio do Veículo */}
       <Text style={styles.label}>Tipo de Câmbio:</Text>
+      <View style={styles.pickerLabel}>
       <Picker
-        selectedValue={transmissionType}
+        selectedValue={transmission}
         style={styles.picker}
-        onValueChange={(itemValue, itemIndex) => setTransmissionType(itemValue)}
+        onValueChange={(itemValue, itemIndex) => setTransmission(itemValue)}
         mode={'dropdown'}
       >
-        <Picker.Item label="Câmbio" />
-        <Picker.Item label="_____________________________________" />
-        <Picker.Item label="Manual" value="manual" />
-        <Picker.Item label="Automatico" value="automatico" />
-        <Picker.Item label="CVT" value="cvt" />
-        <Picker.Item label="Eletrico" value="eletrico" />
+        <Picker.Item label="Manual" value="Manual" />
+        <Picker.Item label="Automatico" value="Automatico" />
+        <Picker.Item label="CVT" value="CVT" />
+        <Picker.Item label="Eletrico" value="Eletrico" />
       </Picker>
+      </View>
 
 {/* Motor do Veículo */}
       <Text style={styles.label}>Motor do veículo:</Text>
@@ -190,22 +193,31 @@ const EditVehiclePage = ({ navigation, route }) => {
       />
 
 {/* Ano de Fabricação do Veículo */}
-      <Text style={styles.label}>Ano de Fabricação:</Text>
-      <Text style={styles.text}>{vehicle.manufactureYear}</Text>
+      <View style={styles.linha} alignItems={'center'}>
+        <Text style={styles.label}>Ano de Fabricação:  </Text>
+        <Text style={styles.text}>{vehicle.manufactureYear}</Text>
+      </View>
 
 {/* Placa do Veículo */}
-      <Text style={styles.label}>Placa do Veículo:</Text>
-      <Text style={styles.text}>{vehicle.licensePlate}</Text>
+      <View style={styles.linha} alignItems={'center'}>
+        <Text style={styles.label}>Placa do Veículo:  </Text>
+        <Text style={styles.text}>{vehicle.licensePlate}</Text>
+      </View>
 
 {/* Quilometragem do Veículo */}
-      <Text style={styles.label}>Quilometragem:</Text>
+      <View style={styles.linha} alignItems={'center'} borderBottomWidth={0}>
+        <Text style={styles.label}>Quilometragem Atual:  </Text>
+        <Text style={styles.text}>{totalMileage}</Text>
+      </View>
       <TextInput
         style={styles.input}
-        value={mileage}
-        onChangeText={setMileage}
-        placeholder="KM"
+        value={additionalMileage}
+        onChangeText={setAdditionalMileage}
+        placeholder="Quilometragem a ser Acrescentada"
         keyboardType="numeric"
       />
+
+
 
       <TouchableOpacity style={styles.addButton} onPress={handleUpdateVehicle}>
         <Text style={styles.addButtonText}>Atualizar Veículo</Text>
@@ -217,58 +229,67 @@ const EditVehiclePage = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     container: {
     flex: 1,
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
     paddingVertical: 20,
     backgroundColor: '#F9F9F9',
     },
 
     linha: {
-        flexDirection: 'row',
+      flexDirection: 'row',
+      borderBottomColor: '#6A6A6A',
+      borderBottomWidth: 1,
+      paddingTop: 10,
     },
 
     label: {
-        color: '#6A6A6A',
+        color: '#000000',
         fontSize: 20,
-        fontWeight: 'bold',
     },
 
     input: {
-        color: '#6A6A6A',
-        borderColor: '#6A6A6A99',
-        borderWidth: 1,
-        fontSize: 18,
-        height: 40,
-        marginBottom: 20,
-        paddingHorizontal: 10,
+      color: '#6A6A6A',
+      backgroundColor: '#6A6A6A22',
+      borderColor: '#000000',
+      borderWidth: 1,
+      borderRadius: 8,
+      fontSize: 18,
+      height: 40,
+      paddingHorizontal: 10,
+      marginBottom: 10,
     },
+  
 
     text: {
       color: '#6A6A6A',
-      borderBottomColor: '#6A6A6A99',
-      borderBottomWidth: 2,
-      marginBottom: 20,
-      marginTop: 10,
       fontSize: 18,
       paddingHorizontal: 10,
+      textAlignVertical: 'center',
     },
 
     colorButton: {
-        borderColor: '#6A6A6A',
-        borderWidth: 1,
-        borderRadius: 10,
-        width: '50%',
-        height: 20,
-        marginLeft: 10,
-        alignSelf: 'center',
+      borderColor: '#000000',
+      borderWidth: 1,
+      borderRadius: 2,
+      width: 20,
+      height: 20,
+      marginLeft: 10,
+    },
+
+    pickerLabel:{
+      backgroundColor: '#6A6A6A22',
+      borderColor: '#000000',
+      borderWidth: 1,
+      borderRadius: 8,
+      marginBottom: 10,
     },
     picker: {
-        color: '#6A6A6A',
-        borderColor: '#6A6A6A99',
-        borderWidth: 1,
-        fontSize: 18,
-        height: 40,
-        marginBottom: 20,
-        paddingHorizontal: 10,
+      color: '#6A6A6A',
+      borderColor: '#6A6A6A99',
+      borderWidth: 1,
+      fontSize: 18,
+      height: 40,
+      marginBottom: 8,
+      paddingHorizontal: 10,
     },
 
     addButton: {
@@ -276,7 +297,8 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 12,
         alignItems: 'center',
-        marginBottom: 100,
+        marginTop: 10,
+        marginBottom: 80,
     },
     addButtonText: {
         color: '#FFFFFF',

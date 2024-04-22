@@ -12,7 +12,7 @@ const NewVehiclePage = ({ navigation }) => {
   const [manufactureYear, setManufactureYear] = useState('');
   const [licensePlate, setLicensePlate] = useState('');
   const [fuelType, setFuelType] = useState('');
-  const [transmissionType, setTransmissionType] = useState('');
+  const [transmission, setTransmission] = useState('');
   const [engine, setEngine] = useState('');
   const [mileage, setMileage] = useState('');
 
@@ -60,7 +60,7 @@ const NewVehiclePage = ({ navigation }) => {
       ', Ano de fabricação:', manufactureYear,
       ', Placa:', licensePlate,
       ', Combustivel:', fuelType,
-      ', Transmissão:', transmissionType,
+      ', Transmissão:', transmission,
       ', Motor:', engine,
       ', Quilometragem:', mileage
     );
@@ -133,6 +133,7 @@ const NewVehiclePage = ({ navigation }) => {
 
 {/* Marca do Veículo */}
       <Text style={styles.label}>Marca do veículo:</Text>
+      <View style={styles.pickerLabel}>
       <Picker
         selectedValue={brand}
         style={styles.picker}
@@ -145,8 +146,10 @@ const NewVehiclePage = ({ navigation }) => {
           <Picker.Item key={brand.code} label={brand.name} value={brand.name} />
         ))}
       </Picker>
+      </View>
 
 {/* Modelo do Veículo */}
+      <Text style={styles.label}>Modelo do Veículo:</Text>
       <TextInput
         style={styles.input}
         value={model}
@@ -164,20 +167,20 @@ const NewVehiclePage = ({ navigation }) => {
       />
 
 {/* Cor do Veículo */}
-      <View style={styles.linha} justifyContent={'space-between'}>
+      <View style={styles.linha}>
       <Text style={styles.label}>Cor do veículo:</Text>
       <View
         style={[styles.colorButton, { backgroundColor: getColorCode(color) }]}
       />
       </View>
+      <View style={styles.pickerLabel}>
       <Picker
         selectedValue={color}
         style={styles.picker}
         onValueChange={(itemValue, itemIndex) => setColor(itemValue)}
         mode={'dropdown'}
       >
-        <Picker.Item label="Cor" />
-        <Picker.Item label="_____________________________________" />
+        <Picker.Item label="* Cor *" value=""/>
         <Picker.Item label="Preto" value="Preto" />
         <Picker.Item label="Cinza" value="Cinza" />
         <Picker.Item label="Prata" value="Prata" />
@@ -190,41 +193,44 @@ const NewVehiclePage = ({ navigation }) => {
         <Picker.Item label="Marrom" value="Marrom" />
         <Picker.Item label="Rosa" value="Rosa" />
       </Picker>
+      </View>
 
 {/* Tipo de Combustível do Veículo */}
       <Text style={styles.label}>Tipo de Combustível:</Text>
+      <View style={styles.pickerLabel}>
       <Picker
         selectedValue={fuelType}
         style={styles.picker}
         onValueChange={(itemValue, itemIndex) => setFuelType(itemValue)}
         mode={'dropdown'}
       >
-        <Picker.Item label="Combustível" />
-        <Picker.Item label="_____________________________________" />
-        <Picker.Item label="Gasolina" value="gasolina" />
-        <Picker.Item label="Etanol" value="etanol" />
-        <Picker.Item label="Flex (Gasolina e Etanol)" value="flex" />
-        <Picker.Item label="Diesel" value="diesel" />
-        <Picker.Item label="Eletrico" value="eletrico" />
-        <Picker.Item label="Híbrido" value="hibrido" />
-        <Picker.Item label="GNV" value="gnv" />
+        <Picker.Item label="* Combustível *" value=""/>
+        <Picker.Item label="Gasolina" value="Gasolina" />
+        <Picker.Item label="Etanol" value="Etanol" />
+        <Picker.Item label="Flex (Gasolina e Etanol)" value="Flex" />
+        <Picker.Item label="Diesel" value="Diesel" />
+        <Picker.Item label="Eletrico" value="Eletrico" />
+        <Picker.Item label="Híbrido" value="Híbrido" />
+        <Picker.Item label="GNV" value="GNV" />
       </Picker>
+      </View>
 
 {/* Tipo de Câmbio do Veículo */}
       <Text style={styles.label}>Tipo de Câmbio:</Text>
+      <View style={styles.pickerLabel}>
       <Picker
-        selectedValue={transmissionType}
+        selectedValue={transmission}
         style={styles.picker}
-        onValueChange={(itemValue, itemIndex) => setTransmissionType(itemValue)}
+        onValueChange={(itemValue, itemIndex) => setTransmission(itemValue)}
         mode={'dropdown'}
       >
-        <Picker.Item label="Câmbio" />
-        <Picker.Item label="_____________________________________" />
-        <Picker.Item label="Manual" value="manual" />
-        <Picker.Item label="Automatico" value="automatico" />
-        <Picker.Item label="CVT" value="cvt" />
-        <Picker.Item label="Eletrico" value="eletrico" />
+        <Picker.Item label="* Câmbio *" value=""/>
+        <Picker.Item label="Manual" value="Manual" />
+        <Picker.Item label="Automatico" value="Automatico" />
+        <Picker.Item label="CVT" value="CVT" />
+        <Picker.Item label="Eletrico" value="Eletrico" />
       </Picker>
+      </View>
 
 {/* Motor do Veículo */}
       <Text style={styles.label}>Motor do veículo:</Text>
@@ -243,6 +249,7 @@ const NewVehiclePage = ({ navigation }) => {
         onChangeText={setManufactureYear}
         placeholder="Ano"
         keyboardType="numeric"
+        maxLength={4}
       />
 
 {/* Placa do Veículo */}
@@ -278,39 +285,40 @@ const NewVehiclePage = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
     paddingVertical: 20,
     backgroundColor: '#F9F9F9',
   },
 
   linha: {
     flexDirection: 'row',
+    paddingTop: 10,
+    alignItems: 'center',
   },
 
   label: {
-    color: '#6A6A6A',
+    color: '#000000',
     fontSize: 20,
-    fontWeight: 'bold',
   },
 
   input: {
     color: '#6A6A6A',
-    borderColor: '#6A6A6A99',
+    backgroundColor: '#6A6A6A22',
+    borderColor: '#000000',
     borderWidth: 1,
+    borderRadius: 8,
     fontSize: 18,
     height: 40,
-    marginBottom: 20,
     paddingHorizontal: 10,
+    marginBottom: 10,
   },
 
-  colorButton: {
-    borderColor: '#6A6A6A',
+  pickerLabel:{
+    backgroundColor: '#6A6A6A22',
+    borderColor: '#000000',
     borderWidth: 1,
-    borderRadius: 10,
-    width: '50%',
-    height: 20,
-    marginLeft: 10,
-    alignSelf: 'center',
+    borderRadius: 8,
+    marginBottom: 10,
   },
   picker: {
     color: '#6A6A6A',
@@ -318,8 +326,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     fontSize: 18,
     height: 40,
-    marginBottom: 20,
+    marginBottom: 8,
     paddingHorizontal: 10,
+  },
+
+  colorButton: {
+    borderColor: '#000000',
+    borderWidth: 1,
+    borderRadius: 2,
+    width: 20,
+    height: 20,
+    marginLeft: 10,
   },
 
   addButton: {
@@ -327,7 +344,8 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 12,
     alignItems: 'center',
-    marginBottom: 100,
+    marginTop: 10,
+    marginBottom: 60,
   },
   addButtonText: {
     color: '#FFFFFF',

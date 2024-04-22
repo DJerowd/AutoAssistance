@@ -10,27 +10,27 @@ const VehiclesPage = ({ navigation }) => {
   const getColorCode = (colorName) => {
     switch (colorName.toLowerCase()) {
       case 'preto':
-        return '#00000077';
+        return '#000000DD';
       case 'cinza':
-        return '#4A4A4A77';
+        return '#4A4A4ADD';
       case 'prata':
-        return '#C3BFBF77';
+        return '#C3BFBFDD';
       case 'branco':
-        return '#EEEEEE77';
+        return '#EEEEEEDD';
       case 'vermelho':
-        return '#FF000077';
+        return '#FF0000DD';
       case 'azul':
-        return '#2400FF77';
+        return '#2400FFDD';
       case 'verde':
-        return '#21A40077';
+        return '#21A400DD';
       case 'amarelo':
-        return '#FAFF0077';
+        return '#FAFF00DD';
       case 'laranja':
-        return '#FF990077';
+        return '#FF9900DD';
       case 'marrom':
-        return '#52310077';
+        return '#523100DD';
       case 'rosa':
-        return '#FF00D677';
+        return '#FF00D6DD';
      
       default:
         return '#6A6A6A55';
@@ -49,15 +49,17 @@ const VehiclesPage = ({ navigation }) => {
       style={styles.item}
       onPress={() => handleItemDetailsPress(item)}
     >
+      <View style={[styles.iconLabel, { backgroundColor: getColorCode(item.color) }]}>
       <IconI 
-                name="car-sport-sharp" 
-                style={[styles.icon, { backgroundColor: getColorCode(item.color) }]}
-                size={40}
-            />
+        name="car-sport-sharp" 
+        style={[styles.icon]}
+        size={40}
+      />
+      </View>
 
       <View style={styles.coluna}>
-        <Text style={styles.itemTitle}>{item.id} - {item.name}</Text>
-        <Text style={styles.itemText}>Veículo: {item.brand} {item.model}</Text>
+        <Text style={styles.itemTitle}>{item.name}</Text>
+        <Text style={styles.itemText}>{item.brand} {item.model} {item.version} {item.manufactureYear}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -101,26 +103,30 @@ const styles = StyleSheet.create({
   },
 
   coluna: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
 
-  icon: {
-    color: '#6A6A6A',
+  iconLabel: {
+    borderColor: '#000000',
     borderRadius: 30,
-    padding: 6,
+    borderWidth: 2,
+  },
+  icon: {
+    color: '#000000',
+    padding: 4,
   },
 
   item: {
     borderColor: '#6A6A6A11',
     borderWidth: 2,
-    padding: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
   },
   itemTitle: {
-    color: '#6A6A6A',
+    color: '#000000',
     fontSize: 20,
-    fontWeight: 'bold',
   },
   itemText: {
     color: '#6A6A6A',
