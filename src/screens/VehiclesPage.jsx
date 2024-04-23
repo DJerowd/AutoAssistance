@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   iconLabel: {
     borderColor: '#000000',
     borderRadius: 30,
-    borderWidth: 2,
+    borderWidth: 1.8,
   },
   icon: {
     color: '#000000',
@@ -117,8 +117,8 @@ const styles = StyleSheet.create({
   },
 
   item: {
-    borderColor: '#6A6A6A11',
-    borderWidth: 2,
+    borderColor: '#6A6A6A55',
+    borderWidth: 1,
     paddingHorizontal: 20,
     paddingVertical: 10,
     flexDirection: 'row',
@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
   itemTitle: {
     color: '#000000',
     fontSize: 20,
+    fontWeight: '500',
   },
   itemText: {
     color: '#6A6A6A',

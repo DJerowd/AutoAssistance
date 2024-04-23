@@ -129,7 +129,7 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
 
 {/* Descrição do Lembrete */}
       <Text style={styles.label} marginTop={20}>Descrição:</Text>
-      <Text style={styles.descriptionInput}>{maintenance.description}</Text>
+      <Text style={styles.input}>{maintenance.description}</Text>
       
 {/* Botão de Editar Informações */}
       <TouchableOpacity style={styles.editButton} onPress={handleEditMaintenance}>
@@ -158,9 +158,9 @@ const styles = StyleSheet.create({
   },
 
   label: {
-    color: '#6A6A6A',
+    color: '#000000',
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: '500',
   },
   text: {
     color: '#6A6A6A',
@@ -205,7 +205,8 @@ const styles = StyleSheet.create({
   },
 
   
-  descriptionInput: {
+  input: {
+    backgroundColor: '#6A6A6A22',
     color: '#6A6A6A',
     borderColor: '#6A6A6A99',
     borderWidth: 2,

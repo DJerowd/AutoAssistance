@@ -299,6 +299,7 @@ const styles = StyleSheet.create({
   label: {
     color: '#000000',
     fontSize: 20,
+    fontWeight: '500',
   },
 
   input: {

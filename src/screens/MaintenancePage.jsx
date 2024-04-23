@@ -159,8 +159,7 @@ const styles = StyleSheet.create({
   item: {
     borderColor: '#6A6A6A11',
     borderWidth: 2,
-    paddingVertical: 2,
-    paddingBottom: 6,
+    paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -168,13 +167,12 @@ const styles = StyleSheet.create({
   text: {
     color: '#6A6A6A',
     fontSize: 12,
-    fontWeight: 'bold',
     alignSelf: 'flex-end',
   },
   itemText: {
-    color: '#6A6A6A',
+    color: '#000000',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '500',
   },
 
   progressBar: {

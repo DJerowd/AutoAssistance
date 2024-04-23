@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontSize: 20,
     marginVertical: 4,
+    fontWeight: '500',
   },
 
   text: {

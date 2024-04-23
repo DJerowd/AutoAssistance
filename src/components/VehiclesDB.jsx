@@ -10,7 +10,7 @@ export const VehiclesDB = () => {
     { id: '6',  name: 'Carro 6',  brand: 'Chevrolet',   model: 'Onix',    version: 'LT',              color: 'Branco',    manufactureYear: '2019', licensePlate: 'UVW6X78', fuelType: 'Flex',     transmission: 'Manual',     engine: '1.4', mileage: 110680 },
     { id: '7',  name: 'Carro 7',  brand: 'Citroen',     model: 'C3',      version: 'Origine',         color: 'Vermelho',  manufactureYear: '2015', licensePlate: 'YZA9B01', fuelType: 'Flex',     transmission: 'Manual',     engine: '1.5', mileage: 174099 },
     { id: '8',  name: 'Carro 8',  brand: 'Nissan',      model: 'March',   version: 'SV',              color: 'Laranja',   manufactureYear: '2020', licensePlate: 'CDE2F34', fuelType: 'Flex',     transmission: 'Manual',     engine: '1.6', mileage: 88001 },
-    { id: '9',  name: 'Carro 9',  brand: 'Hyunday',     model: 'HB20',    version: 'T-GDI Comfort',   color: 'Prata',     manufactureYear: '2024', licensePlate: 'GHI5J67', fuelType: 'Flex',     transmission: 'Automatico', engine: '1.0', mileage: 1200 },
+    { id: '9',  name: 'Carro 9',  brand: 'Hyunday',     model: 'HB20',    version: 'T-GDI',           color: 'Prata',     manufactureYear: '2024', licensePlate: 'GHI5J67', fuelType: 'Flex',     transmission: 'Automatico', engine: '1.0', mileage: 1200 },
     { id: '10', name: 'Carro 10', brand: 'Honda',       model: 'Fit',     version: 'LX',              color: 'Verde',     manufactureYear: '2021', licensePlate: 'KLM8N90', fuelType: 'Flex',     transmission: 'CVT',        engine: '1.5', mileage: 30045 },
   ]);  
 

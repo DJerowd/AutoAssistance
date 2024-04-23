@@ -42,6 +42,7 @@ const EditMaintenancePage = ({ route, navigation }) => {
 
 {/* Tipo do Lembrete */}
       <Text style={styles.label}>Tipo de Manutenção:</Text>
+      <View style={styles.pickerLabel}>
       <Picker
         selectedValue={type}
         style={styles.picker}
@@ -64,6 +65,7 @@ const EditMaintenancePage = ({ route, navigation }) => {
         <Picker.Item label="Amortecedores" value="Amortecedores" />
         <Picker.Item label="Troca de Óleo" value="Troca de Óleo" />
       </Picker>
+      </View>
       
 {/* Frequência de Repetição */}
       <Text style={styles.label}>Frequência:</Text> 
@@ -168,7 +170,7 @@ const EditMaintenancePage = ({ route, navigation }) => {
 {/* Descrição do Lembrete */}
     <Text style={styles.label}>Descrição:</Text>
       <TextInput
-        style={styles.descriptionInput}
+        style={styles.input}
         value={description}
         multiline={true}
         rows={6}
@@ -199,11 +201,18 @@ container: {
   },
 
   label: {
-    color: '#6A6A6A',
+    color: '#000000',
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: '500',
   },
 
+  pickerLabel:{
+    backgroundColor: '#6A6A6A22',
+    borderColor: '#000000',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
   picker: {
     color: '#6A6A6A',
     borderBottomColor: '#6A6A6A99',
@@ -213,18 +222,9 @@ container: {
     marginBottom: 10,
     paddingHorizontal: 10,
   },
-  
-  input: {
-    color: '#6A6A6A',
-    borderBottomColor: '#6A6A6A99',
-    borderBottomWidth: 2,
-    fontSize: 18,
-    height: 40,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-  },
 
   checkbox: {
+    backgroundColor: '#6A6A6A22',
     borderColor: '#000000',
     color: '#6A6A6A',
     borderRadius: 6,
@@ -240,6 +240,7 @@ container: {
   },
 
   repeatCheckbox: {
+    backgroundColor: '#6A6A6A22',
     borderColor: '#000000',
     borderRadius: 6,
     borderWidth: 1,
@@ -273,7 +274,8 @@ container: {
     height: 20,
   },
 
-  descriptionInput: {
+  input: {
+    backgroundColor: '#6A6A6A22',
     color: '#6A6A6A',
     borderColor: '#6A6A6A99',
     borderWidth: 2,
