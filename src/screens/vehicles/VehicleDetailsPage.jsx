@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Alert  } from 'react-native';
 
+import { deleteVehicle } from '../../database/VehiclesDatabase';
+
 const VehicleDetailsPage = ({ route, navigation }) => {
   const { vehicle } = route.params;
 
@@ -17,15 +19,17 @@ const VehicleDetailsPage = ({ route, navigation }) => {
         {
           text: 'Confirmar',
           onPress: () => {
+            deleteVehicle(vehicle.id);
             Alert.alert('Veículo excluído com sucesso');
             console.log('Veículo excluído com sucesso');
-            navigation.goBack();
+            navigation.navigate('SelectNavigator');
           },
           style: 'destructive',
         },
       ],
       { cancelable: false, alertContainerStyle: styles.alertContainer }
     );
+
   };
 
 {/* Navegação para a Página de Editar Veículo */}
@@ -73,13 +77,13 @@ const VehicleDetailsPage = ({ route, navigation }) => {
 {/* Ano de Fabricação do Veículo */}
       <View style={styles.linha}>
       <Text style={styles.label}>Ano de Fabricação:</Text> 
-      <Text style={styles.text}>{vehicle.manufactureYear}</Text>
+      <Text style={styles.text}>{vehicle.manufactureYear || '(Não informado)'}</Text>
       </View>
 
 {/* Placa do Veículo */}
       <View style={styles.linha}>
       <Text style={styles.label}>Placa:</Text> 
-      <Text style={styles.text}>{vehicle.licensePlate}</Text>
+      <Text style={styles.text}>{vehicle.licensePlate || '(Não informado)'}</Text>
       </View>
 
 {/* Tipo de Combustível do Veículo */}

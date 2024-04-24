@@ -1,10 +1,19 @@
-import { React } from 'react';
+import { React, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import IconI from 'react-native-vector-icons/Ionicons';
+
 import { VehiclesDB } from '../../database/VehiclesDB';
+import { fetchVehicles } from '../../database/VehiclesDatabase';
 
 const VehiclesPage = ({ navigation }) => {
-  const {vehicles, setVehicles} = VehiclesDB();  
+  // const {vehicles, setVehicles} = VehiclesDB();
+  const [vehicles, setVehicles] = useState([]);  
+
+{/* Carregar Banco de Dados */}
+  useEffect(() => {
+    fetchVehicles().then(setVehicles).catch(console.error);
+ }, []);
+
 
 {/* Identificação do Codigo HEX de Cor */}
   const getColorCode = (colorName) => {
@@ -78,7 +87,8 @@ const VehiclesPage = ({ navigation }) => {
       <FlatList
         data={vehicles}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}  
+        // keyExtractor={(item) => item.id}  
+        keyExtractor={(item) => item.id.toString()}
         borderBottomWidth={4}
         borderBottomColor={'#6A6A6A11'}
       />

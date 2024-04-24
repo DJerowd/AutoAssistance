@@ -1,59 +1,12 @@
-import { React, useEffect, useState } from 'react';
-import { View, TouchableOpacity, Text, Image, StyleSheet, FlatList } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { React, useState } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
-import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { VehiclesDB } from '../database/VehiclesDB';
-import { LinearGradient } from 'expo-linear-gradient';
 
 
-const Tab = createBottomTabNavigator();
-
-const SelectPage  = () => {
-{/* Navegação Entre a Página de seleção e o Perfil do Usuário */}
-  return (
-    <Tab.Navigator
-    screenOptions={{
-      headerShown: false,
-      tabBarActiveTintColor: '#ffffff',
-      tabBarInactiveTintColor: '#c0c0c0',
-      tabBarStyle: {
-            backgroundColor: '#009F4D',
-            height: 60,
-      },
-      tabBarLabelStyle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-      },
-  }}
-    >
-      <Tab.Screen 
-        name="Seleção" 
-        component={SelecaoScreen} 
-        options={{
-          tabBarIcon: ({ color }) => (
-            <IconFA name="home" color={color} size={30} />
-          ),
-        }}
-        />
-
-      <Tab.Screen 
-        name="Perfil" 
-        component={PerfilScreen} 
-        options={{
-          tabBarIcon: ({ color }) => (
-            <IconFA name="user" color={color} size={30} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
-  );
-};
-
-
-const SelecaoScreen = ({ navigation }) => {
+const SelectPage = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const {vehicles, setVehicles} = VehiclesDB(); 
   const [selectedVehicle, setSelectedVehicle] = useState('');
@@ -106,7 +59,7 @@ const SelecaoScreen = ({ navigation }) => {
       </View>
 
 {/* Background da Página */}
-    <LinearGradient style={styles.container} colors={['#F9F9F9', '#00000022']}>
+    <View style={styles.container}>
 
       <View style={styles.buttonsContainer}>
         
@@ -203,62 +156,7 @@ const SelecaoScreen = ({ navigation }) => {
 
       </View>
 
-    </LinearGradient>
     </View>
-  );
-};
-
-
-const PerfilScreen = () => {
-  const {vehicles, setVehicles} = VehiclesDB(); 
-  const [user, setUser] = useState('');
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userData = await AsyncStorage.getItem('@user');
-        if (userData !== '') {
-          setUser(JSON.parse(userData));
-        }
-      } catch (error) {
-        console.error('Erro ao recuperar os dados do usuário:', error);
-      }
-    };
-
-    fetchUser();
- }, []);
-  
-  return (
-    <View style={styles.containerPerfil}>
-
-{/* Imagem de Perfil */}
-      <View style={styles.perfil}>
-        <Image
-        source={require('../assets/Profile.png')}
-        style={styles.image}
-        />
-      </View>
-
-{/* Nome de Usuários */}
-      <Text style={styles.textTitle}>Nome: </Text>
-      <Text style={styles.text}>{user.username}</Text>
-
-{/* E-mail */}
-      <Text style={styles.textTitle}>E-mail: </Text>
-      <Text style={styles.text}>{user.email}</Text>
-
-{/* Localização do Usuário */}
-      
-      <Text style={styles.textTitle}>Contato: </Text>
-      <Text style={styles.text}>{user.phoneNumber}</Text>
-   
-
-      {/* Quantidade de Veículos Registrados */}
-      <View style={styles.linha} justifyContent={'flex-start'}>
-        <Text style={styles.textTitle}>Veiculos:</Text>
-        <Text style={styles.text} marginHorizontal={10}>{vehicles.length}</Text>
-      </View>
-
     </View>
   );
 };
@@ -267,7 +165,12 @@ const PerfilScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex:  1,
-    backgroundColor: '#F9F9F9',
+    backgroundColor: '#101010',
+  },
+
+  linha: {
+    justifyContent: 'center',
+    flexDirection: 'row',
   },
 
   carPicker:{
@@ -282,6 +185,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlignVertical: 'center',
   },
+
   modalContainer: {
     color: '#FFFFFF',
     backgroundColor: '#009F4D',
@@ -295,25 +199,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
 
-  backgroundImage: {
-    flex: 1,
-    padding: 10,
-  },
-
   buttonsContainer: {
     margin: 10,
   },
-  item: {
-    width: 140,
-    alignItems: 'center',
-    marginHorizontal: 20,
-    marginVertical: 4,
-  },
-  linha: {
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  
   button: {
     height:  140,
     width: 140,
@@ -330,39 +218,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-
-  containerPerfil: {
-    flex:  1,
-    backgroundColor: '#F9F9F9',
-    padding:  20,
-  },
-  perfil: {
-    width: 300,
-    height: 300,
-    backgroundColor: '#6A6A6A55',
-    borderRadius: 150,
-    borderColor: '#000000',
-    borderWidth: 10,
-    alignSelf: 'center',
+  item: {
+    width: 140,
     alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  image: {
-    height: 300,
-    width: 300,
-    alignSelf: 'center',
-    borderRadius: 150,
-  },
-  textTitle: {
-    color: '#000000',
-    fontSize: 20,
-    fontWeight: '500',
-  },
-  text: {
-    color: '#6A6A6A',
-    fontSize: 20,
-    marginBottom: 10,
+    marginHorizontal: 20,
+    marginVertical: 4,
   },
 });
 

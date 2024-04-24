@@ -1,11 +1,12 @@
 import { React, useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert, Image } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { UsersDB } from '../database/UsersDB';
+import { findUserByEmail } from '../database/UsersDatabase';
 
 const LoginPage = ({ navigation }) => {
-  const [login, setLogin] = useState('teste@mail.com');
+  const [login, setLogin] = useState('djerowd@mail.com');
   const [password, setPassword] = useState('Senha123');
   const [error, setError] = useState('');
   const { user } = UsersDB();
@@ -15,11 +16,11 @@ const LoginPage = ({ navigation }) => {
     const userFound = user.find(user => user.email === login && user.password === password)
     if (userFound) {
       setError('');
-      console.log('Login bem sucedido:', 'SelectPage', {userFound});
+      console.log('Login bem sucedido:', 'SelectNavigator', {userFound});
 
       try {
         await AsyncStorage.setItem('@user', JSON.stringify(userFound));
-        navigation.navigate('SelectPage');
+        navigation.navigate('SelectNavigator');
       } catch (error) {
         console.error('Erro ao armazenar os dados do usuário:', error);
       }
@@ -37,7 +38,7 @@ const LoginPage = ({ navigation }) => {
   };
 
   return (
-    <LinearGradient style={styles.container} colors={['#F9F9F9', '#6A6A6A22']}>
+    <View style={styles.container}>
 
 {/* Logo */}
       <Image
@@ -83,7 +84,7 @@ const LoginPage = ({ navigation }) => {
         </View>
       </View>
 
-    </LinearGradient>
+    </View>
   );
 };
 

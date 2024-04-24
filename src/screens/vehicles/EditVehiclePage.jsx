@@ -2,6 +2,8 @@ import {React, useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
+import { updateVehicle, fetchVehicles } from '../../database/VehiclesDatabase';
+
 const EditVehiclePage = ({ navigation, route }) => {
  const { vehicle } = route.params;
  const [name, setName] = useState(vehicle.name);
@@ -19,10 +21,27 @@ const EditVehiclePage = ({ navigation, route }) => {
 
  const totalMileage = additionalMileage ? parseInt(mileage, 10) + parseInt(additionalMileage, 10) : parseInt(mileage, 10) + 0;
 
+
 {/* Salvar */}
  const handleUpdateVehicle = () => {
+
+  const updatedVehicle = {
+    ...vehicle,
+    name,
+    brand,
+    model,
+    version,
+    color,
+    manufactureYear,
+    licensePlate,
+    fuelType,
+    transmission,
+    engine,
+    mileage: totalMileage,
+  };
+
 {/* Alerta ao Tentar Salvar sem Preencher os Campos Necessários */}
-    if (!brand || !model || !color || !additionalMileage) {
+    if (!name || !brand || !model || !color || !fuelType || !transmission || !engine || !mileage) {
       Alert.alert(
         'Campos não preenchidos',
         'Por favor, preencha todos os campos obrigatórios.',
@@ -45,11 +64,14 @@ const EditVehiclePage = ({ navigation, route }) => {
       [
         { text: "Cancelar", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
         { text: "Confirmar", onPress: () => {
-          console.log('Veículo atualizado:', vehicle.id, vehicle.name, vehicle.brand, vehicle.model, vehicle.version, vehicle.color, vehicle.manufactureYear, vehicle.licensePlate, vehicle.fuelType, vehicle.transmission, vehicle.engine, vehicle.mileage);
-          navigation.goBack();
-          Alert.alert(
-            'Veículo Atualizado com Sucesso!'
-          );
+
+          
+
+          updateVehicle(updatedVehicle);
+          console.log('Veículo atualizado:', updatedVehicle);
+          navigation.navigate('SelectNavigator');
+          Alert.alert('Veículo Atualizado com Sucesso!');
+
           }
         }
       ]
@@ -211,7 +233,7 @@ const EditVehiclePage = ({ navigation, route }) => {
       </View>
       <TextInput
         style={styles.input}
-        value={additionalMileage}
+        value={additionalMileage.toString()}
         onChangeText={setAdditionalMileage}
         placeholder="Quilometragem a ser Acrescentada"
         keyboardType="numeric"

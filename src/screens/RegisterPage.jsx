@@ -2,8 +2,9 @@ import { React, useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
 import CheckBox from 'expo-checkbox';
 import IconI from 'react-native-vector-icons/Ionicons';
-import { LinearGradient } from 'expo-linear-gradient';
+
 import { UsersDB } from '../database/UsersDB';
+import { insertUser } from '../database/UsersDatabase';
 
 const RegisterPage = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -46,8 +47,9 @@ const RegisterPage = ({ navigation }) => {
 
 {/* Conclusão Com Sucesso do Registro */}
     if (username.length >= 4 && email.match(emailPattern) && email.length >= 10 && formatPhoneNumber(phoneNumber) && password.length >= 8 && isValidPassword(password) && password == confirmPassword && isChecked == true) {
+ 
       setError('');
-      // navigation.navigate('LoginPage');
+      navigation.navigate('LoginPage');
       console.log('Registro Concluido.', newRegister);
       Alert.alert('Registro Concluído', 'Registrado com sucesso!');
 
@@ -99,7 +101,7 @@ const RegisterPage = ({ navigation }) => {
   };
 
 return (
-  <LinearGradient style={styles.container} colors={['#F9F9F9', '#6A6A6A22']}>
+  <View style={styles.container}>
 
 {/* Titulo */}
     <Text style={styles.title}>Criar conta:</Text>
@@ -205,7 +207,7 @@ return (
       </View>
     </View>
 
-  </LinearGradient>
+  </View>
   );
 };
 

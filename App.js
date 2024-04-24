@@ -1,4 +1,4 @@
-import { React } from 'react';
+import { React, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar, TouchableOpacity } from 'react-native';
@@ -7,7 +7,9 @@ import { MaterialIcons } from '@expo/vector-icons';
 import StartPage from './src/screens/StartPage.jsx';
 import LoginPage from './src/screens/LoginPage';
 import RegisterPage from './src/screens/RegisterPage.jsx';
-import SelectPage from './src/screens/SelectPage.jsx';
+
+import SelectNavigator from './src/components/SelectNavigator.jsx';
+
 import VehiclesPage from './src/screens/vehicles/VehiclesPage.jsx';
 import NewVehiclePage from './src/screens/vehicles/NewVehiclePage.jsx';
 import VehicleDetailsPage from './src/screens/vehicles/VehicleDetailsPage.jsx';
@@ -17,9 +19,18 @@ import NewMaintencePage from './src/screens/maintenances/NewMaintencePage.jsx';
 import MaintenanceDetailsPage from './src/screens/maintenances/MaintenanceDetailsPage.jsx';
 import EditMaintenancePage from './src/screens/maintenances/EditMaintenancePage.jsx';
 
+import { initUsersDB } from './src/database/UsersDatabase.jsx';
+
 const Stack = createStackNavigator();
 
 const App = () => {
+
+  useEffect(() => {
+    initUsersDB()
+      .then(() => console.log('Database initialized'))
+      .catch(error => console.log('Error initializing database', error));
+ }, []);
+
   return (
     <NavigationContainer>
       <StatusBar backgroundColor={'#008F45'} barStyle={'light-content'}/>
@@ -51,8 +62,8 @@ const App = () => {
         }}
       />
       <Stack.Screen 
-          name="SelectPage" 
-          component={SelectPage} 
+          name="SelectNavigator" 
+          component={SelectNavigator} 
           options={{
             title: '',
             headerStyle: { backgroundColor: '#009F4D' },
