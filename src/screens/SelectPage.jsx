@@ -313,6 +313,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
   },
+  
   button: {
     height:  140,
     width: 140,
