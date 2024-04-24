@@ -1,7 +1,7 @@
 import { React } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import IconI from 'react-native-vector-icons/Ionicons';
-import { VehiclesDB } from '../components/VehiclesDB';
+import { VehiclesDB } from '../../database/VehiclesDB';
 
 const VehiclesPage = ({ navigation }) => {
   const {vehicles, setVehicles} = VehiclesDB();  

@@ -1,21 +1,29 @@
 import { React, useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { UsersDB } from '../components/UsersDB';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UsersDB } from '../database/UsersDB';
 
 const LoginPage = ({ navigation }) => {
-  const [username, setUsername] = useState('DJerowd');
+  const [login, setLogin] = useState('teste@mail.com');
   const [password, setPassword] = useState('Senha123');
   const [error, setError] = useState('');
   const { user } = UsersDB();
 
 {/* Realizar Login */}
-  const handleLogin = () => {
-    const userFound = user.find(user => user.username === username && user.password === password)
+  const handleLogin = async () => {
+    const userFound = user.find(user => user.email === login && user.password === password)
     if (userFound) {
       setError('');
       console.log('Login bem sucedido:', 'SelectPage', {userFound});
-      navigation.navigate('SelectPage');
+
+      try {
+        await AsyncStorage.setItem('@user', JSON.stringify(userFound));
+        navigation.navigate('SelectPage');
+      } catch (error) {
+        console.error('Erro ao armazenar os dados do usuário:', error);
+      }
+
     } else {
       Alert.alert('Erro', 'Usuário não encontrado.');
       setError('Usuário não encontrado.');
@@ -41,9 +49,9 @@ const LoginPage = ({ navigation }) => {
       <View style={styles.input}>
         <TextInput
           style={styles.textInput}
-          value={username}
-          placeholder="Username"
-          onChangeText={setUsername}
+          value={login}
+          placeholder="E-mail"
+          onChangeText={setLogin}
           autoCapitalize="none"
         />
       </View>
@@ -53,7 +61,7 @@ const LoginPage = ({ navigation }) => {
         <TextInput
           style={styles.textInput}
           value={password}
-          placeholder="Password"
+          placeholder="Senha"
           secureTextEntry
           onChangeText={setPassword}
         />

@@ -8,14 +8,14 @@ import StartPage from './src/screens/StartPage.jsx';
 import LoginPage from './src/screens/LoginPage';
 import RegisterPage from './src/screens/RegisterPage.jsx';
 import SelectPage from './src/screens/SelectPage.jsx';
-import VehiclesPage from './src/screens/VehiclesPage.jsx';
-import NewVehiclePage from './src/screens/NewVehiclePage.jsx';
-import VehicleDetailsPage from './src/screens/VehicleDetailsPage.jsx';
-import EditVehiclePage from './src/screens/EditVehiclePage.jsx';
-import MaintencePage from './src/screens/MaintenancePage.jsx';
-import NewMaintencePage from './src/screens/NewMaintencePage.jsx';
-import MaintenanceDetailsPage from './src/screens/MaintenanceDetailsPage.jsx';
-import EditMaintenancePage from './src/screens/EditMaintenancePage.jsx';
+import VehiclesPage from './src/screens/vehicles/VehiclesPage.jsx';
+import NewVehiclePage from './src/screens/vehicles/NewVehiclePage.jsx';
+import VehicleDetailsPage from './src/screens/vehicles/VehicleDetailsPage.jsx';
+import EditVehiclePage from './src/screens/vehicles/EditVehiclePage.jsx';
+import MaintencePage from './src/screens/maintenances/MaintenancePage.jsx';
+import NewMaintencePage from './src/screens/maintenances/NewMaintencePage.jsx';
+import MaintenanceDetailsPage from './src/screens/maintenances/MaintenanceDetailsPage.jsx';
+import EditMaintenancePage from './src/screens/maintenances/EditMaintenancePage.jsx';
 
 const Stack = createStackNavigator();
 

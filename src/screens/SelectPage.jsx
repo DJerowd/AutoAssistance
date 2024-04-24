@@ -1,11 +1,13 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import { View, TouchableOpacity, Text, Image, StyleSheet, FlatList } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Modal from 'react-native-modal';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
-import { VehiclesDB } from '../components/VehiclesDB';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { VehiclesDB } from '../database/VehiclesDB';
 import { LinearGradient } from 'expo-linear-gradient';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -207,8 +209,24 @@ const SelecaoScreen = ({ navigation }) => {
 };
 
 
-const PerfilScreen = ({ route }) => {
+const PerfilScreen = () => {
   const {vehicles, setVehicles} = VehiclesDB(); 
+  const [user, setUser] = useState('');
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await AsyncStorage.getItem('@user');
+        if (userData !== '') {
+          setUser(JSON.parse(userData));
+        }
+      } catch (error) {
+        console.error('Erro ao recuperar os dados do usuário:', error);
+      }
+    };
+
+    fetchUser();
+ }, []);
   
   return (
     <View style={styles.containerPerfil}>
@@ -216,33 +234,29 @@ const PerfilScreen = ({ route }) => {
 {/* Imagem de Perfil */}
       <View style={styles.perfil}>
         <Image
-        source={require('../assets/Logo.png')}
+        source={require('../assets/Profile.png')}
         style={styles.image}
         />
       </View>
 
 {/* Nome de Usuários */}
-      <View>
-        <Text style={styles.textTitle}>Nome de Usuário:</Text>
-        <Text style={styles.text}>user</Text>
-      </View>
+      <Text style={styles.textTitle}>Nome: </Text>
+      <Text style={styles.text}>{user.username}</Text>
 
 {/* E-mail */}
-      <View>
-        <Text style={styles.textTitle}>E-mail:</Text>
-        <Text style={styles.text}>email@email.com</Text>
-      </View>
-
-{/* Quantidade de Veículos Registrados */}
-      <View style={styles.linha} justifyContent={'flex-start'}>
-        <Text style={styles.textTitle}>Veiculos Registrados:</Text>
-        <Text style={styles.text} marginHorizontal={10}>{vehicles.length}</Text>
-      </View>
+      <Text style={styles.textTitle}>E-mail: </Text>
+      <Text style={styles.text}>{user.email}</Text>
 
 {/* Localização do Usuário */}
-      <View>
-        <Text style={styles.textTitle}>Localização: </Text>
-        <Text style={styles.text}>local</Text>
+      
+      <Text style={styles.textTitle}>Contato: </Text>
+      <Text style={styles.text}>{user.phoneNumber}</Text>
+   
+
+      {/* Quantidade de Veículos Registrados */}
+      <View style={styles.linha} justifyContent={'flex-start'}>
+        <Text style={styles.textTitle}>Veiculos:</Text>
+        <Text style={styles.text} marginHorizontal={10}>{vehicles.length}</Text>
       </View>
 
     </View>
@@ -324,9 +338,9 @@ const styles = StyleSheet.create({
   perfil: {
     width: 300,
     height: 300,
-    backgroundColor: '#6A6A6A99',
+    backgroundColor: '#6A6A6A55',
     borderRadius: 150,
-    borderColor: '#6A6A6A',
+    borderColor: '#000000',
     borderWidth: 10,
     alignSelf: 'center',
     alignItems: 'center',
@@ -334,23 +348,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   image: {
-    height: 280,
-    width: 280,
+    height: 300,
+    width: 300,
     alignSelf: 'center',
     borderRadius: 150,
-    backgroundColor: '#009F4D50',
   },
   textTitle: {
-    color: '#6A6A6A',
+    color: '#000000',
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: '500',
   },
   text: {
-    color: '#6A6A6A99',
-    fontSize: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: '#6A6A6A99',
-    marginBottom: 20,
+    color: '#6A6A6A',
+    fontSize: 20,
+    marginBottom: 10,
   },
 });
 

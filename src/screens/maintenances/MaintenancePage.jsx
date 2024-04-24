@@ -1,7 +1,7 @@
 import { React, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
-import { MaintenanceDB } from '../components/MaintenanceDB';
+import { MaintenanceDB } from '../../database/MaintenanceDB';
 
 const MaintencePage = ({ navigation }) => {
     const {notes, setNotes} = MaintenanceDB();
@@ -157,8 +157,8 @@ const styles = StyleSheet.create({
   },
 
   item: {
-    borderColor: '#6A6A6A11',
-    borderWidth: 2,
+    borderColor: '#6A6A6A55',
+    borderWidth: 1,
     paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',

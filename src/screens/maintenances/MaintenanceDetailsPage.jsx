@@ -18,6 +18,7 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
         {
           text: 'Confirmar',
           onPress: () => {
+            navigation.goBack();
             Alert.alert('Lembrete excluído com sucesso');
             console.log('Lembrete excluído com sucesso');
           },

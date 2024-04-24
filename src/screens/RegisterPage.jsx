@@ -3,6 +3,7 @@ import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert } from 'reac
 import CheckBox from 'expo-checkbox';
 import IconI from 'react-native-vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { UsersDB } from '../database/UsersDB';
 
 const RegisterPage = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -13,6 +14,7 @@ const RegisterPage = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const [error, setError] = useState('');
+  const { user } = UsersDB();
   const [errors, setErrors] = useState({
     username: '',
     email: '',
@@ -37,21 +39,16 @@ const RegisterPage = ({ navigation }) => {
   };
 
   const handleRegister = () => {
-{/* Formato do email e telefone */}
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    let newErrors = {
-      username: '',
-      email: '',
-      phoneNumber: '',
-      password: '',
-      confirmPassword: '',
-   };
+    const id = (user.length + 1);
+    const newRegister = {id, username, email, phoneNumber, password,}
+    let newErrors = {username: '', email: '', phoneNumber: '', password: '', confirmPassword: '',};
 
 {/* Conclusão Com Sucesso do Registro */}
-    if (username.length >= 6 && email.match(emailPattern) && email.length >= 10 && formatPhoneNumber(phoneNumber) && password.length >= 8 && isValidPassword(password) && password == confirmPassword && isChecked == true) {
+    if (username.length >= 4 && email.match(emailPattern) && email.length >= 10 && formatPhoneNumber(phoneNumber) && password.length >= 8 && isValidPassword(password) && password == confirmPassword && isChecked == true) {
       setError('');
       // navigation.navigate('LoginPage');
-      console.log('Registro Concluido.');
+      console.log('Registro Concluido.', newRegister);
       Alert.alert('Registro Concluído', 'Registrado com sucesso!');
 
 {/* Validação do nome de usuário */}
@@ -91,8 +88,6 @@ const RegisterPage = ({ navigation }) => {
     } else if (isChecked == false){
       setError('Aceite os termos e condições.');
     }
-
-
     setErrors(newErrors);
   };
 

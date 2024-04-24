@@ -33,7 +33,7 @@ const NewVehiclePage = ({ navigation }) => {
 
 {/* Salvar */}
   const handleAddVehicle = () => {
-{/* Alerta ao Tentar Salvar sem Preencher os Campos Necessários */}
+{/* Verificação dos campos obrigatórios */}
     if (!brand || !model || !color || !mileage) {
       Alert.alert(
         'Campos não preenchidos',
@@ -52,17 +52,7 @@ const NewVehiclePage = ({ navigation }) => {
 
 {/* Mensagem no Console */}
     console.log(
-      'Novo veículo adicionado:',
-      ', Marca:', brand,
-      ', Modelo:', model,
-      ', Versão:', version,
-      ', Cor:', color,
-      ', Ano de fabricação:', manufactureYear,
-      ', Placa:', licensePlate,
-      ', Combustivel:', fuelType,
-      ', Transmissão:', transmission,
-      ', Motor:', engine,
-      ', Quilometragem:', mileage
+      'Novo veículo adicionado:', ', Marca:', brand, ', Modelo:', model, ', Versão:', version, ', Cor:', color, ', Ano de fabricação:', manufactureYear, ', Placa:', licensePlate, ', Combustivel:', fuelType, ', Transmissão:', transmission, ', Motor:', engine, ', Quilometragem:', mileage
     );
     navigation.goBack();
 
