@@ -21,8 +21,8 @@ export const initVehiclesDB = () => {
                 mileage INTEGER
             );`,
             [],
-            () => console.log('Tabela criada com sucesso'),
-            (_, error) => console.log('Erro ao criar tabela:', error)
+            () => console.log('Tabela de veículos criada com sucesso'),
+            (_, error) => console.log('Erro ao criar tabela de veículos:', error)
         );
     });
 };

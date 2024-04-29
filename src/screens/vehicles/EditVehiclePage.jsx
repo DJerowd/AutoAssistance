@@ -41,7 +41,7 @@ const EditVehiclePage = ({ navigation, route }) => {
   };
 
 {/* Alerta ao Tentar Salvar sem Preencher os Campos Necessários */}
-    if (!name || !brand || !model || !color || !fuelType || !transmission || !engine || !mileage) {
+    if (!name || !brand || !model || !color || !fuelType || !transmission || !engine) {
       Alert.alert(
         'Campos não preenchidos',
         'Por favor, preencha todos os campos obrigatórios.',
@@ -217,13 +217,36 @@ const EditVehiclePage = ({ navigation, route }) => {
 {/* Ano de Fabricação do Veículo */}
       <View style={styles.linha} alignItems={'center'}>
         <Text style={styles.label}>Ano de Fabricação:  </Text>
-        <Text style={styles.text}>{vehicle.manufactureYear}</Text>
+        {vehicle.manufactureYear && (
+          <Text style={styles.text}>{vehicle.manufactureYear || '(Não informado)'}</Text>
+        )}
+        {!vehicle.manufactureYear && (
+        <TextInput
+          style={styles.shortInput}
+          value={manufactureYear}
+          onChangeText={setManufactureYear}
+          placeholder="(Opcional)"
+          keyboardType="numeric"
+          maxLength={4}
+        />
+      )}
       </View>
+      
 
 {/* Placa do Veículo */}
       <View style={styles.linha} alignItems={'center'}>
         <Text style={styles.label}>Placa do Veículo:  </Text>
-        <Text style={styles.text}>{vehicle.licensePlate}</Text>
+        {vehicle.licensePlate ? (
+          <Text style={styles.text}>{vehicle.licensePlate || '(Não informado)'}</Text>
+        ) : (
+        <TextInput
+          style={styles.shortInput}
+          value={licensePlate}
+          onChangeText={setLicensePlate}
+          placeholder="(Opcional)"
+          maxLength={7}
+        />
+      )}
       </View>
 
 {/* Quilometragem do Veículo */}
@@ -279,6 +302,17 @@ const styles = StyleSheet.create({
       height: 40,
       paddingHorizontal: 10,
       marginBottom: 10,
+    },
+    shortInput: {
+      color: '#6A6A6A',
+      backgroundColor: '#6A6A6A22',
+      borderColor: '#000000',
+      borderWidth: 1,
+      borderRadius: 8,
+      fontSize: 18,
+      height: 40,
+      paddingHorizontal: 10,
+      marginBottom: 4,
     },
   
 

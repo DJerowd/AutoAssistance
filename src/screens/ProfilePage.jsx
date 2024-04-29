@@ -3,9 +3,12 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { VehiclesDB } from '../database/VehiclesDB';
+import { fetchVehicles } from '../database/VehiclesDatabase';
 
 const ProfilePage = () => {
-    const {vehicles, setVehicles} = VehiclesDB(); 
+    // const {vehicles, setVehicles} = VehiclesDB(); 
+    const [vehicles, setVehicles] = useState([]); 
+    
     const [user, setUser] = useState('');
   
     useEffect(() => {

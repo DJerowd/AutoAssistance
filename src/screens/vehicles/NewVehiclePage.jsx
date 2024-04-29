@@ -2,7 +2,7 @@ import { React, useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
-import { initVehiclesDB, insertVehicle } from '../../database/VehiclesDatabase';
+import { insertVehicle } from '../../database/VehiclesDatabase';
 
 const NewVehiclePage = ({ navigation }) => {
   const [name, setName] = useState('Carro');
@@ -18,9 +18,8 @@ const NewVehiclePage = ({ navigation }) => {
   const [engine, setEngine] = useState('');
   const [mileage, setMileage] = useState('');
 
-  {/* Inicialização do Banco de Dados */}
+  {/* Inicialização da API */}
   useEffect(() => {
-    initVehiclesDB();
     fetchBrands();
   }, []);
 
@@ -53,11 +52,9 @@ const NewVehiclePage = ({ navigation }) => {
       return;
    }
     {/* Inserção dos Dados de Veículo */}
-   insertVehicle({ name, brand, model, version, color, manufactureYear, licensePlate, fuelType, transmission, engine, mileage });
-    {/* Mensagem no Console */}
+    insertVehicle({ name, brand, model, version, color, manufactureYear, licensePlate, fuelType, transmission, engine, mileage });
     console.log( 'Novo veículo adicionado:', ', Marca:', brand, ', Modelo:', model, ', Versão:', version, ', Cor:', color, ', Ano de fabricação:', manufactureYear, ', Placa:', licensePlate, ', Combustivel:', fuelType, ', Transmissão:', transmission, ', Motor:', engine, ', Quilometragem:', mileage );
     navigation.navigate('SelectNavigator');
-    {/* Alerta de Sucesso ao Salvar */}
     Alert.alert( 'Veículo Salvo com Sucesso!' );
   };
 
