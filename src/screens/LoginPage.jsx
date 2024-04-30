@@ -1,12 +1,12 @@
 import { React, useEffect, useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert, Image, FlatList } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchUsers, deleteAllUsers } from '../database/UsersDatabase';
 
 const LoginPage = ({ navigation }) => {
-  const [login, setLogin] = useState('teste@mail.com');
-  const [password, setPassword] = useState('Senha123');
+  const [login, setLogin] = useState('mariana.rodriguescm@hotmail.com');
+  const [password, setPassword] = useState('senha123');
   const [error, setError] = useState('');
   
   const [users, setUsers] = useState([]);
@@ -41,7 +41,6 @@ useEffect(() => {
     console.log('Item Selecionado:', 'RegisterPage');
     navigation.navigate('RegisterPage');
   };
-
 
   const handleDeleteAllUsers = async () => {
     try {

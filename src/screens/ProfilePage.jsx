@@ -1,14 +1,11 @@
 import { React, useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { VehiclesDB } from '../database/VehiclesDB';
-import { fetchVehicles } from '../database/VehiclesDatabase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchUserVehicles } from '../database/VehiclesDatabase';
 
 const ProfilePage = () => {
-    // const {vehicles, setVehicles} = VehiclesDB(); 
     const [vehicles, setVehicles] = useState([]); 
-    
     const [user, setUser] = useState('');
   
     useEffect(() => {
@@ -22,13 +19,17 @@ const ProfilePage = () => {
           console.error('Erro ao recuperar os dados do usuário:', error);
         }
       };
-  
       fetchUser();
    }, []);
+
+   useEffect(() => {
+    if (user && user.id) {
+      fetchUserVehicles(user.id).then(setVehicles).catch(console.error);
+    }
+  }, [user]);
     
     return (
       <View style={styles.container}>
-  
   {/* Imagem de Perfil */}
         <View style={styles.perfil}>
           <Image

@@ -1,19 +1,42 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Picker} from '@react-native-picker/picker';
 
-import { VehiclesDB } from '../database/VehiclesDB';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchVehicles, fetchUserVehicles } from '../database/VehiclesDatabase';
 
 const SelectPage = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const {vehicles, setVehicles} = VehiclesDB(); 
-  const [selectedVehicle, setSelectedVehicle] = useState('');
+  const [activeVehicle, setActiveVehicle] = useState('');
+  const [vehicles, setVehicles] = useState([]);  
+  const [user, setUser] = useState('');
 
-{/* Navegação para a Página de Detalhes Do Item Selecionado */}
+  {/* Carregar Banco de Dados */}
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await AsyncStorage.getItem('@user');
+        if (userData !== '') {
+          setUser(JSON.parse(userData));
+        }
+      } catch (error) {
+        console.error('Erro ao recuperar os dados do usuário:', error);
+      }
+    };
+    fetchUser();
+ }, []);
+
+ useEffect(() => {
+  if (user && user.id) {
+    fetchUserVehicles(user.id).then(setVehicles).catch(console.error);
+  }
+}, [user]);
+
+
+    {/* Navegação para a Página de Detalhes Do Item Selecionado */}
     const handleItemPress = (item) => {
-      console.log('Item Selecionado:', item);
       navigation.navigate(item);
     };
 
@@ -23,9 +46,16 @@ const SelectPage = ({ navigation }) => {
     };
 
 {/* Seleção do Veículo Ativo */}
-    const handleVehicleChange = (item) => {
+    const handleVehicleChange = async (item) => {
+
+      try {
+        await AsyncStorage.setItem('@activeVehicle', JSON.stringify(item));
+      } catch (error) {
+        console.error('Erro ao armazenar os dados do veículo ativo:', error);
+      }
+      
       console.log('Veículo Selecionado:', item);
-      setSelectedVehicle(item);
+      setActiveVehicle(item);
     };
 
   return (
@@ -33,29 +63,18 @@ const SelectPage = ({ navigation }) => {
       <View style={{ height: 50, paddingHorizontal: 40, justifyContent: 'center', backgroundColor: '#009F4D'}}>
         
 {/* Seleção do Veículo Ativo */}
-      <TouchableOpacity onPress={toggleModal}>
-      {(!selectedVehicle == '') && (
-        <Text style={styles.carPicker}>{selectedVehicle.name} | {selectedVehicle.brand} {selectedVehicle.model}</Text>
-      )}
-      {(selectedVehicle == '') && (
-        <Text style={styles.carPicker}>Selecione aqui um veículo.</Text>
-      )}
-      </TouchableOpacity>
+        <Picker
+        selectedValue={activeVehicle}
+        style={styles.carPicker}
+        onValueChange={(itemValue, itemIndex) => handleVehicleChange(itemValue)}
+        mode={'dropdown'}
+      >
+        <Picker.Item label="Selecione aqui um veículo" value="" />
+        {vehicles.map((vehicle) => (
+          <Picker.Item key={vehicle.id} label={vehicle.name} value={vehicle} />
+        ))}
+      </Picker>
 
-{/* Lista de Veículo Ativo */}
-        <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
-          <View style={styles.modalContainer}>
-            <FlatList
-              data={vehicles}
-              renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => handleVehicleChange(item)}>
-                  <Text style={styles.modalContainerText}>{item.id} - {item.name} - {item.brand} {item.model}</Text>
-                </TouchableOpacity>
-              )}
-              keyExtractor={(item) => item.id}
-            />
-          </View>
-        </Modal>
       </View>
 
 {/* Background da Página */}
@@ -184,19 +203,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlignVertical: 'center',
-  },
-
-  modalContainer: {
-    color: '#FFFFFF',
-    backgroundColor: '#009F4D',
-    marginHorizontal: 16,
-  },
-  modalContainerText: {
-    color: '#FFFFFF',
-    borderBottomColor: '#6A6A6A99',
-    borderBottomWidth: 2,
-    fontSize: 18,
-    paddingHorizontal: 10,
   },
 
   buttonsContainer: {

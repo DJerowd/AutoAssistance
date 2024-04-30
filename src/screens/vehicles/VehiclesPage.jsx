@@ -2,18 +2,33 @@ import { React, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import IconI from 'react-native-vector-icons/Ionicons';
 
-import { VehiclesDB } from '../../database/VehiclesDB';
-import { fetchVehicles } from '../../database/VehiclesDatabase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchVehicles, fetchUserVehicles } from '../../database/VehiclesDatabase';
 
 const VehiclesPage = ({ navigation }) => {
-  // const {vehicles, setVehicles} = VehiclesDB();
   const [vehicles, setVehicles] = useState([]);  
+  const [user, setUser] = useState('');
 
-{/* Carregar Banco de Dados */}
+  {/* Carregar Banco de Dados */}
   useEffect(() => {
-    fetchVehicles().then(setVehicles).catch(console.error);
+    const fetchUser = async () => {
+      try {
+        const userData = await AsyncStorage.getItem('@user');
+        if (userData !== '') {
+          setUser(JSON.parse(userData));
+        }
+      } catch (error) {
+        console.error('Erro ao recuperar os dados do usuário:', error);
+      }
+    };
+    fetchUser();
  }, []);
 
+ useEffect(() => {
+  if (user && user.id) {
+    fetchVehicles().then(setVehicles).catch(console.error);
+  }
+}, [user]);
 
 {/* Identificação do Codigo HEX de Cor */}
   const getColorCode = (colorName) => {
@@ -68,7 +83,7 @@ const VehiclesPage = ({ navigation }) => {
 
       <View style={styles.coluna}>
         <Text style={styles.itemTitle}>{item.name}</Text>
-        <Text style={styles.itemText}>{item.brand} {item.model} {item.version} {item.manufactureYear}</Text>
+        <Text style={styles.itemText}>{item.brand} {item.model} {item.version}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -82,12 +97,10 @@ const VehiclesPage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-
 {/* Lista de Veículos */}  
       <FlatList
         data={vehicles}
         renderItem={renderItem}
-        // keyExtractor={(item) => item.id}  
         keyExtractor={(item) => item.id.toString()}
         borderBottomWidth={4}
         borderBottomColor={'#6A6A6A11'}

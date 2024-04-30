@@ -14,11 +14,13 @@ import VehiclesPage from './src/screens/vehicles/VehiclesPage.jsx';
 import NewVehiclePage from './src/screens/vehicles/NewVehiclePage.jsx';
 import VehicleDetailsPage from './src/screens/vehicles/VehicleDetailsPage.jsx';
 import EditVehiclePage from './src/screens/vehicles/EditVehiclePage.jsx';
+
 import MaintencePage from './src/screens/maintenances/MaintenancePage.jsx';
 import NewMaintencePage from './src/screens/maintenances/NewMaintencePage.jsx';
 import MaintenanceDetailsPage from './src/screens/maintenances/MaintenanceDetailsPage.jsx';
 import EditMaintenancePage from './src/screens/maintenances/EditMaintenancePage.jsx';
 
+import { initMaintenancesDB } from './src/database/MaintenanceDatabase.jsx';
 import { initVehiclesDB } from './src/database/VehiclesDatabase.jsx';
 import { initUsersDB } from './src/database/UsersDatabase.jsx';
 
@@ -28,6 +30,7 @@ const App = () => {
 
   {/* Inicialização do Banco de Dados */}
   useEffect(() => {
+    initMaintenancesDB();
     initVehiclesDB();
     initUsersDB()
       .then(() => console.log('Database initialized'))

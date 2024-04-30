@@ -1,9 +1,12 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
 import CheckBox from 'expo-checkbox';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { insertMaintenance } from '../../database/MaintenanceDatabase';
 
 const NewMaintencePage = ({ navigation }) => {
   const [type, setType] = useState('');
@@ -11,9 +14,27 @@ const NewMaintencePage = ({ navigation }) => {
   const [isKilometersEnabled, setIsKilometersEnabled] = useState(false);
   const [isMonthsEnabled, setIsMonthsEnabled] = useState(false);
   const [kilometers, setKilometers] = useState(0);
+  const [kilometersTotal, setKilometersTotal] = useState(0);
   const [months, setMonths] = useState(0);
+  const [monthsTotal, setMonthsTotal] = useState(0);
   const [description, setDescription] = useState('');
+  const [activeVehicle, setActiveVehicle] = useState('');
 
+  {/* Carregamentos */}
+  useEffect(() => {
+    const fetchVehicle = async () => {
+      try {
+        const vehicleData = await AsyncStorage.getItem('@activeVehicle');
+        if (vehicleData !== '') {
+          setActiveVehicle(JSON.parse(vehicleData));
+        }
+      } catch (error) {
+        console.error('Erro ao recuperar os dados do veículo ativo:', error);
+      }
+    };
+    fetchVehicle();
+  }, []);
+ 
 {/* Salvar */}
   const handleAddReminder = () => {
 {/* Alerta ao Tentar Salvar sem Preencher os Campos Necessários */}
@@ -33,7 +54,8 @@ const NewMaintencePage = ({ navigation }) => {
       return;
     }
 
-{/* Mensagem no Console */}
+{/* Inserção dos Dados do Lembrete */}
+    insertMaintenance({type, isRepeat, isKilometersEnabled, kilometers, kilometersTotal, isMonthsEnabled, months, monthsTotal, description}, activeVehicle.id);
     console.log(
       'Novo lembrete adicionado:',
       'Tipo de manutenção:', type,
@@ -42,15 +64,8 @@ const NewMaintencePage = ({ navigation }) => {
       ', Meses:', isMonthsEnabled ? months : 'Não habilitado',
       ', Descrição:', description
     );
-    navigation.goBack();
-
-{/* Alerta de Sucesso ao Salvar */}
+    navigation.navigate('SelectNavigator');
     Alert.alert('Novo Lembrete Salvo com Sucesso!'); 
-  };
-
-{/* Cancelar */}
-  const handleCancelReminder = () => {
-    navigation.goBack();
   };
 
 

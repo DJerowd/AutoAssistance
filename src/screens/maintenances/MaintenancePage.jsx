@@ -1,11 +1,35 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
-import { MaintenanceDB } from '../../database/MaintenanceDB';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchMaintenances, fetchVehicleMaintenances } from '../../database/MaintenanceDatabase'; 
 
 const MaintencePage = ({ navigation }) => {
-    const {notes, setNotes} = MaintenanceDB();
+    const {notes, setNotes} = useState([]);
+    const [activeVehicle, setActiveVehicle] = useState('');
 
+    {/* Carregar Banco de Dados */}
+    useEffect(() => {
+      const fetchActiveVehicle = async () => {
+        try {
+          const activeVehicleData = await AsyncStorage.getItem('@activeVehicle');
+          if (activeVehicleData !== '') {
+            setActiveVehicle(JSON.parse(activeVehicleData));
+          }
+        } catch (error) {
+          console.error('Erro ao recuperar os dados do usuário:', error);
+        }
+      };
+      fetchActiveVehicle();
+   }, []);
+  
+   useEffect(() => {
+    if (activeVehicle && activeVehicle.id) {
+      fetchVehicleMaintenances(activeVehicle.id).then(setNotes).catch(console.error);
+    }
+  }, [activeVehicle]);
+    
 {/* Calcular Percentual de Quilometros */}
     const calculateKilometersProgress = (item) => {
       if (item.isKilometersEnabled) {
@@ -107,13 +131,12 @@ const MaintencePage = ({ navigation }) => {
 
 {/* Navegação para a Página de Adicionar Novo Veículo */}
     const handleItemPress = (item) => {
-        console.log('Item Selecionado:', item);
         navigation.navigate(item);
     };
 
   return (
     <View style={styles.container}>
-
+<Text>Carro ativo: {activeVehicle.id} {activeVehicle.brand} {activeVehicle.model}</Text>
 {/* Lista de Lembretes */}  
       <FlatList
         data={notes}
