@@ -2,10 +2,10 @@ import * as SQLite from 'expo-sqlite';
 
 const db = SQLite.openDatabase('users.db');
 
-{/* Iniciar Banco de Dados */}
+{/* Iniciar Banco de Dados */ }
 export const initUsersDB = () => {
   return new Promise((resolve, reject) => {
-  db.transaction(tx => {
+    db.transaction(tx => {
       tx.executeSql(
         `CREATE TABLE IF NOT EXISTS users (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -18,12 +18,37 @@ export const initUsersDB = () => {
         () => console.log('Tabela de usuários criada com sucesso'),
         (_, error) => console.log('Erro ao criar tabela de usuários:', error)
       );
-  });
+    });
   });
 };
 
+export const userExists = (email) => {
+  return new Promise((resolve, reject) => {
+     db.transaction(tx => {
+       tx.executeSql(
+         `SELECT * FROM users WHERE email = ?;`,
+         [email],
+         (_, resultSet) => {
+           if (resultSet.rows.length > 0) {
+             console.log('Usuário já existe:', resultSet.rows.item(0));
+             resolve(true); // Usuário existe
+           } else {
+             console.log('Usuário não existe');
+             resolve(false); // Usuário não existe
+           }
+         },
+         (_, error) => {
+           console.log('Erro ao verificar usuário:', error);
+           reject(error);
+         }
+       );
+     });
+  });
+ };
+ 
 
-{/* Inserir Novo Registro */}
+
+{/* Inserir Novo Registro */ }
 export const insertUser = (user) => {
   db.transaction(tx => {
     tx.executeSql(
@@ -36,39 +61,38 @@ export const insertUser = (user) => {
   });
 };
 
-{/* Carregar Usuarios */}
+{/* Carregar Usuarios */ }
 export const fetchUsers = () => {
   return new Promise((resolve, reject) => {
-      db.transaction(tx => {
-          tx.executeSql(
-              `SELECT * FROM users;`,
-              [],
-              (_, { rows: { _array } }) => resolve(_array),
-              (_, error) => reject(error)
-          );
-      });
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM users;`,
+        [],
+        (_, { rows: { _array } }) => resolve(_array),
+        (_, error) => reject(error)
+      );
+    });
   });
 };
 
-{/* Resetar Banco de Dados de Usuarios */}
+{/* Resetar Banco de Dados de Usuarios */ }
 export const deleteAllUsers = () => {
   return new Promise((resolve, reject) => {
-     db.transaction(tx => {
-       tx.executeSql(
-         `DELETE FROM users;`,
-         [],
-         () => {
-           console.log('Todos os usuários foram apagados com sucesso');
-           resolve();
-         },
-         (_, error) => {
-           console.log('Erro ao apagar usuários:', error);
-           reject(error);
-         }
-       );
-     });
+    db.transaction(tx => {
+      tx.executeSql(
+        `DELETE FROM users;`,
+        [],
+        () => {
+          console.log('Todos os usuários foram apagados com sucesso');
+          resolve();
+        },
+        (_, error) => {
+          console.log('Erro ao apagar usuários:', error);
+          reject(error);
+        }
+      );
+    });
   });
- };
+};
 
 
-   
