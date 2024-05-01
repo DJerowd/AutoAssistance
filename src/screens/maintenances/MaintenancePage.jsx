@@ -1,15 +1,19 @@
 import { React, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Picker} from '@react-native-picker/picker';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { fetchMaintenances, fetchVehicleMaintenances } from '../../database/MaintenanceDatabase'; 
+import { fetchMaintenances, fetchVehicleMaintenances } from '../../database/MaintenanceDatabase';
+import { fetchUserVehicles } from '../../database/VehiclesDatabase';
 
 const MaintencePage = ({ navigation }) => {
-    const {notes, setNotes} = useState([]);
+    const [maintenances, setMaintenances] = useState([]);
+    const [vehicles, setVehicles] = useState([]);  
     const [activeVehicle, setActiveVehicle] = useState('');
+    const [user, setUser] = useState('');
 
-    {/* Carregar Banco de Dados */}
+    {/* Carregar o Veículo Ativo */}
     useEffect(() => {
       const fetchActiveVehicle = async () => {
         try {
@@ -24,16 +28,50 @@ const MaintencePage = ({ navigation }) => {
       fetchActiveVehicle();
    }, []);
   
+
+  {/* Carregar as Manutenções do Veículo Ativo Após Carregar o ID de Veículo */}
    useEffect(() => {
     if (activeVehicle && activeVehicle.id) {
-      fetchVehicleMaintenances(activeVehicle.id).then(setNotes).catch(console.error);
+      const fetchAndSetMaintenances = async () => {
+        const fetchedMaintenances = await fetchVehicleMaintenances(activeVehicle.id);
+        setMaintenances(fetchedMaintenances);
+      };
+
+      fetchAndSetMaintenances();
     }
   }, [activeVehicle]);
     
+
+  {/* Carregar o Usuário Ativo */}
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await AsyncStorage.getItem('@user');
+        if (userData !== '') {
+          setUser(JSON.parse(userData));
+        }
+      } catch (error) {
+        console.error('Erro ao recuperar os dados do usuário:', error);
+      }
+    };
+    fetchUser();
+ }, []);
+
+
+ {/* Carregar os Veículos do Usuário Ativo Após Carregar o ID de Usuário */}
+ useEffect(() => {
+  if (user && user.id) {
+    fetchUserVehicles(user.id).then(setVehicles).catch(console.error);
+  }
+}, [user]);
+
+
+
+
 {/* Calcular Percentual de Quilometros */}
     const calculateKilometersProgress = (item) => {
       if (item.isKilometersEnabled) {
-          return (3.2 *(item.kilometers / (item.kilometersEnd / 100)));
+          return (3 *(item.kilometers / (item.kilometersEnd / 100)));
       } else {
           return 0;
       }
@@ -42,11 +80,17 @@ const MaintencePage = ({ navigation }) => {
 {/* Calcular Percentual de Meses */}
     const calculateMonthsProgress = (item) => {
       if (item.isMonthsEnabled) {
-          return (3.2 *(item.months / (item.monthsEnd / 100)));
+          return (3 *(item.months / (item.monthsEnd / 100)));
       } else {
           return 0;
       }
     };
+
+    const calculateProgress = (item, itemEnd) => {
+          return (3 *(item / (itemEnd / 100)));
+    };
+
+
 
 {/* Navegação para a Página de Detalhes Do Veículo Selecionado */}
     const handleItemDetailsPress = (item) => {
@@ -71,8 +115,7 @@ const MaintencePage = ({ navigation }) => {
           
           <View style={styles.coluna}>
             <View style={styles.linha}>
-              <Text style={styles.itemText}>{item.name} - {item.type}</Text>
-
+              <Text style={styles.itemText}>{item.type}</Text>
 {/* Alerta de Barra de Progresso Completa */}
               {((item.months == item.monthsEnd && !item.monthsEnd == '') || (item.kilometers == item.kilometersEnd && !item.kilometersEnd == '')) && (
                 <IconMCI 
@@ -99,13 +142,15 @@ const MaintencePage = ({ navigation }) => {
               <View>
                 <View style={styles.linha} justifyContent={'space-between'}>
                   <Text style={styles.text}>
-                    {item.isKilometersEnabled ? `${item.kilometers} KM ` : ''}
+                    {item.isKilometersEnabled ? `${item.kilometersTotal} KM ` : ''}
                   </Text>
                   <Text style={styles.text}>
-                    {item.isKilometersEnabled ? `${item.kilometersEnd} KM ` : ''}
+                    {item.isKilometersEnabled ? `${item.kilometers} KM ` : ''}
                   </Text>
                 </View>
-                <View style={styles.progressBarTotal}><View style={styles.progressBar} width={calculateKilometersProgress(item)}></View></View>
+                <View style={styles.progressBarLabel}>
+                  {/* <View style={styles.progressBar} width={calculateProgress(item.kilometers, item.kilometersEnd)}></View> */}
+                </View>
               </View>
             )}
 
@@ -114,13 +159,15 @@ const MaintencePage = ({ navigation }) => {
               <View>
                 <View style={styles.linha} justifyContent={'space-between'}>
                   <Text style={styles.text}>
-                    {item.isMonthsEnabled ? `${item.months} Meses ` : ''}
+                    {item.isMonthsEnabled ? `${item.monthsTotal} Meses ` : ''}
                   </Text>
                   <Text style={styles.text}>
-                    {item.isMonthsEnabled ? `${item.monthsEnd} Meses ` : ''}
+                    {item.isMonthsEnabled ? `${item.months} Meses ` : ''}
                   </Text>
                 </View>
-                <View style={styles.progressBarTotal}><View style={styles.progressBar} width={calculateMonthsProgress(item)}></View></View>
+                <View style={styles.progressBarLabel}>
+                  {/* <View style={styles.progressBar} width={calculateMonthsProgress(item)}></View> */}
+                </View>
               </View>
             )}
 
@@ -134,14 +181,42 @@ const MaintencePage = ({ navigation }) => {
         navigation.navigate(item);
     };
 
+    {/* Seleção do Veículo Ativo */}
+    const handleVehicleChange = async (item) => {
+      try {
+        await AsyncStorage.setItem('@activeVehicle', JSON.stringify(item));
+      } catch (error) {
+        console.error('Erro ao armazenar os dados do veículo ativo:', error);
+      }
+      console.log('Veículo Selecionado:', item);
+      setActiveVehicle(item);
+    };
+
   return (
     <View style={styles.container}>
-<Text>Carro ativo: {activeVehicle.id} {activeVehicle.brand} {activeVehicle.model}</Text>
-{/* Lista de Lembretes */}  
+      <View style={{ height: 60, paddingHorizontal: 40, justifyContent: 'center', backgroundColor: '#009F4D'}}>
+        
+        {/* Seleção do Veículo Ativo */}
+        <Picker
+          selectedValue={activeVehicle}
+          style={styles.carPicker}
+          dropdownIconColor={'#fff'}
+          onValueChange={(itemValue, itemIndex) => handleVehicleChange(itemValue)}
+          mode={'dropdown'}
+        >
+          <Picker.Item style={styles.carPickerItem} label="Selecione aqui um veículo" value="" />
+          {vehicles.map((vehicle) => (
+            <Picker.Item style={styles.carPickerItem} key={vehicle.id} label={vehicle.brand+' '+vehicle.model+' '+vehicle.version} value={vehicle} />
+          ))}
+        </Picker>
+        
+      </View>
+      
+      {/* Lista de Lembretes */}  
       <FlatList
-        data={notes}
+        data={maintenances}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         borderBottomWidth={4}
         borderBottomColor={'#6A6A6A11'}
       />
@@ -170,8 +245,18 @@ const styles = StyleSheet.create({
   },
   coluna: {
     paddingHorizontal: 6,
+    width: '80%',
   },
 
+  carPicker:{
+    color: '#FFFFFF',
+  },
+  carPickerItem:{
+    backgroundColor: '#009F4D',
+    color: '#FFFFFF',
+    fontSize: 16,
+  },
+  
   icon: {
     backgroundColor: '#6A6A6A99',
     color: '#6A6A6A',
@@ -203,10 +288,10 @@ const styles = StyleSheet.create({
     height: 10,
     borderRadius: 6,
   },
-  progressBarTotal: {
+  progressBarLabel: {
     backgroundColor: '#6A6A6A99',
     height: 10,
-    width: 320,
+    width: 300,
     borderRadius: 6,
   },
 

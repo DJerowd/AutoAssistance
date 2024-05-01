@@ -8,6 +8,7 @@ const VehicleDetailsPage = ({ route, navigation }) => {
   const { vehicle } = route.params;
   const [user, setUser] = useState('');
 
+  {/* Carregar o Usuário Ativo */}
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -22,8 +23,9 @@ const VehicleDetailsPage = ({ route, navigation }) => {
     fetchUser();
  }, []);
 
-{/* Alerta ae Confirmação de Excluir Veículo */}
+
   const handleDeleteVehicle = () => {
+    {/* Alerta ae Confirmação de Excluir Veículo */}
     Alert.alert(
       'Excluir Veículo',
       'Tem certeza que deseja excluir este veículo permanentemente?',
@@ -45,7 +47,6 @@ const VehicleDetailsPage = ({ route, navigation }) => {
       ],
       { cancelable: false, alertContainerStyle: styles.alertContainer }
     );
-
   };
 
 {/* Navegação para a Página de Editar Veículo */}

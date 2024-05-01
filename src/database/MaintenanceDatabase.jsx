@@ -69,3 +69,47 @@ export const fetchVehicleMaintenances = (vehicleId) => {
         });
     });
 };
+
+{/* Atualizar Lembrete */}
+export const updateMaintenance = (maintenance, vehicleId) => {
+    db.transaction(tx => {
+        tx.executeSql(
+            `UPDATE maintenances SET type = ?, isRepeat = ?, isKilometersEnabled = ?, kilometers = ?, kilometersTotal = ?, isMonthsEnabled = ?, months = ?, monthsTotal = ?, description = ? WHERE id = ? AND vehicleId = ?;`,
+            [maintenance.type, maintenance.isRepeat, maintenance.isKilometersEnabled, maintenance.kilometers, maintenance.kilometersTotal, maintenance.isMonthsEnabled, maintenance.months, maintenance.monthsTotal, maintenance.description, maintenance.id, vehicleId],
+            (_, resultSet) => console.log('Lembrete atualizado com sucesso:', resultSet),
+            (_, error) => console.log('Erro ao atualizar Lembrete:', error)
+        );
+    });
+};
+
+{/* Deletar Lembrete */}
+export const deleteMaintenances = (maintenanceId, vehicleId) => {
+    db.transaction(tx => {
+        tx.executeSql(
+            `DELETE FROM maintenances WHERE id = ? AND vehicleId = ?;`,
+            [maintenanceId, vehicleId],
+            (_, resultSet) => console.log('Lembrete excluído com sucesso:', resultSet),
+            (_, error) => console.log('Erro ao excluir Lembrete:', error)
+        );
+    });
+};
+
+{/* Resetar Banco de Dados de Usuarios */}
+export const deleteAllMaintenances = () => {
+    return new Promise((resolve, reject) => {
+       db.transaction(tx => {
+         tx.executeSql(
+           `DROP TABLE maintenances;`,
+           [],
+           () => {
+             console.log('Todos as manutenções foram apagadas com sucesso');
+             resolve();
+           },
+           (_, error) => {
+             console.log('Erro ao apagar manutenções:', error);
+             reject(error);
+           }
+         );
+       });
+    });
+   };

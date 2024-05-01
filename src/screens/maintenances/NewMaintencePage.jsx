@@ -56,14 +56,7 @@ const NewMaintencePage = ({ navigation }) => {
 
 {/* Inserção dos Dados do Lembrete */}
     insertMaintenance({type, isRepeat, isKilometersEnabled, kilometers, kilometersTotal, isMonthsEnabled, months, monthsTotal, description}, activeVehicle.id);
-    console.log(
-      'Novo lembrete adicionado:',
-      'Tipo de manutenção:', type,
-      ', Repetição:', isRepeat ? 'Ligada' : 'Desligada',
-      ', Quilometros:', isKilometersEnabled ? kilometers : 'Não habilitado',
-      ', Meses:', isMonthsEnabled ? months : 'Não habilitado',
-      ', Descrição:', description
-    );
+    console.log('Novo lembrete:','Tipo:',type, ',Repetição:',isRepeat ? 'Ligada' : 'Desligada',', Quilometros:', isKilometersEnabled ? kilometers : 'Não habilitado',', Meses:', isMonthsEnabled ? months : 'Não habilitado',', Descrição:',description,', Veículo:',activeVehicle.name);
     navigation.navigate('SelectNavigator');
     Alert.alert('Novo Lembrete Salvo com Sucesso!'); 
   };

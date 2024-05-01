@@ -23,6 +23,7 @@ const EditVehiclePage = ({ navigation, route }) => {
  const totalMileage = additionalMileage ? parseInt(mileage, 10) + parseInt(additionalMileage, 10) : parseInt(mileage, 10) + 0;
  const [user, setUser] = useState('');
 
+ {/* Carregar o Usuário Ativo */}
  useEffect(() => {
    const fetchUser = async () => {
      try {
@@ -72,15 +73,13 @@ const EditVehiclePage = ({ navigation, route }) => {
       return;
     }
 
-    // Salvar atualizações do veículo
+    {/* Salvar atualizações do veículo */}
     Alert.alert(
       "Confirmar Atualização",
       "Você tem certeza de que deseja salvar as alterações?",
       [
         { text: "Cancelar", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
         { text: "Confirmar", onPress: () => {
-
-          
 
           updateVehicle(updatedVehicle, user.id);
           console.log('Veículo atualizado:', updatedVehicle);

@@ -9,7 +9,7 @@ const VehiclesPage = ({ navigation }) => {
   const [vehicles, setVehicles] = useState([]);  
   const [user, setUser] = useState('');
 
-  {/* Carregar Banco de Dados */}
+  {/* Carregar o Usuário Ativo */}
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -24,9 +24,11 @@ const VehiclesPage = ({ navigation }) => {
     fetchUser();
  }, []);
 
+ 
+ {/* Carregar os Veículos do Usuário Ativo Após Carregar o ID de Usuário */}
  useEffect(() => {
   if (user && user.id) {
-    fetchVehicles().then(setVehicles).catch(console.error);
+    fetchUserVehicles(user.id).then(setVehicles).catch(console.error);
   }
 }, [user]);
 
@@ -91,7 +93,6 @@ const VehiclesPage = ({ navigation }) => {
 
 {/* Navegação para a Página de Adicionar Novo Veículo */}
   const handleItemPress = (item) => {
-    console.log('Item Selecionado:', item);
     navigation.navigate(item);
   };
 

@@ -1,10 +1,29 @@
-import React from 'react';
+import { React, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { deleteMaintenances } from '../../database/MaintenanceDatabase';
+
 const MaintenanceDetailsPage = ({ route, navigation }) => {
   const { maintenance } = route.params;
+  const [activeVehicle, setActiveVehicle] = useState('');
 
+  {/* Carregar o Veículo Ativo */}
+  useEffect(() => {
+    const fetchActiveVehicle = async () => {
+      try {
+        const activeVehicleData = await AsyncStorage.getItem('@activeVehicle');
+        if (activeVehicleData !== '') {
+          setActiveVehicle(JSON.parse(activeVehicleData));
+        }
+      } catch (error) {
+        console.error('Erro ao recuperar os dados do usuário:', error);
+      }
+    };
+    fetchActiveVehicle();
+ }, []);
+ 
   const handleDeleteMaintenance = () => {
 {/* Alerta ae Confirmação de Excluir Lembrete */}
     Alert.alert(
@@ -18,9 +37,10 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
         {
           text: 'Confirmar',
           onPress: () => {
-            navigation.goBack();
+            deleteMaintenances(maintenance.id, activeVehicle.id)
             Alert.alert('Lembrete excluído com sucesso');
             console.log('Lembrete excluído com sucesso');
+            navigation.navigate('SelectNavigator');
           },
           style: 'destructive'
         },
@@ -85,7 +105,7 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
                 <Text style={styles.itemText}>
                   {maintenance.isKilometersEnabled ? `${maintenance.kilometers} KM ` : ''}
                 </Text>
-                  {((maintenance.kilometers == maintenance.kilometersEnd && !maintenance.kilometersEnd == '')) && (
+                  {((maintenance.kilometers == maintenance.kilometersTotal && !maintenance.kilometersTotal == '')) && (
                     <IconMCI 
                       name="alert" 
                       color={'#DD0000'}
@@ -94,10 +114,12 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
                     />
                   )}
                 <Text style={styles.itemText}>
-                  {maintenance.isKilometersEnabled ? `${maintenance.kilometersEnd} KM ` : ''}
+                  {maintenance.isKilometersEnabled ? `${maintenance.kilometersTotal} KM ` : ''}
                 </Text>
               </View>
-              <View style={styles.progressBarTotal}><View style={styles.progressBar} width={calculateKilometersProgress(maintenance)}></View></View>
+              <View style={styles.progressBarTotal}>
+                {/* <View style={styles.progressBar} width={calculateKilometersProgress(maintenance)}></View> */}
+              </View>
             </View>
           )}
 
@@ -108,7 +130,7 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
                 <Text style={styles.itemText}>
                   {maintenance.isMonthsEnabled ? `${maintenance.months} Meses ` : ''}
                 </Text>
-                  {((maintenance.months == maintenance.monthsEnd && !maintenance.monthsEnd == '')) && (
+                  {((maintenance.months == maintenance.monthsTotal && !maintenance.monthsTotal == '')) && (
                     <IconMCI 
                       name="alert" 
                       color={'#DD0000'}
@@ -117,11 +139,12 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
                     />
                   )}
                 <Text style={styles.itemText}>
-                  {maintenance.isMonthsEnabled ? `${maintenance.monthsEnd} Meses ` : ''}
+                  {maintenance.isMonthsEnabled ? `${maintenance.monthsTotal} Meses ` : ''}
                 </Text>
               </View>
-
-              <View style={styles.progressBarTotal}><View style={styles.progressBar} width={calculateMonthsProgress(maintenance)}></View></View>
+              <View style={styles.progressBarTotal}>
+                {/* <View style={styles.progressBar} width={calculateMonthsProgress(maintenance)}></View> */}
+              </View>
             </View>
           )}
 
@@ -197,11 +220,13 @@ const styles = StyleSheet.create({
   progressBar: {
     backgroundColor: '#009F4D',
     height: 10,
+    borderRadius: 6,
   },
   progressBarTotal: {
     backgroundColor: '#6A6A6A99',
     width: 340,
     height: 10,
+    borderRadius: 6,
     alignSelf: 'center',
   },
 

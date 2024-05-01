@@ -1,9 +1,12 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
 import CheckBox from 'expo-checkbox';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { updateMaintenance } from '../../database/MaintenanceDatabase';
 
 const EditMaintenancePage = ({ route, navigation }) => {
   const { maintenance } = route.params;
@@ -11,13 +14,62 @@ const EditMaintenancePage = ({ route, navigation }) => {
   const [type, setType] = useState(maintenance.type);
   const [isRepeat, setIsRepeat] = useState(maintenance.isRepeat);
   const [isKilometersEnabled, setIsKilometersEnabled] = useState(maintenance.isKilometersEnabled);
-  const [isMonthsEnabled, setIsMonthsEnabled] = useState(maintenance.isMonthsEnabled);
   const [kilometers, setKilometers] = useState(maintenance.kilometers);
+  const [kilometersTotal, setKilometersTotal] = useState(0);
+  const [isMonthsEnabled, setIsMonthsEnabled] = useState(maintenance.isMonthsEnabled);
   const [months, setMonths] = useState(maintenance.months);
+  const [monthsTotal, setMonthsTotal] = useState(0);
   const [description, setDescription] = useState(editedMaintenance.description);
+  const [activeVehicle, setActiveVehicle] = useState('');
+
+   {/* Carregar o Veículo Ativo */}
+   useEffect(() => {
+    const fetchActiveVehicle = async () => {
+      try {
+        const activeVehicleData = await AsyncStorage.getItem('@activeVehicle');
+        if (activeVehicleData !== '') {
+          setActiveVehicle(JSON.parse(activeVehicleData));
+        }
+      } catch (error) {
+        console.error('Erro ao recuperar os dados do usuário:', error);
+      }
+    };
+    fetchActiveVehicle();
+ }, []);
+
 
 {/* Salvar */}
-  const handleSaveChanges = () => {
+  const handleUpdateMaintenances = () => {
+
+    const updatedMaintenance = {
+      ...maintenance,
+      type,
+      isRepeat,
+      isKilometersEnabled,
+      kilometers,
+      kilometersTotal,
+      isMonthsEnabled,
+      months,
+      monthsTotal,
+      description,
+    };
+
+{/* Alerta ao Tentar Salvar sem Preencher os Campos Necessários */}
+    if (!type) {
+      Alert.alert(
+        'Campos não preenchidos',
+        'Por favor, preencha todos os campos obrigatórios.',
+        [
+          {
+            text: 'OK',
+            onPress: () => console.log('OK Pressed'),
+            style: 'cancel',
+          },
+        ],
+        { cancelable: false }
+      );
+      return;
+    }
 {/* Mensagem no Console */}
     console.log(
         'Lembrete alterado:',
@@ -27,15 +79,26 @@ const EditMaintenancePage = ({ route, navigation }) => {
         ', Meses:', editedMaintenance.isMonthsEnabled ? editedMaintenance.months : 'Não habilitado',
         ', Descrição:', editedMaintenance.description
       );
-      navigation.goBack();
 
-{/* Alerta de Sucesso ao Salvar */}
-      Alert.alert('Alterações salvas com sucesso');
+    {/* Salvar atualizações do lembrete */}
+    Alert.alert(
+      "Confirmar Atualização",
+      "Você tem certeza de que deseja salvar as alterações?",
+      [
+        { text: "Cancelar", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
+        { text: "Confirmar", onPress: () => {
+
+          updateMaintenance(updatedMaintenance, activeVehicle.id)
+          console.log('Veículo atualizado:', updatedMaintenance);
+          navigation.navigate('SelectNavigator');
+          Alert.alert('Alterações salvas com sucesso');
+
+          }
+        }
+      ]
+    );
   };
 
-  // const handleChangeText = (key, value) => {
-  //   setEditedMaintenance({ ...editedMaintenance, [key]: value });
-  // };
 
   return (
     <View style={styles.container}>
@@ -88,11 +151,8 @@ const EditMaintenancePage = ({ route, navigation }) => {
         </View>
       </View>
 
-      {/* <Text style={styles.label} marginBottom={10}>Notificação:</Text>
-        <View style={styles.linha} marginBottom={10}>
+      {/* <
       
-        <Text style={[styles.checkbox, maintenance.isRepeat && styles.checkedCheckbox]}>{maintenance.isRepeat ? 'Ligada' : 'Desligada'}</Text>
-      </View> */}
 
 
 {/* Estado de Notificação */}
@@ -179,7 +239,7 @@ const EditMaintenancePage = ({ route, navigation }) => {
       />
 
 {/* Botão Salvar */}
-      <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
+      <TouchableOpacity style={styles.saveButton} onPress={handleUpdateMaintenances}>
         <Text style={styles.saveButtonText}>Salvar Alterações</Text>
       </TouchableOpacity>
 

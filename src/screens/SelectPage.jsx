@@ -1,11 +1,10 @@
 import { React, useEffect, useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, FlatList } from 'react-native';
-import Modal from 'react-native-modal';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Picker} from '@react-native-picker/picker';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { fetchVehicles, fetchUserVehicles } from '../database/VehiclesDatabase';
+import { fetchUserVehicles } from '../database/VehiclesDatabase';
 
 const SelectPage = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -13,7 +12,7 @@ const SelectPage = ({ navigation }) => {
   const [vehicles, setVehicles] = useState([]);  
   const [user, setUser] = useState('');
 
-  {/* Carregar Banco de Dados */}
+  {/* Carregar o Usuário Ativo */}
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -28,6 +27,7 @@ const SelectPage = ({ navigation }) => {
     fetchUser();
  }, []);
 
+ {/* Carregar os Veículos do Usuário Ativo Após Carregar o ID de Usuário */}
  useEffect(() => {
   if (user && user.id) {
     fetchUserVehicles(user.id).then(setVehicles).catch(console.error);
@@ -47,13 +47,8 @@ const SelectPage = ({ navigation }) => {
 
 {/* Seleção do Veículo Ativo */}
     const handleVehicleChange = async (item) => {
-
-      try {
-        await AsyncStorage.setItem('@activeVehicle', JSON.stringify(item));
-      } catch (error) {
-        console.error('Erro ao armazenar os dados do veículo ativo:', error);
-      }
-      
+      try { await AsyncStorage.setItem('@activeVehicle', JSON.stringify(item));
+      } catch (error) { console.error('Erro ao armazenar os dados do veículo ativo:', error); }
       console.log('Veículo Selecionado:', item);
       setActiveVehicle(item);
     };
@@ -68,12 +63,12 @@ const SelectPage = ({ navigation }) => {
         style={styles.carPicker}
         onValueChange={(itemValue, itemIndex) => handleVehicleChange(itemValue)}
         mode={'dropdown'}
-      >
-        <Picker.Item label="Selecione aqui um veículo" value="" />
-        {vehicles.map((vehicle) => (
-          <Picker.Item key={vehicle.id} label={vehicle.name} value={vehicle} />
-        ))}
-      </Picker>
+        >
+          <Picker.Item label="Selecione aqui um veículo" value="" />
+          {vehicles.map((vehicle) => (
+            <Picker.Item key={vehicle.id} label={vehicle.name} value={vehicle} />
+          ))}
+        </Picker>
 
       </View>
 
