@@ -2,7 +2,8 @@ import { React, useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
-import { initVehiclesDB, insertVehicle } from '../../database/VehiclesDatabase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { insertVehicle, fetchUserVehicles } from '../../database/VehiclesDatabase';
 
 const NewVehiclePage = ({ navigation }) => {
   const [name, setName] = useState('Carro');
@@ -17,12 +18,23 @@ const NewVehiclePage = ({ navigation }) => {
   const [transmission, setTransmission] = useState('');
   const [engine, setEngine] = useState('');
   const [mileage, setMileage] = useState('');
+  const [user, setUser] = useState('');
 
-  {/* Inicialização do Banco de Dados */}
+  {/* Carregamentos */}
   useEffect(() => {
-    initVehiclesDB();
+    const fetchUser = async () => {
+      try {
+        const userData = await AsyncStorage.getItem('@user');
+        if (userData !== '') {
+          setUser(JSON.parse(userData));
+        }
+      } catch (error) {
+        console.error('Erro ao recuperar os dados do usuário:', error);
+      }
+    };
+    fetchUser();
     fetchBrands();
-  }, []);
+ }, []);
 
   {/* Requisição da API */}
   {/* Documentação da Api https://deividfortuna.github.io/fipe/v2/#tag/Fipe/operation/GetFipeInfo */}
@@ -37,7 +49,7 @@ const NewVehiclePage = ({ navigation }) => {
   };
 
   {/* Salvar */}
-  const handleAddVehicle = () => {
+  const handleAddVehicle = async  () => {
     {/* Verificação dos campos obrigatórios */}
     if (!name || !brand || !model || !version || !color || !fuelType || !transmission || !engine || !mileage) {
       Alert.alert(
@@ -52,12 +64,27 @@ const NewVehiclePage = ({ navigation }) => {
       );
       return;
    }
+
+   {/* Verificação do Limite de Veículos */}
+   const vehicles = await fetchUserVehicles(user.id);
+    if (vehicles.length >= 8) {
+        Alert.alert(
+          'Limite Máximo de Veículos Atingido',
+          'Você atingiu o máximo de 10 veículos.',
+          [
+            {
+              text: 'OK', onPress: () => console.log('OK Pressed'), style: 'cancel',
+            },
+          ],
+          { cancelable: false }
+        );
+        return;
+    }
+
     {/* Inserção dos Dados de Veículo */}
-   insertVehicle({ name, brand, model, version, color, manufactureYear, licensePlate, fuelType, transmission, engine, mileage });
-    {/* Mensagem no Console */}
+    insertVehicle({ name, brand, model, version, color, manufactureYear, licensePlate, fuelType, transmission, engine, mileage }, user.id);
     console.log( 'Novo veículo adicionado:', ', Marca:', brand, ', Modelo:', model, ', Versão:', version, ', Cor:', color, ', Ano de fabricação:', manufactureYear, ', Placa:', licensePlate, ', Combustivel:', fuelType, ', Transmissão:', transmission, ', Motor:', engine, ', Quilometragem:', mileage );
     navigation.navigate('SelectNavigator');
-    {/* Alerta de Sucesso ao Salvar */}
     Alert.alert( 'Veículo Salvo com Sucesso!' );
   };
 
@@ -93,7 +120,6 @@ const NewVehiclePage = ({ navigation }) => {
     }
   };
 
-  
   return (
     <ScrollView style={styles.container}>
 

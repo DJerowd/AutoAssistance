@@ -1,10 +1,26 @@
-import React from 'react';
+import { React, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Alert  } from 'react-native';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { deleteVehicle } from '../../database/VehiclesDatabase';
 
 const VehicleDetailsPage = ({ route, navigation }) => {
   const { vehicle } = route.params;
+  const [user, setUser] = useState('');
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await AsyncStorage.getItem('@user');
+        if (userData !== '') {
+          setUser(JSON.parse(userData));
+        }
+      } catch (error) {
+        console.error('Erro ao recuperar os dados do usuário:', error);
+      }
+    };
+    fetchUser();
+ }, []);
 
 {/* Alerta ae Confirmação de Excluir Veículo */}
   const handleDeleteVehicle = () => {
@@ -19,7 +35,7 @@ const VehicleDetailsPage = ({ route, navigation }) => {
         {
           text: 'Confirmar',
           onPress: () => {
-            deleteVehicle(vehicle.id);
+            deleteVehicle(vehicle.id, user.id);
             Alert.alert('Veículo excluído com sucesso');
             console.log('Veículo excluído com sucesso');
             navigation.navigate('SelectNavigator');

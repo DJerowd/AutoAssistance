@@ -1,19 +1,24 @@
-import { React, useState } from 'react';
-import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert, Image } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { React, useEffect, useState } from 'react';
+import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert, Image, FlatList } from 'react-native';
 
-import { UsersDB } from '../database/UsersDB';
-import { findUserByEmail } from '../database/UsersDatabase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchUsers, deleteAllUsers } from '../database/UsersDatabase';
 
 const LoginPage = ({ navigation }) => {
-  const [login, setLogin] = useState('djerowd@mail.com');
+  const [login, setLogin] = useState('djerowd@gmail.com');
   const [password, setPassword] = useState('Senha123');
   const [error, setError] = useState('');
-  const { user } = UsersDB();
+  
+  const [users, setUsers] = useState([]);
 
-{/* Realizar Login */}
+{/* Carregar Banco de Dados */}
+useEffect(() => {
+  fetchUsers().then(setUsers).catch(console.error);
+}, []);
+
+  {/* Realizar Login */}
   const handleLogin = async () => {
-    const userFound = user.find(user => user.email === login && user.password === password)
+    const userFound = users.find(users => users.email === login && users.password === password)
     if (userFound) {
       setError('');
       console.log('Login bem sucedido:', 'SelectNavigator', {userFound});
@@ -31,20 +36,42 @@ const LoginPage = ({ navigation }) => {
     }
   };
 
-{/* Registrar-se */}
+  {/* Registrar-se */}
   const handleRegister = () => {
     console.log('Item Selecionado:', 'RegisterPage');
     navigation.navigate('RegisterPage');
   };
 
+  const handleDeleteAllUsers = async () => {
+    try {
+      await deleteAllUsers();
+      alert('Todos os usuários foram apagados com sucesso');
+    } catch (error) {
+      alert('Erro ao apagar usuários', error);
+    }
+ };
+
   return (
     <View style={styles.container}>
 
-{/* Logo */}
+      {/* Logo */}
       <Image
           source={require('../assets/Logo.png')}
           style={styles.image}
       />
+
+      {/* <TouchableOpacity style={{width: 20, height: 20, borderRadius: 10, backgroundColor: 'grey', alignSelf: 'center'}} onPress={handleDeleteAllUsers}></TouchableOpacity> */}
+      {/* <View>
+      <FlatList
+      data={users}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={({ item }) => (
+        <View>
+          <Text>{item.email} | {item.password}</Text>
+        </View>
+      )}
+      />
+      </View> */}
 
 {/* Nome de Usuário */}
       <View style={styles.input}>

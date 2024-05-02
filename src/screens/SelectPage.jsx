@@ -1,17 +1,39 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { VehiclesDB } from '../database/VehiclesDB';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchVehicles, fetchUserVehicles } from '../database/VehiclesDatabase';
 
 const SelectPage = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const {vehicles, setVehicles} = VehiclesDB(); 
   const [selectedVehicle, setSelectedVehicle] = useState('');
+  const [vehicles, setVehicles] = useState([]);  
+  const [user, setUser] = useState('');
 
-{/* Navegação para a Página de Detalhes Do Item Selecionado */}
+  {/* Carregar Banco de Dados */}
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await AsyncStorage.getItem('@user');
+        if (userData !== '') {
+          setUser(JSON.parse(userData));
+        }
+      } catch (error) {
+        console.error('Erro ao recuperar os dados do usuário:', error);
+      }
+    };
+    fetchUser();
+ }, []);
+
+ useEffect(() => {
+  if (user && user.id) {
+    fetchUserVehicles(user.id).then(setVehicles).catch(console.error);
+  }
+}, [user]);
+
+    {/* Navegação para a Página de Detalhes Do Item Selecionado */}
     const handleItemPress = (item) => {
       console.log('Item Selecionado:', item);
       navigation.navigate(item);
@@ -49,7 +71,7 @@ const SelectPage = ({ navigation }) => {
               data={vehicles}
               renderItem={({ item }) => (
                 <TouchableOpacity onPress={() => handleVehicleChange(item)}>
-                  <Text style={styles.modalContainerText}>{item.id} - {item.name} - {item.brand} {item.model}</Text>
+                  <Text style={styles.modalContainerText}>{item.name} - {item.brand} {item.model}</Text>
                 </TouchableOpacity>
               )}
               keyExtractor={(item) => item.id}

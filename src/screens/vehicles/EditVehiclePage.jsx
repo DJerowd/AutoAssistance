@@ -2,6 +2,7 @@ import {React, useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updateVehicle, fetchVehicles } from '../../database/VehiclesDatabase';
 
 const EditVehiclePage = ({ navigation, route }) => {
@@ -20,7 +21,21 @@ const EditVehiclePage = ({ navigation, route }) => {
  const [additionalMileage, setAdditionalMileage] = useState(0);
 
  const totalMileage = additionalMileage ? parseInt(mileage, 10) + parseInt(additionalMileage, 10) : parseInt(mileage, 10) + 0;
+ const [user, setUser] = useState('');
 
+ useEffect(() => {
+   const fetchUser = async () => {
+     try {
+       const userData = await AsyncStorage.getItem('@user');
+       if (userData !== '') {
+         setUser(JSON.parse(userData));
+       }
+     } catch (error) {
+       console.error('Erro ao recuperar os dados do usuário:', error);
+     }
+   };
+   fetchUser();
+}, []);
 
 {/* Salvar */}
  const handleUpdateVehicle = () => {
@@ -41,7 +56,7 @@ const EditVehiclePage = ({ navigation, route }) => {
   };
 
 {/* Alerta ao Tentar Salvar sem Preencher os Campos Necessários */}
-    if (!name || !brand || !model || !color || !fuelType || !transmission || !engine || !mileage) {
+    if (!name || !brand || !model || !color || !fuelType || !transmission || !engine) {
       Alert.alert(
         'Campos não preenchidos',
         'Por favor, preencha todos os campos obrigatórios.',
@@ -67,7 +82,7 @@ const EditVehiclePage = ({ navigation, route }) => {
 
           
 
-          updateVehicle(updatedVehicle);
+          updateVehicle(updatedVehicle, user.id);
           console.log('Veículo atualizado:', updatedVehicle);
           navigation.navigate('SelectNavigator');
           Alert.alert('Veículo Atualizado com Sucesso!');
@@ -217,13 +232,36 @@ const EditVehiclePage = ({ navigation, route }) => {
 {/* Ano de Fabricação do Veículo */}
       <View style={styles.linha} alignItems={'center'}>
         <Text style={styles.label}>Ano de Fabricação:  </Text>
-        <Text style={styles.text}>{vehicle.manufactureYear}</Text>
+        {vehicle.manufactureYear && (
+          <Text style={styles.text}>{vehicle.manufactureYear || '(Não informado)'}</Text>
+        )}
+        {!vehicle.manufactureYear && (
+        <TextInput
+          style={styles.shortInput}
+          value={manufactureYear}
+          onChangeText={setManufactureYear}
+          placeholder="(Opcional)"
+          keyboardType="numeric"
+          maxLength={4}
+        />
+      )}
       </View>
+      
 
 {/* Placa do Veículo */}
       <View style={styles.linha} alignItems={'center'}>
         <Text style={styles.label}>Placa do Veículo:  </Text>
-        <Text style={styles.text}>{vehicle.licensePlate}</Text>
+        {vehicle.licensePlate ? (
+          <Text style={styles.text}>{vehicle.licensePlate || '(Não informado)'}</Text>
+        ) : (
+        <TextInput
+          style={styles.shortInput}
+          value={licensePlate}
+          onChangeText={setLicensePlate}
+          placeholder="(Opcional)"
+          maxLength={7}
+        />
+      )}
       </View>
 
 {/* Quilometragem do Veículo */}
@@ -279,6 +317,17 @@ const styles = StyleSheet.create({
       height: 40,
       paddingHorizontal: 10,
       marginBottom: 10,
+    },
+    shortInput: {
+      color: '#6A6A6A',
+      backgroundColor: '#6A6A6A22',
+      borderColor: '#000000',
+      borderWidth: 1,
+      borderRadius: 8,
+      fontSize: 18,
+      height: 40,
+      paddingHorizontal: 10,
+      marginBottom: 4,
     },
   
 

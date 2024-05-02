@@ -3,7 +3,6 @@ import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert } from 'reac
 import CheckBox from 'expo-checkbox';
 import IconI from 'react-native-vector-icons/Ionicons';
 
-import { UsersDB } from '../database/UsersDB';
 import { insertUser } from '../database/UsersDatabase';
 
 const RegisterPage = ({ navigation }) => {
@@ -15,7 +14,6 @@ const RegisterPage = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const [error, setError] = useState('');
-  const { user } = UsersDB();
   const [errors, setErrors] = useState({
     username: '',
     email: '',
@@ -33,32 +31,33 @@ const RegisterPage = ({ navigation }) => {
     return null;
    };
 
-   {/* Registrar-se */}
+   
   const handleLogin = () => {
     console.log('Item Selecionado:', 'LoginPage');
     navigation.navigate('LoginPage');
   };
 
+  {/* Registrar */}
   const handleRegister = () => {
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    const id = (user.length + 1);
-    const newRegister = {id, username, email, phoneNumber, password,}
     let newErrors = {username: '', email: '', phoneNumber: '', password: '', confirmPassword: '',};
 
-{/* Conclusão Com Sucesso do Registro */}
+    {/* Conclusão Com Sucesso do Registro */}
     if (username.length >= 4 && email.match(emailPattern) && email.length >= 10 && formatPhoneNumber(phoneNumber) && password.length >= 8 && isValidPassword(password) && password == confirmPassword && isChecked == true) {
  
+      {/* Inserção dos Dados de Usuário */}
+      insertUser({ username, email, phoneNumber, password });
+      console.log('Registro Concluido.', username, email, phoneNumber, password );
       setError('');
       navigation.navigate('LoginPage');
-      console.log('Registro Concluido.', newRegister);
       Alert.alert('Registro Concluído', 'Registrado com sucesso!');
 
-{/* Validação do nome de usuário */}
+    {/* Validação do nome de usuário */}
     } else if (username.length > 0 && username.length < 6) {
       newErrors.username = 'O nome de usuário é muito curto.';
       setError('');
 
-{/* Validação do e-mail */}
+    {/* Validação do e-mail */}
     } else if (email.length > 0 && !email.match(emailPattern)) {
       newErrors.email = 'O e-mail inserido é inválido.';
       setError('');
@@ -66,12 +65,12 @@ const RegisterPage = ({ navigation }) => {
       newErrors.email = 'O e-mail inserido é muito curto.';
       setError('');
 
-{/* Validação do número de telefone */}
+    {/* Validação do número de telefone */}
     } else if (phoneNumber.length > 0 && !formatPhoneNumber(phoneNumber)) {
       newErrors.phoneNumber = 'O número de telefone é inválido.';
       setError('');
 
-{/* Validação da senha */}
+    {/* Validação da senha */}
     } else if (password.length > 0 && !isValidPassword(password)) {
       newErrors.password = 'A senha deve conter letras e números.';
       setError('');
@@ -82,18 +81,18 @@ const RegisterPage = ({ navigation }) => {
       newErrors.confirmPassword = 'A senha e a confirmação da senha não coincidem.';
       setError('');
 
-{/* Verificar se alguma informação não foi inserida*/}
+    {/* Verificar se alguma informação não foi inserida*/}
     } else if (username.length <= 0 || email.length <= 0 || phoneNumber.length <= 0 || password.length <= 0) {
       setError('Todos os campos devem ser preenchidos corretamente.');
 
-{/* Verificar se foram confirmados os termos e condições */}
+    {/* Verificar se foram confirmados os termos e condições */}
     } else if (isChecked == false){
       setError('Aceite os termos e condições.');
     }
     setErrors(newErrors);
   };
 
-{/* Validação da composição da senha */}
+  {/* Validação da composição da senha */}
   const isValidPassword = (password) => {
     const hasLetter = /[a-zA-Z]/.test(password);
     const hasNumber = /\d/.test(password);
@@ -103,10 +102,10 @@ const RegisterPage = ({ navigation }) => {
 return (
   <View style={styles.container}>
 
-{/* Titulo */}
+    {/* Titulo */}
     <Text style={styles.title}>Criar conta:</Text>
 
-{/* Nome de Usuário */}
+    {/* Nome de Usuário */}
     <Text style={styles.text}>Nome de usuário:</Text>
     <View style={styles.input}>
       <TextInput
@@ -119,7 +118,7 @@ return (
     </View>
     {errors.username ? <Text style={styles.error}>{errors.username}</Text> : null}
 
-{/* E-mail */}
+    {/* E-mail */}
     <Text style={styles.text}>E-mail:</Text>
     <View style={styles.input}>
       <TextInput
@@ -133,7 +132,7 @@ return (
     </View>
     {errors.email ? <Text style={styles.error}>{errors.email}</Text> : null}
 
-{/* Número de Telefone */}
+    {/* Número de Telefone */}
     <Text style={styles.text}>Número de telefone:</Text>
     <View style={styles.input} flexDirection={'row'} alignItems={'center'}>
     <Text style={styles.textInput} width={'14%'} height={'100%'} borderRightWidth={1}>+55</Text>
@@ -150,7 +149,7 @@ return (
     </View>
     {errors.phoneNumber ? <Text style={styles.error}>{errors.phoneNumber}</Text> : null}
 
-{/* Senha */}
+    {/* Senha */}
     <Text style={styles.text}>Senha:</Text>
     <View style={styles.input} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
       <TextInput
@@ -167,7 +166,7 @@ return (
     </View>
     {errors.password ? <Text style={styles.error}>{errors.password}</Text> : null}
 
-{/* Confirmação da Senha */}
+    {/* Confirmação da Senha */}
     <Text style={styles.text}>Confirmar senha:</Text>
     <View style={styles.input}>
       <TextInput
@@ -180,7 +179,7 @@ return (
     </View>
     {errors.confirmPassword ? <Text style={styles.error}>{errors.confirmPassword}</Text> : null}
     
-{/* Confirmar termos e condições */}
+    {/* Confirmar termos e condições */}
     <View style={styles.linha}>
       <CheckBox
         disabled={false}
@@ -191,14 +190,14 @@ return (
       <Text style={styles.text}>  Aceito os Termos e Condições.</Text>
     </View>
 
-{/* Botão de Criar Conta */}
+    {/* Botão de Criar Conta */}
     <View style={styles.buttonsContainer}>
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <TouchableOpacity title="Registrar" style={styles.registrarButton} onPress={handleRegister} >
             <Text style={styles.registrarButtonText}>Criar conta</Text>
       </TouchableOpacity>
 
-{/* Botão de Realizar Login */}
+      {/* Botão de Realizar Login */}
       <View style={styles.linha}>
         <Text style={styles.text}>Já tenho uma conta: </Text>
         <TouchableOpacity title="Registrar" style={styles.loginButton} onPress={handleLogin} >
