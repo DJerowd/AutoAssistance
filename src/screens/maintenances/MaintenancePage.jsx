@@ -66,6 +66,12 @@ const MaintencePage = ({ navigation }) => {
 }, [user]);
 
 
+    const calculateProgress = (item, itemEnd) => {
+          return (3 *(item / (itemEnd / 100)));
+    };
+
+
+
 {/* Navegação para a Página de Detalhes Do Veículo Selecionado */}
     const handleItemDetailsPress = (item) => {
       console.log('Item Selecionado:', item);
@@ -116,7 +122,7 @@ const MaintencePage = ({ navigation }) => {
               <View>
                 <View style={styles.linha} justifyContent={'space-between'}>
                   <Text style={styles.text}>
-                    {item.isKilometersEnabled ? `${item.kilometers} KM ` : ''}
+                    {item.isKilometersEnabled ? `${item.kilometersTotal} KM ` : ''}
                   </Text>
                   <Text style={styles.text}>
                     {item.isKilometersEnabled ? `${item.kilometersTotal} KM ` : ''}
@@ -134,7 +140,7 @@ const MaintencePage = ({ navigation }) => {
               <View>
                 <View style={styles.linha} justifyContent={'space-between'}>
                   <Text style={styles.text}>
-                    {item.isMonthsEnabled ? `${item.months} Meses ` : ''}
+                    {item.isMonthsEnabled ? `${item.monthsTotal} Meses ` : ''}
                   </Text>
                   <Text style={styles.text}>
                     {item.isMonthsEnabled ? `${item.monthsTotal} Meses ` : ''}

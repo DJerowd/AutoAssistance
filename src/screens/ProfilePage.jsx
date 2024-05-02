@@ -28,9 +28,14 @@ const ProfilePage = ({ navigation }) => {
     }
   }, [user]);
 
+  
+  const handleEdit = () => {
+    navigation.navigate('EditProfilePage');
+  };
+
     return (
       <View style={styles.container}>
-              
+
   {/* Imagem de Perfil */}
         <View style={styles.perfil}>
           <Image
