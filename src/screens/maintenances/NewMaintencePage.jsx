@@ -1,9 +1,12 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
 import CheckBox from 'expo-checkbox';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchVehicleMaintenances, insertMaintenance } from '../../database/MaintenanceDatabase';
 
 const NewMaintencePage = ({ navigation }) => {
   const [type, setType] = useState('');
@@ -11,11 +14,29 @@ const NewMaintencePage = ({ navigation }) => {
   const [isKilometersEnabled, setIsKilometersEnabled] = useState(false);
   const [isMonthsEnabled, setIsMonthsEnabled] = useState(false);
   const [kilometers, setKilometers] = useState(0);
+  const [kilometersTotal, setKilometersTotal] = useState(0);
   const [months, setMonths] = useState(0);
+  const [monthsTotal, setMonthsTotal] = useState(0);
   const [description, setDescription] = useState('');
+  const [activeVehicle, setActiveVehicle] = useState('');
 
+  {/* Carregamentos */}
+  useEffect(() => {
+    const fetchVehicle = async () => {
+      try {
+        const vehicleData = await AsyncStorage.getItem('@activeVehicle');
+        if (vehicleData !== '') {
+          setActiveVehicle(JSON.parse(vehicleData));
+        }
+      } catch (error) {
+        console.error('Erro ao recuperar os dados do veículo ativo:', error);
+      }
+    };
+    fetchVehicle();
+  }, []);
+ 
 {/* Salvar */}
-  const handleAddReminder = () => {
+  const handleAddReminder = async () => {
 {/* Alerta ao Tentar Salvar sem Preencher os Campos Necessários */}
     if (!type) {
       Alert.alert(
@@ -33,24 +54,27 @@ const NewMaintencePage = ({ navigation }) => {
       return;
     }
 
-{/* Mensagem no Console */}
-    console.log(
-      'Novo lembrete adicionado:',
-      'Tipo de manutenção:', type,
-      ', Repetição:', isRepeat ? 'Ligada' : 'Desligada',
-      ', Quilometros:', isKilometersEnabled ? kilometers : 'Não habilitado',
-      ', Meses:', isMonthsEnabled ? months : 'Não habilitado',
-      ', Descrição:', description
-    );
-    navigation.goBack();
+  {/* Verificação do Limite de Veículos */}
+   const maintenances = await fetchVehicleMaintenances(activeVehicle.id);
+   if (maintenances.length >= 10) {
+       Alert.alert(
+         'Limite Máximo de Lembretes Atingido',
+         'Você atingiu o máximo de 10 veículos.',
+         [
+           {
+             text: 'OK', onPress: () => console.log('OK Pressed'), style: 'cancel',
+           },
+         ],
+         { cancelable: false }
+       );
+       return;
+   }
 
-{/* Alerta de Sucesso ao Salvar */}
+{/* Inserção dos Dados do Lembrete */}
+    insertMaintenance({type, isRepeat, isKilometersEnabled, kilometers, kilometersTotal, isMonthsEnabled, months, monthsTotal, description}, activeVehicle.id);
+    console.log('Novo lembrete:','Tipo:',type, ',Repetição:',isRepeat ? 'Ligada' : 'Desligada',', Quilometros:', isKilometersEnabled ? kilometers : 'Não habilitado',', Meses:', isMonthsEnabled ? months : 'Não habilitado',', Descrição:',description,', Veículo:',activeVehicle.name);
+    navigation.navigate('SelectNavigator');
     Alert.alert('Novo Lembrete Salvo com Sucesso!'); 
-  };
-
-{/* Cancelar */}
-  const handleCancelReminder = () => {
-    navigation.goBack();
   };
 
 
@@ -135,7 +159,7 @@ const NewMaintencePage = ({ navigation }) => {
           />
           <Text style={styles.checkboxLabel}>  Quilometros:</Text>
         {isKilometersEnabled && (
-          <Text style={styles.checkboxInput}>{kilometers}</Text>
+          <Text style={styles.checkboxInput}>{kilometersTotal}</Text>
         )}
         </View>
       </View>
@@ -143,8 +167,8 @@ const NewMaintencePage = ({ navigation }) => {
         style={styles.slider}
         minimumValue={0}
         maximumValue={100000}
-        value={kilometers}
-        onValueChange={(value) => setKilometers(Math.round(value / 1000) * 1000)}
+        value={kilometersTotal}
+        onValueChange={(value) => setKilometersTotal(Math.round(value / 1000) * 1000)}
         minimumTrackTintColor="#008F45"
         maximumTrackTintColor="#000000"
         thumbTintColor="#009F4D"
@@ -161,7 +185,7 @@ const NewMaintencePage = ({ navigation }) => {
           />
           <Text style={styles.checkboxLabel}>  Meses: </Text>
           {isMonthsEnabled && (
-            <Text style={styles.checkboxInput}>{months}</Text>
+            <Text style={styles.checkboxInput}>{monthsTotal}</Text>
           )}
         </View>
       </View>
@@ -169,8 +193,8 @@ const NewMaintencePage = ({ navigation }) => {
         style={styles.slider}
         minimumValue={0}
         maximumValue={60}
-        value={months}
-        onValueChange={(value) => setMonths(`${Math.round(value)}`)}
+        value={monthsTotal}
+        onValueChange={(value) => setMonthsTotal(`${Math.round(value)}`)}
         minimumTrackTintColor="#008F45"
         maximumTrackTintColor="#000000"
         thumbTintColor="#009F4D"

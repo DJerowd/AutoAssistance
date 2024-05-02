@@ -70,7 +70,7 @@ const NewVehiclePage = ({ navigation }) => {
     if (vehicles.length >= 8) {
         Alert.alert(
           'Limite Máximo de Veículos Atingido',
-          'Você atingiu o máximo de 10 veículos.',
+          'Você atingiu o máximo de 8 veículos.',
           [
             {
               text: 'OK', onPress: () => console.log('OK Pressed'), style: 'cancel',

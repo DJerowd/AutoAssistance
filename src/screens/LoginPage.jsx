@@ -3,6 +3,8 @@ import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert, Image, Flat
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchUsers, deleteAllUsers } from '../database/UsersDatabase';
+import { deleteAllVehicles } from '../database/VehiclesDatabase';
+import { deleteAllMaintenances } from '../database/MaintenanceDatabase';
 
 const LoginPage = ({ navigation }) => {
   const [login, setLogin] = useState('djerowd@gmail.com');
@@ -42,12 +44,14 @@ useEffect(() => {
     navigation.navigate('RegisterPage');
   };
 
-  const handleDeleteAllUsers = async () => {
+  const handleDeleteDB = async () => {
     try {
-      await deleteAllUsers();
-      alert('Todos os usuários foram apagados com sucesso');
+      // await deleteAllUsers();
+      await deleteAllVehicles();
+      // await deleteAllMaintenances();
+      alert('Database apagada com sucesso');
     } catch (error) {
-      alert('Erro ao apagar usuários', error);
+      alert('Erro ao apagar Database', error);
     }
  };
 
@@ -60,7 +64,7 @@ useEffect(() => {
           style={styles.image}
       />
 
-      {/* <TouchableOpacity style={{width: 20, height: 20, borderRadius: 10, backgroundColor: 'grey', alignSelf: 'center'}} onPress={handleDeleteAllUsers}></TouchableOpacity> */}
+      {/* <TouchableOpacity style={{width: 20, height: 20, borderRadius: 10, backgroundColor: 'grey', alignSelf: 'center'}} onPress={handleDeleteDB}></TouchableOpacity> */}
       {/* <View>
       <FlatList
       data={users}

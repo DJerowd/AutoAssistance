@@ -9,7 +9,7 @@ const VehiclesPage = ({ navigation }) => {
   const [vehicles, setVehicles] = useState([]);  
   const [user, setUser] = useState('');
 
-  {/* Carregar Banco de Dados */}
+  {/* Carregar o Usuário Ativo */}
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -24,6 +24,8 @@ const VehiclesPage = ({ navigation }) => {
     fetchUser();
  }, []);
 
+ 
+ {/* Carregar os Veículos do Usuário Ativo Após Carregar o ID de Usuário */}
  useEffect(() => {
   if (user && user.id) {
     fetchUserVehicles(user.id).then(setVehicles).catch(console.error);
@@ -91,7 +93,6 @@ const VehiclesPage = ({ navigation }) => {
 
 {/* Navegação para a Página de Adicionar Novo Veículo */}
   const handleItemPress = (item) => {
-    console.log('Item Selecionado:', item);
     navigation.navigate(item);
   };
 
@@ -127,6 +128,7 @@ const styles = StyleSheet.create({
 
   coluna: {
     paddingHorizontal: 10,
+    width: '80%',
   },
 
   iconLabel: {
@@ -154,7 +156,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     color: '#6A6A6A',
-    fontSize: 20,
+    fontSize: 18,
   },
 
   addButton: {

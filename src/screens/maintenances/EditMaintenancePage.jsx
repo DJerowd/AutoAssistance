@@ -1,9 +1,12 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
 import CheckBox from 'expo-checkbox';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { updateMaintenance } from '../../database/MaintenanceDatabase';
 
 const EditMaintenancePage = ({ route, navigation }) => {
   const { maintenance } = route.params;
@@ -11,31 +14,102 @@ const EditMaintenancePage = ({ route, navigation }) => {
   const [type, setType] = useState(maintenance.type);
   const [isRepeat, setIsRepeat] = useState(maintenance.isRepeat);
   const [isKilometersEnabled, setIsKilometersEnabled] = useState(maintenance.isKilometersEnabled);
-  const [isMonthsEnabled, setIsMonthsEnabled] = useState(maintenance.isMonthsEnabled);
   const [kilometers, setKilometers] = useState(maintenance.kilometers);
+  const [kilometersTotal, setKilometersTotal] = useState(maintenance.kilometersTotal);
+  const [isMonthsEnabled, setIsMonthsEnabled] = useState(maintenance.isMonthsEnabled);
   const [months, setMonths] = useState(maintenance.months);
+  const [monthsTotal, setMonthsTotal] = useState(maintenance.monthsTotal);
   const [description, setDescription] = useState(editedMaintenance.description);
+  const [activeVehicle, setActiveVehicle] = useState('');
+
+   {/* Carregar o Veículo Ativo */}
+   useEffect(() => {
+    const fetchActiveVehicle = async () => {
+      try {
+        const activeVehicleData = await AsyncStorage.getItem('@activeVehicle');
+        if (activeVehicleData !== '') {
+          setActiveVehicle(JSON.parse(activeVehicleData));
+        }
+      } catch (error) {
+        console.error('Erro ao recuperar os dados do usuário:', error);
+      }
+    };
+    fetchActiveVehicle();
+ }, []);
+
 
 {/* Salvar */}
-  const handleSaveChanges = () => {
+  const handleUpdateMaintenances = () => {
+
+    const updatedMaintenance = {
+      ...maintenance,
+      type,
+      isRepeat,
+      isKilometersEnabled,
+      kilometers,
+      kilometersTotal,
+      isMonthsEnabled,
+      months,
+      monthsTotal,
+      description,
+    };
+
+{/* Alerta ao Tentar Salvar sem Preencher os Campos Necessários */}
+    if (!type) {
+      Alert.alert(
+        'Campos não preenchidos',
+        'Por favor, preencha todos os campos obrigatórios.',
+        [
+          {
+            text: 'OK',
+            onPress: () => console.log('OK Pressed'),
+            style: 'cancel',
+          },
+        ],
+        { cancelable: false }
+      );
+      return;
+    }
+
+    
+    
+
 {/* Mensagem no Console */}
     console.log(
         'Lembrete alterado:',
         'Tipo de manutenção:', editedMaintenance.type,
         ', Repetição:', editedMaintenance.isRepeat ? 'Ligada' : 'Desligada',
-        ', Quilometros:', editedMaintenance.isKilometersEnabled ? editedMaintenance.kilometers : 'Não habilitado',
-        ', Meses:', editedMaintenance.isMonthsEnabled ? editedMaintenance.months : 'Não habilitado',
+        ', Quilometros:', editedMaintenance.isKilometersEnabled ? editedMaintenance.kilometersTotal : 'Não habilitado',
+        ', Meses:', editedMaintenance.isMonthsEnabled ? editedMaintenance.monthsTotal : 'Não habilitado',
         ', Descrição:', editedMaintenance.description
       );
-      navigation.goBack();
 
-{/* Alerta de Sucesso ao Salvar */}
-      Alert.alert('Alterações salvas com sucesso');
+    {/* Salvar atualizações do lembrete */}
+    Alert.alert(
+      "Confirmar Atualização",
+      "Você tem certeza de que deseja salvar as alterações?",
+      [
+        { text: "Cancelar", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
+        { text: "Confirmar", onPress: () => {
+            {/* Validar se o valor de quilometros e meses inserido não é menor que o progresso atual */}
+            if (kilometersTotal >= kilometers) {
+              if (monthsTotal >= months) {
+                updateMaintenance(updatedMaintenance, activeVehicle.id)
+                console.log('Veículo atualizado:', updatedMaintenance);
+                navigation.navigate('SelectNavigator');
+                Alert.alert('Alterações salvas com sucesso');
+              } else {
+                Alert.alert('Valor inválido', 'O valor de meses não pode ser menor que o progresso atual de meses.');
+              }
+            } else {
+              Alert.alert('Valor inválido', 'O valor de quilômetros não pode ser menor que o progresso atual de quilômetros.');
+            }
+          }
+        }
+      ]
+    );
   };
 
-  // const handleChangeText = (key, value) => {
-  //   setEditedMaintenance({ ...editedMaintenance, [key]: value });
-  // };
 
   return (
     <View style={styles.container}>
@@ -88,11 +162,8 @@ const EditMaintenancePage = ({ route, navigation }) => {
         </View>
       </View>
 
-      {/* <Text style={styles.label} marginBottom={10}>Notificação:</Text>
-        <View style={styles.linha} marginBottom={10}>
+      {/* <
       
-        <Text style={[styles.checkbox, maintenance.isRepeat && styles.checkedCheckbox]}>{maintenance.isRepeat ? 'Ligada' : 'Desligada'}</Text>
-      </View> */}
 
 
 {/* Estado de Notificação */}
@@ -126,7 +197,7 @@ const EditMaintenancePage = ({ route, navigation }) => {
           />
           <Text style={styles.checkboxLabel}>  Quilometros:</Text>
         {isKilometersEnabled && (
-          <Text style={styles.checkboxInput}>{kilometers}</Text>
+          <Text style={styles.checkboxInput}>{kilometersTotal}</Text>
         )}
         </View>
       </View>
@@ -134,8 +205,8 @@ const EditMaintenancePage = ({ route, navigation }) => {
         style={styles.slider}
         minimumValue={0}
         maximumValue={100000}
-        value={kilometers}
-        onValueChange={(value) => setKilometers(Math.round(value / 1000) * 1000)}
+        value={kilometersTotal}
+        onValueChange={(value) => setKilometersTotal(Math.round(value / 1000) * 1000)}
         minimumTrackTintColor="#008F45"
         maximumTrackTintColor="#000000"
         thumbTintColor="#009F4D"
@@ -152,7 +223,7 @@ const EditMaintenancePage = ({ route, navigation }) => {
           />
           <Text style={styles.checkboxLabel}>  Meses:</Text>
           {isMonthsEnabled && (
-            <Text style={styles.checkboxInput}>{months}</Text>
+            <Text style={styles.checkboxInput}>{monthsTotal}</Text>
           )}
         </View>
       </View>
@@ -160,8 +231,8 @@ const EditMaintenancePage = ({ route, navigation }) => {
         style={styles.slider}
         minimumValue={0}
         maximumValue={60}
-        value={months}
-        onValueChange={(value) => setMonths(`${Math.round(value)}`)}
+        value={monthsTotal}
+        onValueChange={(value) => setMonthsTotal(`${Math.round(value)}`)}
         minimumTrackTintColor="#008F45"
         maximumTrackTintColor="#000000"
         thumbTintColor="#009F4D"
@@ -175,11 +246,10 @@ const EditMaintenancePage = ({ route, navigation }) => {
         multiline={true}
         rows={6}
         onChangeText={setDescription}
-        // onChangeText={(text) => handleChangeText('description', text)}
       />
 
 {/* Botão Salvar */}
-      <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
+      <TouchableOpacity style={styles.saveButton} onPress={handleUpdateMaintenances}>
         <Text style={styles.saveButtonText}>Salvar Alterações</Text>
       </TouchableOpacity>
 

@@ -4,6 +4,7 @@ const db = SQLite.openDatabase('vehicles.db');
 
 {/* Iniciar Banco de Dados */}
 export const initVehiclesDB = () => {
+    return new Promise((resolve, reject) => {
     db.transaction(tx => {
         tx.executeSql(
             `CREATE TABLE IF NOT EXISTS vehicles (
@@ -25,6 +26,7 @@ export const initVehiclesDB = () => {
             () => console.log('Tabela de veículos criada com sucesso'),
             (_, error) => console.log('Erro ao criar tabela de veículos:', error)
         );
+    });
     });
 };
 
@@ -69,7 +71,7 @@ export const fetchUserVehicles = (userId) => {
     });
 };
 
-{/* Atualiizar Veículo */}
+{/* Atualizar Veículo */}
 export const updateVehicle = (vehicle, userId) => {
     db.transaction(tx => {
         tx.executeSql(
@@ -98,7 +100,7 @@ export const deleteAllVehicles = () => {
     return new Promise((resolve, reject) => {
        db.transaction(tx => {
          tx.executeSql(
-           `DELETE FROM vehicles;`,
+           `DROP DATABASE vehicles;`,
            [],
            () => {
              console.log('Todos os veículos foram apagados com sucesso');
