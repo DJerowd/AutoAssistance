@@ -1,75 +1,16 @@
 import { React, useEffect, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Picker} from '@react-native-picker/picker';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { fetchUserVehicles } from '../database/VehiclesDatabase';
 
 const SelectPage = ({ navigation }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [activeVehicle, setActiveVehicle] = useState('');
-  const [vehicles, setVehicles] = useState([]);  
-  const [user, setUser] = useState('');
-
-  {/* Carregar o Usuário Ativo */}
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userData = await AsyncStorage.getItem('@user');
-        if (userData !== '') {
-          setUser(JSON.parse(userData));
-        }
-      } catch (error) {
-        console.error('Erro ao recuperar os dados do usuário:', error);
-      }
-    };
-    fetchUser();
- }, []);
-
- {/* Carregar os Veículos do Usuário Ativo Após Carregar o ID de Usuário */}
- useEffect(() => {
-  if (user && user.id) {
-    fetchUserVehicles(user.id).then(setVehicles).catch(console.error);
-  }
-}, [user]);
-
 
     {/* Navegação para a Página de Detalhes Do Item Selecionado */}
     const handleItemPress = (item) => {
       navigation.navigate(item);
     };
 
-{/* Definição da Visibilidade da Lista de Veículo Ativo */}
-    const toggleModal = () => {
-      setIsModalVisible(!isModalVisible);
-    };
-
-{/* Seleção do Veículo Ativo */}
-    const handleVehicleChange = async (item) => {
-      try { await AsyncStorage.setItem('@activeVehicle', JSON.stringify(item));
-      } catch (error) { console.error('Erro ao armazenar os dados do veículo ativo:', error); }
-      console.log('Veículo Selecionado:', item);
-      setActiveVehicle(item);
-    };
-
   return (
     <View style={styles.container}>
-      {/* <View style={{ height: 50, paddingHorizontal: 40, justifyContent: 'center', backgroundColor: '#009F4D'}}> */}
-{/* Seleção do Veículo Ativo */}
-        {/* <Picker
-        selectedValue={activeVehicle}
-        style={styles.carPicker}
-        onValueChange={(itemValue, itemIndex) => handleVehicleChange(itemValue)}
-        mode={'dropdown'}
-        >
-          <Picker.Item label="Selecione aqui um veículo" value="" />
-          {vehicles.map((vehicle) => (
-            <Picker.Item key={vehicle.id} label={vehicle.name} value={vehicle} />
-          ))}
-        </Picker>
-
-      </View> */}
 
 {/* Background da Página */}
     <View style={styles.container}>

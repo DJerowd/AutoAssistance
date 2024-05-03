@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchUserVehicles } from '../database/VehiclesDatabase';
@@ -8,6 +9,7 @@ const ProfilePage = ({ navigation }) => {
     const [vehicles, setVehicles] = useState([]); 
     const [user, setUser] = useState('');
   
+    {/* Carregar o Usuário Ativo */}
     useEffect(() => {
       const fetchUser = async () => {
         try {
@@ -35,8 +37,11 @@ const ProfilePage = ({ navigation }) => {
 
     return (
       <View style={styles.container}>
+        <TouchableOpacity style={{ position: 'absolute', right: 20, top: 20 }} onPress={handleEdit}>
+          <MaterialIcons name="edit" size={40} color="black" />
+        </TouchableOpacity>
 
-  {/* Imagem de Perfil */}
+        {/* Imagem de Perfil */}
         <View style={styles.perfil}>
           <Image
           source={require('../assets/Profile.png')}
@@ -44,16 +49,15 @@ const ProfilePage = ({ navigation }) => {
           />
         </View>
   
-  {/* Nome de Usuários */}
+        {/* Nome de Usuários */}
         <Text style={styles.textTitle}>Nome: </Text>
         <Text style={styles.textInput}>{user.username}</Text>
   
-  {/* E-mail */}
+        {/* E-mail */}
         <Text style={styles.textTitle}>E-mail: </Text>
         <Text style={styles.textInput}>{user.email}</Text>
   
-  {/* Localização do Usuário */}
-        
+        {/* Telefone de Contato */}
         <Text style={styles.textTitle}>Telefone: </Text>
         <Text style={styles.textInput}>{user.phoneNumber}</Text>
      
@@ -107,8 +111,7 @@ const ProfilePage = ({ navigation }) => {
     },
     text: {
       color: '#6A6A6A',
-      fontSize: 20,
-      marginBottom: 10,
+      fontSize: 22,
     },
     textInput: {
       color: '#6A6A6A',
@@ -117,7 +120,7 @@ const ProfilePage = ({ navigation }) => {
       fontSize: 20,
       marginBottom: 10,
       paddingHorizontal: 6,
-      paddingVertical: 2,
+      paddingBottom: 6,
       marginTop: 4,
     },
   });

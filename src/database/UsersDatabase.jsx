@@ -22,6 +22,7 @@ export const initUsersDB = () => {
   });
 };
 
+{/* Verificar se o Usuário Existe */ }
 export const userExists = (email) => {
   return new Promise((resolve, reject) => {
      db.transaction(tx => {
@@ -31,10 +32,10 @@ export const userExists = (email) => {
          (_, resultSet) => {
            if (resultSet.rows.length > 0) {
              console.log('Usuário já existe:', resultSet.rows.item(0));
-             resolve(true); // Usuário existe
+             resolve(true);
            } else {
              console.log('Usuário não existe');
-             resolve(false); // Usuário não existe
+             resolve(false);
            }
          },
          (_, error) => {

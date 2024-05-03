@@ -46,11 +46,11 @@ const RegisterPage = ({ navigation }) => {
     console.log(userExists(email) === true, " 888888888 ");
 
     {/* Conclusão Com Sucesso do Registro */ }
-    if (username.length >= 4 && email.match(emailPattern) && email.length >= 10 && formatPhoneNumber(phoneNumber) && password.length >= 8 && isValidPassword(password) && password == confirmPassword && isChecked == true && userExists(email) === false) {
+    if (username.length >= 4 && email.match(emailPattern) && email.length >= 10 && password.length >= 8 && isValidPassword(password) && password == confirmPassword && isChecked == true && userExists(email) === false) {
 
       {/* Inserção dos Dados de Usuário */ }
       insertUser({ username, email, phoneNumber, password });
-      console.log('Registro Concluido.', username, email, phoneNumber, password);
+      console.log('Registro Concluido.', username, email);
       setError('');
       //navigation.navigate('LoginPage');
       Alert.alert('Registro Concluído', 'Registrado com sucesso!');
@@ -87,7 +87,7 @@ const RegisterPage = ({ navigation }) => {
       setError('');
 
       {/* Verificar se alguma informação não foi inserida*/ }
-    } else if (username.length <= 0 || email.length <= 0 || phoneNumber.length <= 0 || password.length <= 0) {
+    } else if (username.length <= 0 || email.length <= 0 || password.length <= 0) {
       setError('Todos os campos devem ser preenchidos corretamente.');
 
       {/* Verificar se foram confirmados os termos e condições */ }

@@ -10,12 +10,29 @@ const LoginPage = ({ navigation }) => {
   const [login, setLogin] = useState('djerowd@gmail.com');
   const [password, setPassword] = useState('Senha123');
   const [error, setError] = useState('');
-  
   const [users, setUsers] = useState([]);
+  const [user, setUser] = useState('');
+  
+  {/* Carregar o Usuário Ativo */}
+    useEffect(() => {
+      const fetchUser = async () => {
+        try {
+          const userData = await AsyncStorage.getItem('@user');
+          if (userData !== '') {
+            setUser(JSON.parse(userData));
+          }
+        } catch (error) {
+          console.error('Erro ao recuperar os dados do usuário:', error);
+        }
+      };
+      fetchUser();
+   }, []);
 
 {/* Carregar Banco de Dados */}
 useEffect(() => {
   fetchUsers().then(setUsers).catch(console.error);
+      // setLogin(user.email);
+      // setPassword(user.password);
 }, []);
 
   {/* Realizar Login */}
