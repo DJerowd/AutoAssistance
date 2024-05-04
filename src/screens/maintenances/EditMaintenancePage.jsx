@@ -204,7 +204,7 @@ const EditMaintenancePage = ({ route, navigation }) => {
       <Slider
         style={styles.slider}
         minimumValue={0}
-        maximumValue={100000}
+        maximumValue={150000}
         value={kilometersTotal}
         onValueChange={(value) => setKilometersTotal(Math.round(value / 1000) * 1000)}
         minimumTrackTintColor="#008F45"

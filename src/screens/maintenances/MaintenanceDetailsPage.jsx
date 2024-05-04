@@ -83,7 +83,7 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
           <Text style={styles.label}>Notificar a cada:</Text>
 
 {/* Barra de Progresso em Quilometros */}
-          {maintenance.isKilometersEnabled && (
+          {maintenance.isKilometersEnabled == 'true' && (
             <View>
               <View style={styles.linha} justifyContent={'space-between'}>
                 <Text style={styles.itemText}>
@@ -109,7 +109,7 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
           )}
 
 {/* Barra de Progresso em Meses */}
-          {maintenance.isMonthsEnabled && (
+          {maintenance.isMonthsEnabled == 'true' && (
             <View>
               <View style={styles.linha} justifyContent={'space-between'}>
                 <Text style={styles.itemText}>
@@ -139,7 +139,7 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
 
 {/* Descrição do Lembrete */}
       <Text style={styles.label} marginTop={20}>Descrição:</Text>
-      <Text style={styles.input}>{maintenance.description}</Text>
+      <Text style={styles.input}>{maintenance.description} {maintenance.description == '' && ('Sem descrição.')}</Text>
       
 {/* Botão de Editar Informações */}
       <TouchableOpacity style={styles.editButton} onPress={handleEditMaintenance}>

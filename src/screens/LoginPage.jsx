@@ -7,7 +7,7 @@ import { deleteAllVehicles } from '../database/VehiclesDatabase';
 import { deleteAllMaintenances } from '../database/MaintenanceDatabase';
 
 const LoginPage = ({ navigation }) => {
-  const [login, setLogin] = useState('teste@gmail.com');
+  const [login, setLogin] = useState('teste@mail.com');
   const [password, setPassword] = useState('Senha123');
   const [error, setError] = useState('');
   const [users, setUsers] = useState([]);

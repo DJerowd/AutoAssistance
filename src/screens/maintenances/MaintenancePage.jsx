@@ -85,12 +85,22 @@ const MaintencePage = ({ navigation }) => {
           onPress={() => handleItemDetailsPress(item)}
         >
 
-          {(item.isKilometersEnabled || item.isMonthsEnabled) && (
-          <IconMCI 
-            name="bell" 
-            style={styles.icon}
-            size={30} 
-          />
+          {(item.isKilometersEnabled == 'true' || item.isMonthsEnabled == 'true') && (
+            <IconMCI 
+              name="bell" 
+              style={styles.icon}
+              size={30} 
+            />
+          )}
+
+          {/* Alerta de Ausencia de Avisos */}
+          {(item.isKilometersEnabled == 'false' && item.isMonthsEnabled == 'false') && (
+            <IconMCI 
+              name="alert-outline" 
+              color={'#FF9900'}
+              size={30} 
+              marginHorizontal={10}
+            />
           )}
           
           <View style={styles.coluna}>
@@ -105,20 +115,10 @@ const MaintencePage = ({ navigation }) => {
                   marginHorizontal={10}
                 />
               )}
-
-{/* Alerta de Ausencia de Avisos */}
-              {(!item.isKilometersEnabled && !item.isMonthsEnabled) && (
-                <IconMCI 
-                  name="alert-outline" 
-                  color={'#FF9900'}
-                  size={30} 
-                  marginHorizontal={10}
-                />
-              )}
             </View>
 
 {/* Barra de Progresso em Quilometros */}
-            {item.isMonthsEnabled && (
+            {item.isKilometersEnabled == 'true' && (
               <View>
                 <View style={styles.linha} justifyContent={'space-between'}>
                   <Text style={styles.text}>
@@ -136,7 +136,7 @@ const MaintencePage = ({ navigation }) => {
             )}
 
 {/* Barra de Progresso em Meses */}
-            {item.isMonthsEnabled && (
+            {item.isMonthsEnabled == 'true' && (
               <View>
                 <View style={styles.linha} justifyContent={'space-between'}>
                   <Text style={styles.text}>
