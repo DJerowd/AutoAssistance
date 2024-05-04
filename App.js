@@ -30,9 +30,9 @@ const App = () => {
 
   {/* Inicialização do Banco de Dados */}
   useEffect(() => {
-    initMaintenancesDB();
-    initVehiclesDB();
-    initUsersDB().then(() => console.log('Database initialized')).catch(error => console.log('Error initializing database', error));
+      initUsersDB();
+      initVehiclesDB();
+      initMaintenancesDB();
  }, []);
 
   return (

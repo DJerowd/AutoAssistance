@@ -7,7 +7,7 @@ import { deleteAllVehicles } from '../database/VehiclesDatabase';
 import { deleteAllMaintenances } from '../database/MaintenanceDatabase';
 
 const LoginPage = ({ navigation }) => {
-  const [login, setLogin] = useState('djerowd@gmail.com');
+  const [login, setLogin] = useState('teste@gmail.com');
   const [password, setPassword] = useState('Senha123');
   const [error, setError] = useState('');
   const [users, setUsers] = useState([]);
@@ -64,7 +64,7 @@ useEffect(() => {
   const handleDeleteDB = async () => {
     try {
       // await deleteAllUsers();
-      await deleteAllVehicles();
+      // await deleteAllVehicles();
       // await deleteAllMaintenances();
       alert('Database apagada com sucesso');
     } catch (error) {
@@ -92,7 +92,7 @@ useEffect(() => {
         </View>
       )}
       />
-      </View> */}
+      </View>  */}
 
 {/* Nome de Usuário */}
       <View style={styles.input}>

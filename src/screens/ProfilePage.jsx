@@ -24,6 +24,7 @@ const ProfilePage = ({ navigation }) => {
       fetchUser();
    }, []);
 
+   {/* Carregar os Veículos do Usuário Ativo Após Carregar o ID de Usuário */}
    useEffect(() => {
     if (user && user.id) {
       fetchUserVehicles(user.id).then(setVehicles).catch(console.error);

@@ -92,7 +92,7 @@ export const deleteAllUsers = () => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        `DELETE FROM users;`,
+        `DROP TABLE users;`,
         [],
         () => {
           console.log('Todos os usuários foram apagados com sucesso');
