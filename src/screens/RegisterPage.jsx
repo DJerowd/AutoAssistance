@@ -43,7 +43,7 @@ const RegisterPage = ({ navigation }) => {
       insertUser({ username, email, phoneNumber, password });
       console.log('Registro Concluido.', username, email);
       setError('');
-      navigation.navigate('StartPage');
+      navigation.navigate('LoginPage');
       Alert.alert('Registro Concluído', 'Registrado com sucesso!');
 
       {/* Validação do nome de usuário */ }

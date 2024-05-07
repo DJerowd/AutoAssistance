@@ -6,6 +6,7 @@ import { StatusBar } from 'react-native';
 import StartPage from './src/screens/StartPage.jsx';
 import LoginPage from './src/screens/LoginPage';
 import RegisterPage from './src/screens/RegisterPage.jsx';
+import EditProfilePage from './src/screens/EditProfilePage.jsx';
 
 import SelectNavigator from './src/components/SelectNavigator.jsx';
 
@@ -29,9 +30,9 @@ const App = () => {
 
   {/* Inicialização do Banco de Dados */}
   useEffect(() => {
-    initMaintenancesDB();
-    initVehiclesDB();
-    initUsersDB().then(() => console.log('Database initialized')).catch(error => console.log('Error initializing database', error));
+      initUsersDB();
+      initVehiclesDB();
+      initMaintenancesDB();
  }, []);
 
   return (
@@ -67,6 +68,15 @@ const App = () => {
       <Stack.Screen 
           name="SelectNavigator" 
           component={SelectNavigator} 
+          options={{
+            title: '',
+            headerStyle: { backgroundColor: '#009F4D' },
+            headerTintColor: '#ffffff',
+          }}
+        />
+        <Stack.Screen 
+          name="EditProfilePage" 
+          component={EditProfilePage} 
           options={{
             title: '',
             headerStyle: { backgroundColor: '#009F4D' },

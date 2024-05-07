@@ -1,175 +1,170 @@
 import { React, useEffect, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Picker} from '@react-native-picker/picker';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchUserVehicles } from '../database/VehiclesDatabase';
 
 const SelectPage = ({ navigation }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [activeVehicle, setActiveVehicle] = useState('');
-  const [vehicles, setVehicles] = useState([]);  
+  const [vehicles, setVehicles] = useState([]); 
   const [user, setUser] = useState('');
-
-  {/* Carregar o Usuário Ativo */}
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userData = await AsyncStorage.getItem('@user');
-        if (userData !== '') {
-          setUser(JSON.parse(userData));
+  
+    {/* Carregar o Usuário Ativo */}
+    useEffect(() => {
+      const fetchUser = async () => {
+        try {
+          const userData = await AsyncStorage.getItem('@user');
+          if (userData !== '') {
+            setUser(JSON.parse(userData));
+          }
+        } catch (error) {
+          console.error('Erro ao recuperar os dados do usuário:', error);
         }
-      } catch (error) {
-        console.error('Erro ao recuperar os dados do usuário:', error);
-      }
-    };
-    fetchUser();
- }, []);
+      };
+      fetchUser();
+   }, []);
 
- {/* Carregar os Veículos do Usuário Ativo Após Carregar o ID de Usuário */}
- useEffect(() => {
-  if (user && user.id) {
-    fetchUserVehicles(user.id).then(setVehicles).catch(console.error);
-  }
-}, [user]);
-
+   {/* Carregar os Veículos do Usuário Ativo Após Carregar o ID de Usuário */}
+   useEffect(() => {
+    if (user && user.id) {
+      fetchUserVehicles(user.id).then(setVehicles).catch(console.error);
+    }
+  }, [user]);
 
     {/* Navegação para a Página de Detalhes Do Item Selecionado */}
     const handleItemPress = (item) => {
       navigation.navigate(item);
     };
 
-{/* Definição da Visibilidade da Lista de Veículo Ativo */}
-    const toggleModal = () => {
-      setIsModalVisible(!isModalVisible);
-    };
-
-{/* Seleção do Veículo Ativo */}
-    const handleVehicleChange = async (item) => {
-      try { await AsyncStorage.setItem('@activeVehicle', JSON.stringify(item));
-      } catch (error) { console.error('Erro ao armazenar os dados do veículo ativo:', error); }
-      console.log('Veículo Selecionado:', item);
-      setActiveVehicle(item);
-    };
-
   return (
     <View style={styles.container}>
-      {/* <View style={{ height: 50, paddingHorizontal: 40, justifyContent: 'center', backgroundColor: '#009F4D'}}> */}
-{/* Seleção do Veículo Ativo */}
-        {/* <Picker
-        selectedValue={activeVehicle}
-        style={styles.carPicker}
-        onValueChange={(itemValue, itemIndex) => handleVehicleChange(itemValue)}
-        mode={'dropdown'}
-        >
-          <Picker.Item label="Selecione aqui um veículo" value="" />
-          {vehicles.map((vehicle) => (
-            <Picker.Item key={vehicle.id} label={vehicle.name} value={vehicle} />
-          ))}
-        </Picker>
+      {/* Background da Página */}
+      <View style={styles.container}>
+        <View style={styles.buttonsContainer}>
 
-      </View> */}
-
-{/* Background da Página */}
-    <View style={styles.container}>
-
-      <View style={styles.buttonsContainer}>
-        
-{/* Botão Manutenções Pendentes */}
-        <View style={styles.linha}>
+          {/* Botão Veículos Salvos */}
           <View style={styles.item}>
             <TouchableOpacity
-              style={styles.button}
+                style={styles.button}
+                onPress={() => handleItemPress('VehiclesPage')}
+            >
+              <View style={styles.linha}>
+                <IconMCI 
+                  name="garage" 
+                  color={'#ffffff'} 
+                  size={48}
+                />
+                <Text style={styles.buttonText}>Veiculos Salvos</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        
+          {/* Botão Manutenções Pendentes */}
+          <View style={styles.item}>
+            <TouchableOpacity
+              style={[styles.button, vehicles.length === 0 && styles.disabledButton]}
+              disabled={vehicles.length === 0}
               onPress={() => handleItemPress('MaintencePage')}
             >
-              <IconMCI 
-              name="car-wrench" 
-              color={'#ffffff'} 
-              size={120} 
-              />
+              <View style={styles.linha}>
+                <IconMCI 
+                  name="car-wrench" 
+                  color={'#ffffff'} 
+                  size={48}
+                />
+                <Text style={styles.buttonText}>Manutenções Pendentes</Text>
+                {(vehicles.length === 0) && (
+                  <IconMCI 
+                    name="lock" 
+                    color={'#000000'} 
+                    size={24}
+                  />
+                )}
+              </View>
             </TouchableOpacity>
-            <Text style={styles.buttonText}>
-              Manutenções Pendentes
-            </Text>
           </View>
 
-{/* Botão Veículos Salvos */}
+          {/* Botão Histórico de Problemas */}
           <View style={styles.item}>
             <TouchableOpacity
-              style={styles.button}
-              onPress={() => handleItemPress('VehiclesPage')}
-            >
-              <IconMCI 
-              name="garage" 
-              color={'#ffffff'} 
-              size={140} 
-              />
-            </TouchableOpacity>
-            <Text style={styles.buttonText}>
-              Veiculos Salvos
-            </Text>
-          </View>
-        </View>
-
-{/* Botão Histórico de Problemas */}
-        <View style={styles.linha}>
-          <View style={styles.item}>
-            <TouchableOpacity
-              style={styles.button}
+              style={[styles.button, vehicles.length >= 0 && styles.disabledButton]}
+              disabled={vehicles.length >= 0}
               // onPress={() => handleItemPress('historicoPage')}
             >
-              <IconMCI 
-              name="history" 
-              color={'#ffffff'} 
-              size={120} 
-              />
+              <View style={styles.linha}>
+                <IconMCI 
+                  name="history" 
+                  color={'#ffffff'} 
+                  size={48} 
+                />
+                <Text style={styles.buttonText}>Histórico de Problemas</Text>
+                {(vehicles.length >= 0) && (
+                  <IconMCI 
+                    name="lock" 
+                    color={'#000000'} 
+                    size={24}
+                  />
+                )}
+              </View>
             </TouchableOpacity>
-            <Text style={styles.buttonText}>
-              Histórico de Problemas
-            </Text>
           </View>
           
-{/* Botão identificação de Problemas */}
+          {/* Botão identificação de Problemas */}
           <View style={styles.item}>
             <TouchableOpacity
-              style={styles.button}
+              style={[styles.button, vehicles.length >= 0 && styles.disabledButton]}
+              disabled={vehicles.length >= 0}
               // onPress={() => handleItemPress('identificacaoPage')}
             >
-              <IconMCI 
-              name="clipboard-search" 
-              color={'#ffffff'} 
-              size={100} 
-              />
+              <View style={styles.linha}>
+                <IconMCI 
+                  name="clipboard-search" 
+                  color={'#ffffff'} 
+                  size={48} 
+                />
+                <Text style={styles.buttonText}>Identificação de problemas</Text>
+                {(vehicles.length >= 0) && (
+                  <IconMCI 
+                    name="lock" 
+                    color={'#000000'} 
+                    size={24}
+                  />
+                )}
+              </View>
             </TouchableOpacity>
-            <Text style={styles.buttonText}>
-              Identificação de problemas
-            </Text>
           </View>
-        </View>
 
-{/* Botão Mapa */}
-        <View style={styles.linha}>
+          {/* Botão Mapa */}
           <View style={styles.item}>
             <TouchableOpacity
-              style={styles.button}
+              style={[styles.button, vehicles.length >= 0 && styles.disabledButton]}
+              disabled={vehicles.length >= 0}
               // onPress={() => handleItemPress('mapaPage')}
             >
-              <IconMCI 
-              name="map-search" 
-              color={'#ffffff'} 
-              size={100} 
-              />
+              <View style={styles.linha}>
+                <IconMCI 
+                  name="map-search" 
+                  color={'#ffffff'} 
+                  size={48} 
+                />
+                <Text style={styles.buttonText}>Mapa</Text>
+                {(vehicles.length >= 0) && (
+                  <IconMCI 
+                    name="lock" 
+                    color={'#000000'} 
+                    size={24}
+                  />
+                )}
+              </View>
             </TouchableOpacity>
-            <Text style={styles.buttonText}>
-              Mapa
-            </Text>
-          </View>
+          </View>  
+
+          {(vehicles.length === 0) && (
+                <Text style={styles.text}>Adicione um veículo para utilizar outras funções.</Text>
+              )} 
+
         </View>
-
       </View>
-
-    </View>
     </View>
   );
 };
@@ -178,7 +173,7 @@ const SelectPage = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex:  1,
-    backgroundColor: '#101010',
+    backgroundColor: '#F9F9F9',
   },
 
   linha: {
@@ -203,26 +198,42 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   button: {
-    height:  140,
-    width: 140,
-    borderRadius: 12,
     backgroundColor: '#6A6A6A',
-    alignItems: 'center',
+    borderRadius: 12,
+    padding: 10,
+    height:  70,
+    width: '100%',
+    alignItems: 'flex-start',
     justifyContent: 'center',
   },
   buttonText: {
     color: '#ffffff',
     textShadowColor: '#000000',
-    textShadowRadius: 6,
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 20,
+    width: '80%',
+    height: '100%',
+    fontWeight: '500',
     textAlign: 'center',
+    textAlignVertical: 'center',
   },
+  disabledButton: {
+    opacity: 0.4,
+  },
+
+  text: {
+    color: '#000000',
+    marginTop: 20,
+    fontSize: 16,
+    fontWeight: '500',
+    width: '80%',
+    textAlign: 'center',
+    alignSelf: 'center',
+  },
+
   item: {
-    width: 140,
+    width: '100%',
     alignItems: 'center',
-    marginHorizontal: 20,
-    marginVertical: 14,
+    marginVertical: 10,
   },
 });
 

@@ -100,7 +100,7 @@ export const deleteAllVehicles = () => {
     return new Promise((resolve, reject) => {
        db.transaction(tx => {
          tx.executeSql(
-           `DROP DATABASE vehicles;`,
+           `DROP TABLE vehicles;`,
            [],
            () => {
              console.log('Todos os veículos foram apagados com sucesso');
