@@ -14,13 +14,7 @@ const RegisterPage = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const [error, setError] = useState('');
-  const [errors, setErrors] = useState({
-    username: '',
-    email: '',
-    phoneNumber: '',
-    password: '',
-    confirmPassword: '',
-  });
+  const [errors, setErrors] = useState({ username: '', email: '', phoneNumber: '', password: '', confirmPassword: '', });
 
   const formatPhoneNumber = (phoneNumberString) => {
     const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
@@ -42,24 +36,20 @@ const RegisterPage = ({ navigation }) => {
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     let newErrors = { username: '', email: '', phoneNumber: '', password: '', confirmPassword: '', };
 
-    console.log(userExists(email) , " EXISTE? ");
-    console.log(userExists(email) === true, " 888888888 ");
-
     {/* Conclusão Com Sucesso do Registro */ }
-    if (username.length >= 4 && email.match(emailPattern) && email.length >= 10 && formatPhoneNumber(phoneNumber) && password.length >= 8 && isValidPassword(password) && password == confirmPassword && isChecked == true && userExists(email) === false) {
+    if (username.length >= 4 && email.match(emailPattern) && email.length >= 10 && password.length >= 8 && isValidPassword(password) && password == confirmPassword && isChecked == true && userExists(email)) {
 
       {/* Inserção dos Dados de Usuário */ }
       insertUser({ username, email, phoneNumber, password });
-      console.log('Registro Concluido.', username, email, phoneNumber, password);
+      console.log('Registro Concluido.', username, email);
       setError('');
-      //navigation.navigate('LoginPage');
+      navigation.navigate('StartPage');
       Alert.alert('Registro Concluído', 'Registrado com sucesso!');
 
       {/* Validação do nome de usuário */ }
     } else if (username.length > 0 && username.length < 6) {
       newErrors.username = 'O nome de usuário é muito curto.';
       setError('');
-
     {/* Validação do e-mail */}
     } else if (email.length > 0 && !email.match(emailPattern)) {
       newErrors.email = 'O e-mail inserido é inválido.';
@@ -68,7 +58,7 @@ const RegisterPage = ({ navigation }) => {
       newErrors.email = 'O e-mail inserido é muito curto.';
       setError('');
       {/* Validação se existe email cadastrado*/ }
-    } else if (userExists(email) === true) {
+    } else if (email.length > 0 && userExists(email)) {
       newErrors.email = 'O e-mail ja foi cadastrado.';
       setError('');
       {/* Validação do número de telefone */ }
@@ -85,11 +75,9 @@ const RegisterPage = ({ navigation }) => {
     } else if (password.length > 0 && password !== confirmPassword) {
       newErrors.confirmPassword = 'A senha e a confirmação da senha não coincidem.';
       setError('');
-
       {/* Verificar se alguma informação não foi inserida*/ }
-    } else if (username.length <= 0 || email.length <= 0 || phoneNumber.length <= 0 || password.length <= 0) {
+    } else if (username.length <= 0 || email.length <= 0 || password.length <= 0) {
       setError('Todos os campos devem ser preenchidos corretamente.');
-
       {/* Verificar se foram confirmados os termos e condições */ }
     } else if (isChecked == false) {
       setError('Aceite os termos e condições.');

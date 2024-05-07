@@ -89,12 +89,12 @@ const NewMaintencePage = ({ navigation }) => {
         onValueChange={(itemValue, itemIndex) => setType(itemValue)}
         mode={'dropdown'}
       >
-        <Picker.Item label="Tipo de Manutenção" />
-        <Picker.Item label="_____________________________________" />
-        <Picker.Item label="Ar Condicionado" value="ar condicionado" />
-        <Picker.Item label="Bateria" value="bateria" />
-        <Picker.Item label="Correia" value="correia" />
-        <Picker.Item label="Filtro de Ar" value="filtro de ar" />
+        <Picker.Item label="Tipo de Manutenção" value=" " />
+        <Picker.Item label="_____________________________________" value=" " />
+        <Picker.Item label="Ar Condicionado" value="Ar Condicionado" />
+        <Picker.Item label="Bateria" value="Bateria" />
+        <Picker.Item label="Correia" value="Correia" />
+        <Picker.Item label="Filtro de Ar" value="Filtro de Ar" />
         <Picker.Item label="Filtro de Combustível" value="Filtro de Combustível" />
         <Picker.Item label="Filtro de Óleo" value="Filtro de Óleo" />
         <Picker.Item label="Fluído de Freio" value="Fluído de Freio" />
@@ -166,7 +166,7 @@ const NewMaintencePage = ({ navigation }) => {
       <Slider
         style={styles.slider}
         minimumValue={0}
-        maximumValue={100000}
+        maximumValue={150000}
         value={kilometersTotal}
         onValueChange={(value) => setKilometersTotal(Math.round(value / 1000) * 1000)}
         minimumTrackTintColor="#008F45"
