@@ -6,7 +6,6 @@ const StartPage = ({ navigation }) => {
 
 {/* Navegação para a Página Inicial */}
   const handleItemPress = (item) => {
-    console.log('Item Selecionado:', item);
     navigation.navigate(item);
   };
 

@@ -1,8 +1,10 @@
 import { React, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import Modal from 'react-native-modal';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { updateUser } from '../database/UsersDatabase';
+import { updateUser, deleteUser } from '../database/UsersDatabase';
 
 const EditProfilePage = ({ navigation }) => {
     const [user, setUser] = useState('');
@@ -14,6 +16,7 @@ const EditProfilePage = ({ navigation }) => {
     const [currentPassword, setCurrentPassword] = useState(user.password);
     const [confirmActualPassword, setConfirmActualPassword] = useState('');
     const [error, setError] = useState('');
+    const [isModalVisible, setIsModalVisible] = useState(false);
   
     {/* Carregar o Usuário Ativo */}
     useEffect(() => {
@@ -52,6 +55,9 @@ const EditProfilePage = ({ navigation }) => {
     return null;
   };
 
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
 
   {/* Salvar */}
   const handleUpdateProfile = () => {
@@ -72,7 +78,6 @@ const EditProfilePage = ({ navigation }) => {
           [
             {
               text: 'OK',
-              onPress: () => console.log('OK Pressed'),
               style: 'cancel',
             },
           ],
@@ -105,18 +110,61 @@ const EditProfilePage = ({ navigation }) => {
       { text: "Confirmar", onPress: () => {
         updateUser(updatedUser)
         console.log('Usuário atualizado:', updatedUser);
-        navigation.navigate('StartPage');
+        navigation.navigate('LoginPage');
         Alert.alert('Usuário Atualizado com Sucesso!');
       }}
     ]
   );
    };
 
+  const handleDelete = () => {
+    if (currentPassword == confirmActualPassword) {
+      deleteUser(user.id)
+      toggleModal();
+      Alert.alert('Usuário excluído com sucesso');
+      console.log('Usuário excluído: ', user);
+      navigation.navigate('LoginPage');
+    } else {
+      toggleModal();
+      Alert.alert("", "A senha atual está incorreta.");
+    }
+  };
 
     return (
       <View style={styles.container}>
         {/* Título */}
         <Text style={styles.title}>Editar Perfil:</Text>
+        <TouchableOpacity style={{ position: 'absolute', right: 30, top: 10 }} onPress={toggleModal}>
+          <Ionicons name="trash" size={40} color="#000000" />
+        </TouchableOpacity>
+
+        {/* Tela de Confirmar Exclusão */} 
+        <Modal animationIn={'zoomIn'} animationOut={'zoomOut'} isVisible={isModalVisible} onBackdropPress={toggleModal}>
+          <View style={styles.modalContainer}>
+
+            <Text style={styles.modalTitle}>Excluir Usuário</Text>
+            <Text style={styles.modalText}>Tem certeza que deseja excluir este usuário permanentemente?</Text>
+          
+            <Text style={styles.text}>Confirme a Senha Atual</Text>
+            <TextInput
+              style={styles.textInput}
+              value={confirmActualPassword}
+              onChangeText={setConfirmActualPassword}
+              placeholder="Senha Atual"
+              secureTextEntry
+            />
+
+            <View style={styles.linha} justifyContent={'space-between'}>
+              <TouchableOpacity style={styles.modalButton} onPress={toggleModal} >
+                <Text style={styles.modalButtonText}>Não</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.modalButton} onPress={handleDelete} >
+                <Text style={styles.modalButtonText}>Excluir</Text>
+              </TouchableOpacity>
+            </View>
+
+          </View>
+        </Modal>
 
         <View style={styles.input}>
           <Text style={styles.text}>Nome de Usuário</Text>
@@ -210,6 +258,50 @@ const EditProfilePage = ({ navigation }) => {
         marginBottom: 10,
         paddingHorizontal: 30,
         fontSize: 24,
+        fontWeight: 'bold',
+      },
+
+      modalContainer: {
+        backgroundColor: '#FFFFFF',
+        borderRadius: 10,
+        paddingHorizontal: 20,
+        paddingVertical: 20,
+        width: '100%',
+        alignSelf: 'center',
+      },
+      modalTitle: {
+        color: '#000000',
+        fontSize: 20,
+        fontWeight: '500',
+      },
+      modalText: {
+        color: '#6A6A6A',
+        fontSize: 18,
+      },
+      modalInput: {
+        color: '#6A6A6A',
+        backgroundColor: '#6A6A6A22',
+        borderColor: '#000000',
+        borderWidth: 1,
+        borderRadius: 10,
+        fontSize: 18,
+        height: 40,
+        paddingHorizontal: 10,
+        marginVertical: 20,
+      },
+      modalButton: {
+        backgroundColor: '#009F4D',
+        borderColor: '#009F4D',
+        borderWidth: 4,
+        padding: 16,
+        borderRadius: 10,
+        width: '46%',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      modalButtonText: {
+        color: '#FFFFFF',
+        fontSize: 20,
         fontWeight: 'bold',
       },
       

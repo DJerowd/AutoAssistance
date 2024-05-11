@@ -1,5 +1,6 @@
-import { React, useEffect, useState } from 'react';
+import { React, useCallback, useEffect, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -25,11 +26,13 @@ const SelectPage = ({ navigation }) => {
    }, []);
 
    {/* Carregar os Veículos do Usuário Ativo Após Carregar o ID de Usuário */}
-   useEffect(() => {
+   useFocusEffect(
+    useCallback(() => {
     if (user && user.id) {
       fetchUserVehicles(user.id).then(setVehicles).catch(console.error);
     }
-  }, [user]);
+  }, [user])
+);
 
     {/* Navegação para a Página de Detalhes Do Item Selecionado */}
     const handleItemPress = (item) => {
@@ -89,7 +92,6 @@ const SelectPage = ({ navigation }) => {
             <TouchableOpacity
               style={[styles.button, vehicles.length >= 0 && styles.disabledButton]}
               disabled={vehicles.length >= 0}
-              // onPress={() => handleItemPress('historicoPage')}
             >
               <View style={styles.linha}>
                 <IconMCI 
@@ -114,7 +116,6 @@ const SelectPage = ({ navigation }) => {
             <TouchableOpacity
               style={[styles.button, vehicles.length >= 0 && styles.disabledButton]}
               disabled={vehicles.length >= 0}
-              // onPress={() => handleItemPress('identificacaoPage')}
             >
               <View style={styles.linha}>
                 <IconMCI 

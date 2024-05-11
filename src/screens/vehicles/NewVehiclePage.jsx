@@ -84,7 +84,7 @@ const NewVehiclePage = ({ navigation }) => {
     {/* Inserção dos Dados de Veículo */}
     insertVehicle({ name, brand, model, version, color, manufactureYear, licensePlate, fuelType, transmission, engine, mileage }, user.id);
     console.log( 'Novo veículo adicionado:', ', Marca:', brand, ', Modelo:', model, ', Versão:', version, ', Cor:', color, ', Ano de fabricação:', manufactureYear, ', Placa:', licensePlate, ', Combustivel:', fuelType, ', Transmissão:', transmission, ', Motor:', engine, ', Quilometragem:', mileage );
-    navigation.navigate('SelectNavigator');
+    navigation.navigate('VehiclesPage');
     Alert.alert( 'Veículo Salvo com Sucesso!' );
   };
 
@@ -258,6 +258,7 @@ const NewVehiclePage = ({ navigation }) => {
         onChangeText={setLicensePlate}
         placeholder="(Opcional)"
         maxLength={7}
+        autoCapitalize='characters'
       />
 
       {/* Quilometragem do Veículo */}

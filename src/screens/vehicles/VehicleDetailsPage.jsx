@@ -40,7 +40,7 @@ const VehicleDetailsPage = ({ route, navigation }) => {
             deleteVehicle(vehicle.id, user.id);
             Alert.alert('Veículo excluído com sucesso');
             console.log('Veículo excluído com sucesso');
-            navigation.navigate('SelectNavigator');
+            navigation.navigate('VehiclesPage');
           },
           style: 'destructive',
         },

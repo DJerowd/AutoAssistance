@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchUserVehicles } from '../database/VehiclesDatabase';
@@ -8,7 +8,8 @@ import { fetchUserVehicles } from '../database/VehiclesDatabase';
 const ProfilePage = ({ navigation }) => {
     const [vehicles, setVehicles] = useState([]); 
     const [user, setUser] = useState('');
-  
+    const [loading, setLoading] = useState(true);
+
     {/* Carregar o Usuário Ativo */}
     useEffect(() => {
       const fetchUser = async () => {
@@ -28,6 +29,7 @@ const ProfilePage = ({ navigation }) => {
    useEffect(() => {
     if (user && user.id) {
       fetchUserVehicles(user.id).then(setVehicles).catch(console.error);
+      setLoading(false);
     }
   }, [user]);
 
@@ -36,10 +38,22 @@ const ProfilePage = ({ navigation }) => {
     navigation.navigate('EditProfilePage');
   };
 
+  {/* Tela de carregamento */}
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <View style={{height: '100%', alignItems: 'center', justifyContent: 'center'}}>
+        <Text style={{color: '#6A6A6A', fontWeight: '500', fontSize: 32, margin: 10}}>Carregando...</Text>
+        <ActivityIndicator size="100" color="#6A6A6A" style={{margin: 10}} />
+        </View>
+      </View>
+    );
+  }
+
     return (
       <View style={styles.container}>
         <TouchableOpacity style={{ position: 'absolute', right: 20, top: 20 }} onPress={handleEdit}>
-          <MaterialIcons name="edit" size={40} color="black" />
+          <MaterialCommunityIcons name="pencil" size={40} color="#000000" />
         </TouchableOpacity>
 
         {/* Imagem de Perfil */}

@@ -19,7 +19,6 @@ const EditVehiclePage = ({ navigation, route }) => {
  const [engine, setEngine] = useState(vehicle.engine);
  const [mileage, setMileage] = useState(vehicle.mileage);
  const [additionalMileage, setAdditionalMileage] = useState(0);
-
  const totalMileage = additionalMileage ? parseInt(mileage, 10) + parseInt(additionalMileage, 10) : parseInt(mileage, 10) + 0;
  const [user, setUser] = useState('');
 
@@ -40,7 +39,6 @@ const EditVehiclePage = ({ navigation, route }) => {
 
 {/* Salvar */}
  const handleUpdateVehicle = () => {
-
   const updatedVehicle = {
     ...vehicle,
     name,
@@ -55,7 +53,6 @@ const EditVehiclePage = ({ navigation, route }) => {
     engine,
     mileage: totalMileage,
   };
-
 {/* Alerta ao Tentar Salvar sem Preencher os Campos Necessários */}
     if (!name || !brand || !model || !color || !fuelType || !transmission || !engine) {
       Alert.alert(
@@ -72,7 +69,6 @@ const EditVehiclePage = ({ navigation, route }) => {
       );
       return;
     }
-
     {/* Salvar atualizações do veículo */}
     Alert.alert(
       "Confirmar Atualização",
@@ -83,7 +79,7 @@ const EditVehiclePage = ({ navigation, route }) => {
 
           updateVehicle(updatedVehicle, user.id);
           console.log('Veículo atualizado:', updatedVehicle);
-          navigation.navigate('SelectNavigator');
+          navigation.navigate('VehiclesPage');
           Alert.alert('Veículo Atualizado com Sucesso!');
 
           }
@@ -123,7 +119,6 @@ const EditVehiclePage = ({ navigation, route }) => {
     }
   };
 
-
  return (
     <ScrollView style={styles.container}>
 
@@ -135,7 +130,6 @@ const EditVehiclePage = ({ navigation, route }) => {
         onChangeText={setName}
         placeholder="Carro"
       />
-
 
 {/* Marca do Veículo */}
       <View style={styles.linha}>
@@ -154,7 +148,6 @@ const EditVehiclePage = ({ navigation, route }) => {
       <Text style={styles.label}>Versão do veículo:</Text>
       <Text style={styles.text}>{vehicle.version}</Text>
       </View>
-
 
 {/* Cor do Veículo */}
       <View style={{flexDirection: 'row', marginTop: 10,}}>
@@ -245,22 +238,18 @@ const EditVehiclePage = ({ navigation, route }) => {
         />
       )}
       </View>
-      
 
 {/* Placa do Veículo */}
       <View style={styles.linha} alignItems={'center'}>
         <Text style={styles.label}>Placa do Veículo:  </Text>
-        {vehicle.licensePlate ? (
-          <Text style={styles.text}>{vehicle.licensePlate || '(Não informado)'}</Text>
-        ) : (
         <TextInput
           style={styles.shortInput}
           value={licensePlate}
           onChangeText={setLicensePlate}
           placeholder="(Opcional)"
           maxLength={7}
+          autoCapitalize='characters'
         />
-      )}
       </View>
 
 {/* Quilometragem do Veículo */}
@@ -275,8 +264,6 @@ const EditVehiclePage = ({ navigation, route }) => {
         placeholder="Quilometragem a ser Acrescentada"
         keyboardType="numeric"
       />
-
-
 
       <TouchableOpacity style={styles.addButton} onPress={handleUpdateVehicle}>
         <Text style={styles.addButtonText}>Atualizar Veículo</Text>

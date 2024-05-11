@@ -1,5 +1,6 @@
-import { React, useEffect, useState } from 'react';
+import { React, useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert, Image, FlatList } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchUsers, deleteAllUsers } from '../database/UsersDatabase';
@@ -14,7 +15,7 @@ const LoginPage = ({ navigation }) => {
   const [user, setUser] = useState('');
   
   {/* Carregar o Usuário Ativo */}
-    useEffect(() => {
+  useEffect(() => {
       const fetchUser = async () => {
         try {
           const userData = await AsyncStorage.getItem('@user');
@@ -28,19 +29,21 @@ const LoginPage = ({ navigation }) => {
       fetchUser();
    }, []);
 
-{/* Carregar Banco de Dados */}
-useEffect(() => {
-  fetchUsers().then(setUsers).catch(console.error);
-      // setLogin(user.email);
-      // setPassword(user.password);
-}, []);
+  {/* Carregar Banco de Dados */}
+  useFocusEffect(
+    useCallback(() => {
+      fetchUsers().then(setUsers).catch(console.error);
+          // setLogin(user.email);
+          // setPassword(user.password);
+    }, [])
+  );
 
   {/* Realizar Login */}
   const handleLogin = async () => {
     const userFound = users.find(users => users.email === login && users.password === password)
     if (userFound) {
       setError('');
-      console.log('Login bem sucedido:', 'SelectNavigator', {userFound});
+      console.log('Login:', {userFound});
 
       try {
         await AsyncStorage.setItem('@user', JSON.stringify(userFound));
@@ -57,7 +60,6 @@ useEffect(() => {
 
   {/* Registrar-se */}
   const handleRegister = () => {
-    console.log('Item Selecionado:', 'RegisterPage');
     navigation.navigate('RegisterPage');
   };
 

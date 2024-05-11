@@ -22,10 +22,10 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
       }
     };
     fetchActiveVehicle();
- }, []);
+  }, []);
  
+  {/* Excluir Lembrete */}
   const handleDeleteMaintenance = () => {
-{/* Alerta ae Confirmação de Excluir Lembrete */}
     Alert.alert(
       'Excluir Lembrete',
       'Tem certeza que deseja excluir este lembrete permanentemente?',
@@ -40,7 +40,7 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
             deleteMaintenances(maintenance.id, activeVehicle.id)
             Alert.alert('Lembrete excluído com sucesso');
             console.log('Lembrete excluído com sucesso');
-            navigation.navigate('SelectNavigator');
+            navigation.navigate('MaintencePage');
           },
           style: 'destructive'
         },
@@ -49,71 +49,89 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
     );
   };
 
-
-
-{/* Navegação Para a Página de Edição da Manutenção */}
+  {/* Navegação Para a Página de Edição da Manutenção */}
   const handleEditMaintenance = () => {
     navigation.navigate('EditMaintenancePage', { maintenance });
   };
 
+
   return (
     <ScrollView style={styles.container}>
 
-{/* Tipo de Manutenção */}
+      {/* Tipo de Manutenção */}
       <Text style={styles.label}>Tipo de Manutenção:</Text>
       <Text style={styles.text}>{maintenance.type}</Text>
 
-{/* Estado da Notifição */}
+      {/* Estado da Notifição */}
       <View style={styles.linha} marginBottom={10}>
-        <Text style={styles.label}>Notificação:</Text>
-        {(!maintenance.isKilometersEnabled && !maintenance.isMonthsEnabled) && (
+        <Text style={styles.label}>Quando notificar:</Text>
+        {(JSON.parse(maintenance.isKilometersEnabled) || JSON.parse(maintenance.isMonthsEnabled)) && (
+            <IconMCI 
+              name="bell" 
+              style={styles.icon}
+              size={30} 
+            />
+          )}
+        {(!JSON.parse(maintenance.isKilometersEnabled) && !JSON.parse(maintenance.isMonthsEnabled)) && (
+          <View style={styles.linha}>
+          <IconMCI 
+            name="bell-off" 
+            style={styles.icon}
+            size={30} 
+          />
           <IconMCI 
             name="alert-outline" 
             color={'#FF9900'}
             size={30} 
-            marginLeft={10}
+          />
+          </View>
+        )}
+        {(JSON.parse(maintenance.isKilometersEnabled) || JSON.parse(maintenance.isMonthsEnabled)) && ((maintenance.months == maintenance.monthsTotal && !maintenance.monthsTotal == '') || (maintenance.kilometers == maintenance.kilometersTotal && !maintenance.kilometersTotal == '')) && (
+          <IconMCI 
+            name="alert" 
+            color={'#DD0000'}
+            size={30} 
+            marginRight={10}
           />
         )}
-        <Text style={[styles.checkbox, maintenance.isRepeat && styles.checkedCheckbox]}>{maintenance.isRepeat ? 'Ligada' : 'Desligada'}</Text>
+        {/* <Text style={[styles.checkbox, maintenance.isRepeat && styles.checkedCheckbox]}>{maintenance.isRepeat ? 'Ligada' : 'Desligada'}</Text> */}
       </View>
 
-{/* Notificações */}
+      {/* Notificações */}
       {maintenance.isRepeat && (
         <View>
-          <Text style={styles.label}>Notificar a cada:</Text>
 
-{/* Barra de Progresso em Quilometros */}
-          {maintenance.isKilometersEnabled == 'true' && (
+          {/* Barra de Progresso em Quilometros */}
+          {JSON.parse(maintenance.isKilometersEnabled) && (
             <View>
               <View style={styles.linha} justifyContent={'space-between'}>
                 <Text style={styles.itemText}>
-                  {maintenance.isKilometersEnabled ? `${maintenance.kilometers} KM ` : ''}
+                  {JSON.parse(maintenance.isKilometersEnabled) ? `${maintenance.kilometers} KM ` : ''}
                 </Text>
-                  {((maintenance.kilometers == maintenance.kilometersTotal && !maintenance.kilometersTotal == '')) && (
-                    <IconMCI 
-                      name="alert" 
-                      color={'#DD0000'}
-                      size={30} 
-                      marginRight={10}
-                    />
-                  )}
+                  
                 <Text style={styles.itemText}>
-                  {maintenance.isKilometersEnabled ? `${maintenance.kilometersTotal} KM ` : ''}
+                  {JSON.parse(maintenance.isKilometersEnabled) ? `${maintenance.kilometersTotal} KM ` : ''}
                 </Text>
               </View>
               <View style={styles.progressBarTotal}>
                 {/* Barra de Progresso de Quilometros */}
-                <View style={[styles.progressBar, { width: `${maintenance.kilometers / (maintenance.kilometersTotal / 100)}%` }]} />
+                <View 
+                  style={[
+                    styles.progressBar, 
+                    { width: `${maintenance.kilometers / (maintenance.kilometersTotal / 100)}%`, 
+                    backgroundColor: maintenance.kilometers === maintenance.kilometersTotal? '#DD0000' : '#009F4D' }
+                  ]} 
+                />
               </View>
             </View>
           )}
 
-{/* Barra de Progresso em Meses */}
-          {maintenance.isMonthsEnabled == 'true' && (
+          {/* Barra de Progresso em Meses */}
+          {JSON.parse(maintenance.isMonthsEnabled) && (
             <View>
               <View style={styles.linha} justifyContent={'space-between'}>
                 <Text style={styles.itemText}>
-                  {maintenance.isMonthsEnabled ? `${maintenance.months} Meses ` : ''}
+                  {JSON.parse(maintenance.isMonthsEnabled) ? `${maintenance.months} Meses ` : ''}
                 </Text>
                   {((maintenance.months == maintenance.monthsTotal && !maintenance.monthsTotal == '')) && (
                     <IconMCI 
@@ -124,12 +142,18 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
                     />
                   )}
                 <Text style={styles.itemText}>
-                  {maintenance.isMonthsEnabled ? `${maintenance.monthsTotal} Meses ` : ''}
+                  {JSON.parse(maintenance.isMonthsEnabled) ? `${maintenance.monthsTotal} Meses ` : ''}
                 </Text>
               </View>
               <View style={styles.progressBarTotal}>
                 {/* Barra de Progresso de Meses */}
-                <View style={[styles.progressBar, { width: `${maintenance.months / (maintenance.monthsTotal / 100)}%` }]} />
+                <View 
+                  style={[
+                    styles.progressBar, 
+                    { width: `${maintenance.months / (maintenance.monthsTotal / 100)}%`,
+                    backgroundColor: maintenance.kilometers === maintenance.kilometersTotal? '#DD0000' : '#009F4D' }
+                  ]} 
+                />
               </View>
             </View>
           )}
@@ -137,16 +161,16 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
         </View>
       )}
 
-{/* Descrição do Lembrete */}
+      {/* Descrição do Lembrete */}
       <Text style={styles.label} marginTop={20}>Descrição:</Text>
       <Text style={styles.input}>{maintenance.description} {maintenance.description == '' && ('Sem descrição.')}</Text>
       
-{/* Botão de Editar Informações */}
+      {/* Botão de Editar Informações */}
       <TouchableOpacity style={styles.editButton} onPress={handleEditMaintenance}>
         <Text style={styles.editButtonText}>Editar Informações</Text>
       </TouchableOpacity>
 
-{/* Botão de Excluir Lembrete */}
+      {/* Botão de Excluir Lembrete */}
       <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteMaintenance}>
         <Text style={styles.deleteButtonText}>Excluir Lembrete</Text>
       </TouchableOpacity>
@@ -183,19 +207,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 
-  checkbox: {
-    borderColor: '#6A6A6A',
+  icon: {
     color: '#6A6A6A',
-    borderRadius: 6,
-    borderWidth: 2,
+    borderRadius: 30,
     paddingHorizontal: 10,
-    paddingVertical: 4,
-    fontSize: 16,
-    marginHorizontal: 10,
-  },
-  checkedCheckbox: {
-    backgroundColor: '#009F4D',
-    color: '#FFFFFF'
   },
 
   itemText: {
@@ -262,7 +277,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-
 });
 
 export default MaintenanceDetailsPage;

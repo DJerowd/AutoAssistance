@@ -27,7 +27,6 @@ const RegisterPage = ({ navigation }) => {
 
 
   const handleLogin = () => {
-    console.log('Item Selecionado:', 'LoginPage');
     navigation.navigate('LoginPage');
   };
 
@@ -58,7 +57,7 @@ const RegisterPage = ({ navigation }) => {
       newErrors.email = 'O e-mail inserido é muito curto.';
       setError('');
       {/* Validação se existe email cadastrado*/ }
-    } else if (email.length > 0 && userExists(email)) {
+    } else if (email.length > 0 && !userExists(email)) {
       newErrors.email = 'O e-mail ja foi cadastrado.';
       setError('');
       {/* Validação do número de telefone */ }
@@ -70,7 +69,7 @@ const RegisterPage = ({ navigation }) => {
       newErrors.password = 'A senha deve conter letras e números.';
       setError('');
     } else if (password.length > 0 && password.length < 8) {
-      newErrors.password = 'A senha é muito curta.';
+      newErrors.password = 'A senha deve ser maior que 8 caracteres.';
       setError('');
     } else if (password.length > 0 && password !== confirmPassword) {
       newErrors.confirmPassword = 'A senha e a confirmação da senha não coincidem.';

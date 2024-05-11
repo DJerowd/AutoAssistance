@@ -87,7 +87,19 @@ export const updateUser = (user) => {
   });
 };
 
-{/* Resetar Banco de Dados de Usuarios */ }
+{/* Deletar Usuário */}
+export const deleteUser = (userId) => {
+  db.transaction(tx => {
+      tx.executeSql(
+          `DELETE FROM users WHERE id = ?;`,
+          [userId],
+          (_, resultSet) => console.log('Usuário excluído com sucesso:', resultSet),
+          (_, error) => console.log('Erro ao excluir Usuário:', error)
+      );
+  });
+};
+
+{/* Resetar Banco de Dados de Usuários */ }
 export const deleteAllUsers = () => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {

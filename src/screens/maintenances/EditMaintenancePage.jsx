@@ -23,7 +23,7 @@ const EditMaintenancePage = ({ route, navigation }) => {
   const [activeVehicle, setActiveVehicle] = useState('');
 
    {/* Carregar o Veículo Ativo */}
-   useEffect(() => {
+  useEffect(() => {
     const fetchActiveVehicle = async () => {
       try {
         const activeVehicleData = await AsyncStorage.getItem('@activeVehicle');
@@ -35,12 +35,11 @@ const EditMaintenancePage = ({ route, navigation }) => {
       }
     };
     fetchActiveVehicle();
- }, []);
+  }, []);
 
 
-{/* Salvar */}
+  {/* Salvar */}
   const handleUpdateMaintenances = () => {
-
     const updatedMaintenance = {
       ...maintenance,
       type,
@@ -53,8 +52,7 @@ const EditMaintenancePage = ({ route, navigation }) => {
       monthsTotal,
       description,
     };
-
-{/* Alerta ao Tentar Salvar sem Preencher os Campos Necessários */}
+    {/* Alerta ao Tentar Salvar sem Preencher os Campos Necessários */}
     if (!type) {
       Alert.alert(
         'Campos não preenchidos',
@@ -70,11 +68,7 @@ const EditMaintenancePage = ({ route, navigation }) => {
       );
       return;
     }
-
-    
-    
-
-{/* Mensagem no Console */}
+    {/* Mensagem no Console */}
     console.log(
         'Lembrete alterado:',
         'Tipo de manutenção:', editedMaintenance.type,
@@ -83,7 +77,6 @@ const EditMaintenancePage = ({ route, navigation }) => {
         ', Meses:', editedMaintenance.isMonthsEnabled ? editedMaintenance.monthsTotal : 'Não habilitado',
         ', Descrição:', editedMaintenance.description
       );
-
     {/* Salvar atualizações do lembrete */}
     Alert.alert(
       "Confirmar Atualização",
@@ -96,7 +89,7 @@ const EditMaintenancePage = ({ route, navigation }) => {
               if (monthsTotal >= months) {
                 updateMaintenance(updatedMaintenance, activeVehicle.id)
                 console.log('Veículo atualizado:', updatedMaintenance);
-                navigation.navigate('SelectNavigator');
+                navigation.navigate('MaintencePage');
                 Alert.alert('Alterações salvas com sucesso');
               } else {
                 Alert.alert('Valor inválido', 'O valor de meses não pode ser menor que o progresso atual de meses.');
@@ -114,7 +107,7 @@ const EditMaintenancePage = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
 
-{/* Tipo do Lembrete */}
+      {/* Tipo do Lembrete */}
       <Text style={styles.label}>Tipo de Manutenção:</Text>
       <View style={styles.pickerLabel}>
       <Picker
@@ -124,10 +117,10 @@ const EditMaintenancePage = ({ route, navigation }) => {
         // onChangeText={(text) => handleChangeText('type', text)}
         mode={'dropdown'}
       >
-        <Picker.Item label="Ar Condicionado" value="ar condicionado" />
-        <Picker.Item label="Bateria" value="bateria" />
-        <Picker.Item label="Correia" value="correia" />
-        <Picker.Item label="Filtro de Ar" value="filtro de ar" />
+        <Picker.Item label="Ar Condicionado" value="Ar Condicionado" />
+        <Picker.Item label="Bateria" value="Bateria" />
+        <Picker.Item label="Correia" value="Correia" />
+        <Picker.Item label="Filtro de Ar" value="Filtro de Ar" />
         <Picker.Item label="Filtro de Combustível" value="Filtro de Combustível" />
         <Picker.Item label="Filtro de Óleo" value="Filtro de Óleo" />
         <Picker.Item label="Fluído de Freio" value="Fluído de Freio" />
@@ -141,7 +134,7 @@ const EditMaintenancePage = ({ route, navigation }) => {
       </Picker>
       </View>
       
-{/* Frequência de Repetição */}
+      {/* Frequência de Repetição */}
       <Text style={styles.label}>Frequência:</Text> 
       <View style={styles.linha}>
         <View style={styles.checkboxContainer}>
@@ -166,10 +159,10 @@ const EditMaintenancePage = ({ route, navigation }) => {
       
 
 
-{/* Estado de Notificação */}
+      {/* Estado de Notificação */}
       <View style={styles.linha} marginBottom={10}>
-        <Text style={styles.label} >Notificação:</Text>
-        {(!isKilometersEnabled && !isMonthsEnabled) && (
+        <Text style={styles.label} >Quando notificar:</Text>
+        {(!JSON.parse(isKilometersEnabled) && !JSON.parse(isMonthsEnabled)) && (
           <IconMCI 
             name="alert-outline" 
             color={'#FF9900'}
@@ -178,25 +171,23 @@ const EditMaintenancePage = ({ route, navigation }) => {
           />
         )}
         <TextInput
-            style={[styles.checkbox, (isKilometersEnabled || isMonthsEnabled) && styles.checkedCheckbox]}
-            value={(isKilometersEnabled || isMonthsEnabled) ? 'Ligada' : 'Desligada'}
+            style={[styles.checkbox, (JSON.parse(isKilometersEnabled) || JSON.parse(isMonthsEnabled)) && styles.checkedCheckbox]}
+            value={(JSON.parse(isKilometersEnabled) || JSON.parse(isMonthsEnabled)) ? 'Ligada' : 'Desligada'}
             editable={false}
         />
       </View>
-
-
-      <Text style={styles.label}>Notificar a cada:</Text>
-{/* Quilometros para Notificar */}
+      
+      {/* Quilometros para Notificar */}
       <View style={styles.linha}>
         <View style={styles.checkboxContainer}>
           <CheckBox
             disabled={false}
-            value={isKilometersEnabled}
-            onValueChange={() => setIsKilometersEnabled(!isKilometersEnabled)}
-            color={isKilometersEnabled ? '#009F4D' : undefined}
+            value={JSON.parse(isKilometersEnabled)}
+            onValueChange={() => setIsKilometersEnabled(!JSON.parse(isKilometersEnabled))}
+            color={JSON.parse(isKilometersEnabled) ? '#009F4D' : undefined}
           />
           <Text style={styles.checkboxLabel}>  Quilometros:</Text>
-        {isKilometersEnabled && (
+        {JSON.parse(isKilometersEnabled) && (
           <Text style={styles.checkboxInput}>{kilometersTotal}</Text>
         )}
         </View>
@@ -212,14 +203,14 @@ const EditMaintenancePage = ({ route, navigation }) => {
         thumbTintColor="#009F4D"
       />
 
-{/* Meses para notificar */}
+      {/* Meses para notificar */}
       <View style={styles.linha}>
         <View style={styles.checkboxContainer}>
           <CheckBox
             disabled={false}
-            value={isMonthsEnabled}
-            onValueChange={() => setIsMonthsEnabled(!isMonthsEnabled)}
-            color={isMonthsEnabled ? '#009F4D' : undefined}
+            value={JSON.parse(isMonthsEnabled)}
+            onValueChange={() => setIsMonthsEnabled(!JSON.parse(isMonthsEnabled))}
+            color={JSON.parse(isMonthsEnabled) ? '#009F4D' : undefined}
           />
           <Text style={styles.checkboxLabel}>  Meses:</Text>
           {isMonthsEnabled && (
@@ -238,7 +229,7 @@ const EditMaintenancePage = ({ route, navigation }) => {
         thumbTintColor="#009F4D"
       />
 
-{/* Descrição do Lembrete */}
+    {/* Descrição do Lembrete */}
     <Text style={styles.label}>Descrição:</Text>
       <TextInput
         style={styles.input}
@@ -248,13 +239,12 @@ const EditMaintenancePage = ({ route, navigation }) => {
         onChangeText={setDescription}
       />
 
-{/* Botão Salvar */}
+    {/* Botão Salvar */}
       <TouchableOpacity style={styles.saveButton} onPress={handleUpdateMaintenances}>
         <Text style={styles.saveButtonText}>Salvar Alterações</Text>
       </TouchableOpacity>
-
-    </View>
     
+    </View>
   );
 };
 

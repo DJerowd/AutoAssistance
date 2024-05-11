@@ -35,13 +35,12 @@ const NewMaintencePage = ({ navigation }) => {
     fetchVehicle();
   }, []);
  
-{/* Salvar */}
+  {/* Salvar */}
   const handleAddReminder = async () => {
-{/* Alerta ao Tentar Salvar sem Preencher os Campos Necessários */}
     if (!type) {
       Alert.alert(
         'Campos não preenchidos',
-        'Por favor, preencha todos os campos obrigatórios.',
+        'Por favor, defina o tipo de atividade do lembrete.',
         [
           {
             text: 'OK',
@@ -54,12 +53,12 @@ const NewMaintencePage = ({ navigation }) => {
       return;
     }
 
-  {/* Verificação do Limite de Veículos */}
-   const maintenances = await fetchVehicleMaintenances(activeVehicle.id);
-   if (maintenances.length >= 10) {
+    {/* Verificação do Limite de Veículos */}
+    const maintenances = await fetchVehicleMaintenances(activeVehicle.id);
+    if (maintenances.length >= 10) {
        Alert.alert(
          'Limite Máximo de Lembretes Atingido',
-         'Você atingiu o máximo de 10 veículos.',
+         'Você atingiu o máximo de 10 Lembretes por veículo.',
          [
            {
              text: 'OK', onPress: () => console.log('OK Pressed'), style: 'cancel',
@@ -68,20 +67,19 @@ const NewMaintencePage = ({ navigation }) => {
          { cancelable: false }
        );
        return;
-   }
-
-{/* Inserção dos Dados do Lembrete */}
+    }
+    {/* Inserção dos Dados do Lembrete */}
     insertMaintenance({type, isRepeat, isKilometersEnabled, kilometers, kilometersTotal, isMonthsEnabled, months, monthsTotal, description}, activeVehicle.id);
     console.log('Novo lembrete:','Tipo:',type, ',Repetição:',isRepeat ? 'Ligada' : 'Desligada',', Quilometros:', isKilometersEnabled ? kilometers : 'Não habilitado',', Meses:', isMonthsEnabled ? months : 'Não habilitado',', Descrição:',description,', Veículo:',activeVehicle.name);
-    navigation.navigate('SelectNavigator');
-    Alert.alert('Novo Lembrete Salvo com Sucesso!'); 
+    navigation.navigate('MaintencePage');
+    Alert.alert('', 'Novo Lembrete Salvo com Sucesso!'); 
   };
 
 
   return (
     <View style={styles.container}>
     
-{/* Tipo do Lembrete */}
+      {/* Tipo do Lembrete */}
       <Text style={styles.label}>Tipo:</Text>
       <Picker
         selectedValue={type}
@@ -89,12 +87,12 @@ const NewMaintencePage = ({ navigation }) => {
         onValueChange={(itemValue, itemIndex) => setType(itemValue)}
         mode={'dropdown'}
       >
-        <Picker.Item label="Tipo de Manutenção" />
-        <Picker.Item label="_____________________________________" />
-        <Picker.Item label="Ar Condicionado" value="ar condicionado" />
-        <Picker.Item label="Bateria" value="bateria" />
-        <Picker.Item label="Correia" value="correia" />
-        <Picker.Item label="Filtro de Ar" value="filtro de ar" />
+        <Picker.Item label="Tipo de Manutenção" value=" " />
+        <Picker.Item label="_____________________________________" value=" " />
+        <Picker.Item label="Ar Condicionado" value="Ar Condicionado" />
+        <Picker.Item label="Bateria" value="Bateria" />
+        <Picker.Item label="Correia" value="Correia" />
+        <Picker.Item label="Filtro de Ar" value="Filtro de Ar" />
         <Picker.Item label="Filtro de Combustível" value="Filtro de Combustível" />
         <Picker.Item label="Filtro de Óleo" value="Filtro de Óleo" />
         <Picker.Item label="Fluído de Freio" value="Fluído de Freio" />
@@ -107,7 +105,7 @@ const NewMaintencePage = ({ navigation }) => {
         <Picker.Item label="Troca de Óleo" value="Troca de Óleo" />
       </Picker>
 
-{/* Frequência de Repetição */}
+      {/* Frequência de Repetição */}
       <Text style={styles.label}>Frequência:</Text> 
       <View style={styles.linha}>
         <View style={styles.checkboxContainer}>
@@ -129,9 +127,9 @@ const NewMaintencePage = ({ navigation }) => {
       </View>
       
 
-{/* Estado de Notificação */}
-<View style={styles.linha} marginBottom={10}>
-        <Text style={styles.label} >Notificação:</Text>
+      {/* Estado de Notificação */}
+      <View style={styles.linha} marginBottom={10}>
+        <Text style={styles.label} >Quando notificar:</Text>
         {(!isKilometersEnabled && !isMonthsEnabled) && (
           <IconMCI 
             name="alert-outline" 
@@ -147,8 +145,7 @@ const NewMaintencePage = ({ navigation }) => {
         />
       </View>
 
-      <Text style={styles.label}>Notificar a cada:</Text>
-{/* Quilometros para Notificar */}
+      {/* Quilometros para Notificar */}
       <View style={styles.linha}>
         <View style={styles.checkboxContainer}>
           <CheckBox
@@ -174,7 +171,7 @@ const NewMaintencePage = ({ navigation }) => {
         thumbTintColor="#009F4D"
       />
       
-{/* Meses para notificar */}
+      {/* Meses para notificar */}
       <View style={styles.linha}>
         <View style={styles.checkboxContainer}>
           <CheckBox
@@ -200,7 +197,7 @@ const NewMaintencePage = ({ navigation }) => {
         thumbTintColor="#009F4D"
       />
 
-{/* Descrição do Lembrete */}
+      {/* Descrição do Lembrete */}
       <Text style={styles.label}>Descrição:</Text>
       <TextInput
         style={styles.descriptionInput}
@@ -211,7 +208,7 @@ const NewMaintencePage = ({ navigation }) => {
         placeholder="Descrição da manutenção"
       />
 
-{/* Botão Salvar */}
+      {/* Botão Salvar */}
       <TouchableOpacity style={styles.addButton} onPress={handleAddReminder}>
         <Text style={styles.addButtonText}>Salvar</Text>
       </TouchableOpacity>

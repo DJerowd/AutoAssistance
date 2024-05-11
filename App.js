@@ -88,7 +88,7 @@ const App = () => {
           name="MaintencePage" 
           component={MaintencePage} 
           options={{
-            title: 'Lembretes de Manutenções',
+            title: 'Lembretes',
             headerStyle: { backgroundColor: '#009F4D' },
             headerTintColor: '#ffffff',
             headerTitleAlign: 'center',
