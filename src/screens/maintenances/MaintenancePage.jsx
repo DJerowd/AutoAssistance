@@ -327,6 +327,14 @@ const MaintencePage = ({ navigation }) => {
         <Text style={styles.addButtonText}>Adicionar Novo Lembrete +</Text>
       </TouchableOpacity>
 
+      {/* Botão de Adicionar Quilometragem */}
+      <TouchableOpacity 
+        style={styles.addKmsButton}
+        onPress={toggleModal}
+        >
+        <Text style={styles.addButtonText}>+</Text>
+      </TouchableOpacity>
+
     </View>
   );
 };
