@@ -33,6 +33,11 @@ const ProfilePage = ({ navigation }) => {
     }
   }, [user]);
 
+  const formatPhoneNumber = (phoneNumber) => {
+    if (!phoneNumber || phoneNumber.length!== 11) return phoneNumber; // Verifica se o número tem o comprimento correto
+    return `${phoneNumber.slice(0, 2)} ${phoneNumber.slice(2, 7)}-${phoneNumber.slice(7)}`; // Formata o número
+  };
+
   
   const handleEdit = () => {
     navigation.navigate('EditProfilePage');
@@ -59,7 +64,7 @@ const ProfilePage = ({ navigation }) => {
         {/* Imagem de Perfil */}
         <View style={styles.perfil}>
           <Image
-          source={require('../assets/Profile.png')}
+          source={require('../assets/EmptyProfile.jpg')}
           style={styles.image}
           />
         </View>
@@ -74,7 +79,7 @@ const ProfilePage = ({ navigation }) => {
   
         {/* Telefone de Contato */}
         <Text style={styles.textTitle}>Telefone: </Text>
-        <Text style={styles.textInput}>{user.phoneNumber}</Text>
+        <Text style={styles.textInput}>+55 {formatPhoneNumber(user.phoneNumber)}</Text>
      
   
         {/* Quantidade de Veículos Registrados */}
@@ -113,10 +118,12 @@ const ProfilePage = ({ navigation }) => {
       marginBottom: 20,
     },
     image: {
+      borderColor: '#000000',
+      borderWidth: 12,
       height: 300,
       width: 300,
-      alignSelf: 'center',
       borderRadius: 150,
+      alignSelf: 'center',
     },
 
     textTitle: {

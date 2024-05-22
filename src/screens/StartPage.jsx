@@ -1,42 +1,67 @@
-import { React } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { React, useEffect, useState } from 'react';
+import { Text, View, TouchableOpacity, StyleSheet, Image, ImageBackground, ActivityIndicator } from 'react-native';
 import Swiper from 'react-native-swiper';
 
-const StartPage = ({ navigation }) => {
 
-{/* Navegação para a Página Inicial */}
+const StartPage = ({ navigation }) => {
+  const [loading, setLoading] = useState(true);
+
+  {/* Verificar se as Fontes Foram Carregas */}
+  useEffect(() => {
+      setLoading(false);
+  }, []);
+
+  {/* Navegação para a Página Inicial */}
   const handleItemPress = (item) => {
     navigation.navigate(item);
   };
 
-{/* Anúncios da Página de Rolagem */}  
+  {/* Anúncios da Página de Rolagem */}  
   const ads = [
-    { id: 1, imageUrl: 'https://img.freepik.com/psd-gratuitas/modelo-de-cartaz-de-anuncio-de-oficina-mecanica_23-2148747133.jpg' },
-    { id: 2, imageUrl: 'https://img.freepik.com/psd-gratuitas/modelo-de-anuncio-de-oficina-mecanica-de-poster_23-2148747129.jpg' },
-    { id: 3, imageUrl: 'https://img.freepik.com/psd-gratuitas/modelo-de-folheto-de-oficina-mecanica_23-2148747126.jpg?size=626&ext=jpg' },
+    { id: 1, image: require('../assets/ad1.jpg'), legend: 'Organize as manutenções de seus veículos.' },
+    { id: 2, image: require('../assets/ad2.jpg'), legend: 'Mantenha a manutenção em dia.' },
+    { id: 3, image: require('../assets/ad3.jpg'), legend: 'Melhore a segurança no transito e vida util do veículo.' },
   ];
   
-return (
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <View style={{height: '100%', alignItems: 'center', justifyContent: 'center'}}>
+        <Text style={{color: '#6A6A6A', fontWeight: '500', fontSize: 32, margin: 10}}>Carregando...</Text>
+        <ActivityIndicator size="100" color="#6A6A6A" style={{margin: 10}} />
+        </View>
+      </View>
+    );
+  }
+
+  return (
     <View style={styles.container}>
 
-{/* Página de Rolagem */}  
+      {/* <Text style={[styles.title, {fontFamily: 'hardrace'}]}>Auto Assistance</Text> */}
+      <Image
+          source={require('../assets/NameTitle.png')}
+          style={styles.title}
+      />
+
+      {/* Página de Rolagem */}  
       <View style={styles.swiperContainer}>
-      <Swiper autoplay={true} autoplayTimeout={30} loop={true}>
+      <Swiper autoplay={true} autoplayTimeout={30} loop={true} activeDotColor='#009F4D'>
         {ads.map(ad => (
           <View key={ad.id} style={styles.swiper}>
-            <Image source={{ uri: ad.imageUrl }} style={styles.adImage} />
+            <ImageBackground source={ad.image} style={styles.adImage}/>
+            <Text style={styles.legend}>{ad.legend}</Text>
           </View>
         ))}
       </Swiper>
       </View>
 
-{/* Botão de Navegação para a Página Inicial */}  
+      {/* Botão de Navegação para a Página Inicial */}  
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
             style={styles.button}
             onPress={() => handleItemPress('LoginPage')}
         >
-          <Text style={styles.buttonText}>Entrar</Text>
+          <Text style={styles.buttonText}>Iniciar</Text>
         </TouchableOpacity>
       </View>
 
@@ -48,15 +73,22 @@ return (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9F9F9',
+    backgroundColor: '#FFFFFF',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
 
+  title:{
+    marginVertical: 10,
+    marginHorizontal: 10,
+    height: '3%',
+    width: "98%",
+    alignSelf: 'center',
+    marginBottom:  20,
+  },
+
   swiperContainer: {
-    paddingTop: 160,
-    paddingBottom: 40,
-    paddingHorizontal: 20,
+    flex: 1,
   },
   swiper: {
     flex: 1,
@@ -65,7 +97,17 @@ const styles = StyleSheet.create({
   },
   adImage: {
     width: '100%',
-    height: '100%',
+    height: 400,
+    resizeMode: 'cover',
+  },
+  legend: {
+    color: '#000000',
+    marginTop: 40,
+    marginHorizontal: 20,
+    bottom: 10,
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 
   buttonsContainer: {
@@ -73,17 +115,17 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   button: {
-    height:  60,
-    width: 200,
-    backgroundColor: '#6A6A6A',
-    borderRadius: 40,
-    marginBottom: 40,
-    justifyContent: 'center',
+    backgroundColor: '#009F4D',
+    paddingVertical: 20,
+    paddingHorizontal: 100,
+    marginVertical: 10,
+    marginHorizontal: 30,
+    borderRadius: 12,
+    alignItems: 'center',
   },
   buttonText: {
     color: '#FFFFFF',
     fontSize: 20,
-    textAlign: 'center',
     fontWeight: 'bold',
   },
 });
