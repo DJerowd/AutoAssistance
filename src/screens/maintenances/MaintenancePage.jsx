@@ -6,11 +6,10 @@ import {Picker} from '@react-native-picker/picker';
 import Modal from 'react-native-modal';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { fetchMaintenances, fetchVehicleMaintenances, updateMaintenance } from '../../database/MaintenanceDatabase';
+import { fetchVehicleMaintenances, updateMaintenance } from '../../database/MaintenanceDatabase';
 import { fetchUserVehicles, updateVehicle } from '../../database/VehiclesDatabase';
 
 const MaintencePage = ({ navigation }) => {
-  const [vehicle, setVehicle] = useState('');
   const [maintenances, setMaintenances] = useState([]);
   const [vehicles, setVehicles] = useState([]);  
   const [activeVehicle, setActiveVehicle] = useState('');
@@ -262,26 +261,25 @@ const MaintencePage = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.carPickerLabel}>
         <View style={styles.linha}>
-        {/* Seleção do Veículo Ativo */}
-        <Picker
-          selectedValue={activeVehicle}
-          style={styles.carPicker}
-          dropdownIconColor={'#FFFFFF'}
-          onValueChange={(itemValue, itemIndex) => handleVehicleChange(itemValue)}
-          mode={'dropdown'}
-        >
-          {/* <Picker.Item style={styles.carPickerItem} label="Selecione aqui um veículo" value="" /> */}
-          {vehicles.map((vehicle) => (
-            <Picker.Item style={styles.carPickerItem} key={vehicle.id} label={vehicle.brand+' '+vehicle.model+' '+vehicle.version} value={vehicle} />
-          ))}
-        </Picker>
+          {/* Seleção do Veículo Ativo */}
+          <Picker
+            selectedValue={activeVehicle}
+            style={styles.carPicker}
+            dropdownIconColor={'#FFFFFF'}
+            onValueChange={(itemValue, itemIndex) => handleVehicleChange(itemValue)}
+            mode={'dropdown'}
+          >
+            {vehicles.map((vehicle) => (
+              <Picker.Item style={styles.carPickerItem} key={vehicle.id} label={vehicle.brand+' '+vehicle.model+' '+vehicle.version} value={vehicle} />
+            ))}
+          </Picker>
 
-        <TouchableOpacity 
-        style={styles.addKmsButton}
-        onPress={toggleModal}
-        >
-        <Text style={styles.carKm}>{activeVehicle.mileage} KM</Text>
-        </TouchableOpacity>
+          <TouchableOpacity 
+          style={styles.addKmsButton}
+          onPress={toggleModal}
+          >
+            <Text style={styles.carKm}>{activeVehicle.mileage} KM</Text>
+          </TouchableOpacity>
         </View>
       </View>
       
@@ -325,14 +323,6 @@ const MaintencePage = ({ navigation }) => {
         onPress={() => handleItemPress('NewMaintencePage')}
         >
         <Text style={styles.addButtonText}>Adicionar Novo Lembrete +</Text>
-      </TouchableOpacity>
-
-      {/* Botão de Adicionar Quilometragem */}
-      <TouchableOpacity 
-        style={styles.addKmsButton}
-        onPress={toggleModal}
-        >
-        <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
 
     </View>

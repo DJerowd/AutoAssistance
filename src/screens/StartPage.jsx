@@ -1,15 +1,21 @@
 import { React, useEffect, useState } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Image, ImageBackground, ActivityIndicator } from 'react-native';
 import Swiper from 'react-native-swiper';
+import { useFonts } from 'expo-font';
 
 
 const StartPage = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
+  const [fontsLoaded] = useFonts({
+    'HardRace': require('../assets/fonts/HardRace.otf'),
+  });
 
-  {/* Verificar se as Fontes Foram Carregas */}
+  {/* Verificar se as Fontes Foram Carregadas */}
   useEffect(() => {
+    if (fontsLoaded) {
       setLoading(false);
-  }, []);
+    }
+  }, [fontsLoaded]);
 
   {/* Navegação para a Página Inicial */}
   const handleItemPress = (item) => {
@@ -37,11 +43,7 @@ const StartPage = ({ navigation }) => {
   return (
     <View style={styles.container}>
 
-      {/* <Text style={[styles.title, {fontFamily: 'hardrace'}]}>Auto Assistance</Text> */}
-      <Image
-          source={require('../assets/NameTitle.png')}
-          style={styles.title}
-      />
+      <Text style={{ fontFamily: 'HardRace', fontSize: 30, marginVertical: 10 }}>Auto Assistance</Text>
 
       {/* Página de Rolagem */}  
       <View style={styles.swiperContainer}>
@@ -76,15 +78,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     justifyContent: 'flex-end',
     alignItems: 'center',
-  },
-
-  title:{
-    marginVertical: 10,
-    marginHorizontal: 10,
-    height: '3%',
-    width: "98%",
-    alignSelf: 'center',
-    marginBottom:  20,
   },
 
   swiperContainer: {

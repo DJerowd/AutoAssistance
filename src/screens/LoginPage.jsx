@@ -1,19 +1,29 @@
 import { React, useCallback, useEffect, useState } from 'react';
-import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert, Image, FlatList } from 'react-native';
+import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert, Image } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { fetchUsers, deleteAllUsers } from '../database/UsersDatabase';
-import { deleteAllVehicles } from '../database/VehiclesDatabase';
-import { deleteAllMaintenances } from '../database/MaintenanceDatabase';
+import { fetchUsers } from '../database/UsersDatabase';
 
 const LoginPage = ({ navigation }) => {
-  const [login, setLogin] = useState('teste@mail.com');
-  const [password, setPassword] = useState('Senha123');
+  const [login, setLogin] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [fontsLoaded] = useFonts({
+    'HardRace': require('../assets/fonts/HardRace.otf'),
+  });
   
+  {/* Verificar se as Fontes Foram Carregadas */}
+  useEffect(() => {
+    if (fontsLoaded) {
+      setLoading(false);
+    }
+  }, [fontsLoaded]);
+
   {/* Carregar o Usuário Ativo */}
   useEffect(() => {
       const fetchUser = async () => {
@@ -33,8 +43,6 @@ const LoginPage = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       fetchUsers().then(setUsers).catch(console.error);
-          // setLogin(user.email);
-          // setPassword(user.password);
     }, [])
   );
 
@@ -63,38 +71,18 @@ const LoginPage = ({ navigation }) => {
     navigation.navigate('RegisterPage');
   };
 
-  const handleDeleteDB = async () => {
-    try {
-      // await deleteAllUsers();
-      // await deleteAllVehicles();
-      // await deleteAllMaintenances();
-      alert('Database apagada com sucesso');
-    } catch (error) {
-      alert('Erro ao apagar Database', error);
-    }
- };
-
   return (
     <View style={styles.container}>
 
       {/* Logo */}
-      <Image
-          source={require('../assets/Logo.png')}
-          style={styles.image}
-      />
-
-      {/* <TouchableOpacity style={{width: 20, height: 20, borderRadius: 10, backgroundColor: 'grey', alignSelf: 'center'}} onPress={handleDeleteDB}></TouchableOpacity> */}
-      {/* <View>
-      <FlatList
-      data={users}
-      keyExtractor={(item) => item.id.toString()}
-      renderItem={({ item }) => (
-        <View>
-          <Text>{item.email} | {item.password}</Text>
-        </View>
-      )}
-      />
-      </View>  */}
+      <View style={{ top: 20 }}>
+        <Image
+            source={require('../assets/Logo.png')}
+            style={styles.image}
+        />
+        <Text style={{ fontFamily: 'HardRace', fontSize: 57, alignSelf: 'center', bottom: 30}}>Auto</Text>
+        <Text style={{ fontFamily: 'HardRace', fontSize: 24, alignSelf: 'center', bottom: 54}}>Assistance</Text>
+      </View>
 
 {/* Nome de Usuário */}
       <View style={styles.input}>
@@ -153,10 +141,9 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    height: 300,
-    width: 300,
+    height: 160,
+    width: 200,
     alignSelf: 'center',
-    marginBottom:  20,
   },
 
   text: {
