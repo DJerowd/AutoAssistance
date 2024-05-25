@@ -86,7 +86,7 @@ const MaintencePage = ({ navigation }) => {
   };
 
   {/* Definição da Visibilidade da Lista de Veículo Ativo */}
-  const toggleModal = () => {
+  const toggleModal = async () => {
     setIsModalVisible(!isModalVisible);
   };
 
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
   },
   coluna: {
     paddingHorizontal: 6,
-    width: '80%',
+    width: '88%',
   },
 
   carPickerLabel:{
@@ -372,12 +372,16 @@ const styles = StyleSheet.create({
   },
 
   item: {
-    borderColor: '#6A6A6A55',
+    backgroundColor: '#6A6A6A0f',
+    borderColor: '#000000',
     borderWidth: 1,
-    paddingVertical: 10,
+    borderRadius: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    marginVertical: 4,
+    marginHorizontal: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
   },
   text: {
     color: '#6A6A6A',

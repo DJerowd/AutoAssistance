@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'rea
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { deleteMaintenances } from '../../database/MaintenanceDatabase';
+import { resetMaintenance, deleteMaintenances } from '../../database/MaintenanceDatabase';
 
 const MaintenanceDetailsPage = ({ route, navigation }) => {
   const { maintenance } = route.params;
@@ -54,6 +54,24 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
     navigation.navigate('EditMaintenancePage', { maintenance });
   };
 
+  {/* Reiniciar Progresso */}
+  const handleRestartMaintenances = () => {
+    Alert.alert(
+      "Confirmar Reinício",
+      "Você tem certeza de que deseja reiniciar o lembrete?",
+      [
+        { text: "Cancelar", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
+        { text: "Confirmar", onPress: () => {
+            resetMaintenance(maintenance, activeVehicle.id)
+            console.log('Manutenção resetada:', maintenance);
+            navigation.navigate('MaintencePage');
+            Alert.alert('','Manutenção reiniciada com sucesso');
+          }
+        }
+      ]
+    );
+  };
+
 
   return (
     <ScrollView style={styles.container}>
@@ -98,67 +116,79 @@ const MaintenanceDetailsPage = ({ route, navigation }) => {
       </View>
 
       {/* Notificações */}
-      {maintenance.isRepeat && (
-        <View>
+      <View>
 
-          {/* Barra de Progresso em Quilometros */}
-          {JSON.parse(maintenance.isKilometersEnabled) && (
-            <View>
-              <View style={styles.linha} justifyContent={'space-between'}>
-                <Text style={styles.itemText}>
-                  {JSON.parse(maintenance.isKilometersEnabled) ? `${maintenance.kilometers} KM ` : ''}
-                </Text>
-                  
-                <Text style={styles.itemText}>
-                  {JSON.parse(maintenance.isKilometersEnabled) ? `${maintenance.kilometersTotal} KM ` : ''}
-                </Text>
-              </View>
-              <View style={styles.progressBarTotal}>
-                {/* Barra de Progresso de Quilometros */}
-                <View 
-                  style={[
-                    styles.progressBar, 
-                    { width: `${maintenance.kilometers / (maintenance.kilometersTotal / 100)}%`, 
-                    backgroundColor: maintenance.kilometers === maintenance.kilometersTotal? '#DD0000' : '#009F4D' }
-                  ]} 
-                />
-              </View>
+        {/* Barra de Progresso em Quilometros */}
+        {JSON.parse(maintenance.isKilometersEnabled) && (
+          <View>
+            <View style={styles.linha} justifyContent={'space-between'}>
+              <Text style={styles.itemText}>
+                {JSON.parse(maintenance.isKilometersEnabled) ? `${maintenance.kilometers} KM ` : ''}
+              </Text>
+                
+              <Text style={styles.itemText}>
+                {JSON.parse(maintenance.isKilometersEnabled) ? `${maintenance.kilometersTotal} KM ` : ''}
+              </Text>
             </View>
-          )}
-
-          {/* Barra de Progresso em Meses */}
-          {JSON.parse(maintenance.isMonthsEnabled) && (
-            <View>
-              <View style={styles.linha} justifyContent={'space-between'}>
-                <Text style={styles.itemText}>
-                  {JSON.parse(maintenance.isMonthsEnabled) ? `${maintenance.months} Meses ` : ''}
-                </Text>
-                  {((maintenance.months == maintenance.monthsTotal && !maintenance.monthsTotal == '')) && (
-                    <IconMCI 
-                      name="alert" 
-                      color={'#DD0000'}
-                      size={30} 
-                      marginRight={10}
-                    />
-                  )}
-                <Text style={styles.itemText}>
-                  {JSON.parse(maintenance.isMonthsEnabled) ? `${maintenance.monthsTotal} Meses ` : ''}
-                </Text>
-              </View>
-              <View style={styles.progressBarTotal}>
-                {/* Barra de Progresso de Meses */}
-                <View 
-                  style={[
-                    styles.progressBar, 
-                    { width: `${maintenance.months / (maintenance.monthsTotal / 100)}%`,
-                    backgroundColor: maintenance.kilometers === maintenance.kilometersTotal? '#DD0000' : '#009F4D' }
-                  ]} 
-                />
-              </View>
+            <View style={styles.progressBarTotal}>
+              {/* Barra de Progresso de Quilometros */}
+              <View 
+                style={[
+                  styles.progressBar, 
+                  { width: `${maintenance.kilometers / (maintenance.kilometersTotal / 100)}%`, 
+                  backgroundColor: maintenance.kilometers === maintenance.kilometersTotal? '#DD0000' : '#009F4D' }
+                ]} 
+              />
             </View>
-          )}
+          </View>
+        )}
 
-        </View>
+        {/* Barra de Progresso em Meses */}
+        {JSON.parse(maintenance.isMonthsEnabled) && (
+          <View>
+            <View style={styles.linha} justifyContent={'space-between'}>
+              <Text style={styles.itemText}>
+                {JSON.parse(maintenance.isMonthsEnabled) ? `${maintenance.months} Meses ` : ''}
+              </Text>
+                {((maintenance.months == maintenance.monthsTotal && !maintenance.monthsTotal == '')) && (
+                  <IconMCI 
+                    name="alert" 
+                    color={'#DD0000'}
+                    size={30} 
+                    marginRight={10}
+                  />
+                )}
+              <Text style={styles.itemText}>
+                {JSON.parse(maintenance.isMonthsEnabled) ? `${maintenance.monthsTotal} Meses ` : ''}
+              </Text>
+            </View>
+            <View style={styles.progressBarTotal}>
+              {/* Barra de Progresso de Meses */}
+              <View 
+                style={[
+                  styles.progressBar, 
+                  { width: `${maintenance.months / (maintenance.monthsTotal / 100)}%`,
+                  backgroundColor: maintenance.kilometers === maintenance.kilometersTotal? '#DD0000' : '#009F4D' }
+                ]} 
+              />
+            </View>
+          </View>
+        )}
+
+      </View>
+      
+      {/* Botão de Resetar Progresso */}
+      {JSON.parse(maintenance.isRepeat) && (
+        <TouchableOpacity style={[styles.restartButton, {backgroundColor: maintenance.kilometers !== maintenance.kilometersTotal? '#6A6A6A55' : '#6A6A6A' }]} disabled={maintenance.kilometers !== maintenance.kilometersTotal} onPress={handleRestartMaintenances}>
+          <View style={styles.linha}>
+          <Text style={styles.restartButtonText}>Reiniciar progresso</Text>
+          <IconMCI 
+            name="restart" 
+            style={{color: '#fff', marginLeft: 10}}
+            size={28} 
+          />
+          </View>
+        </TouchableOpacity>
       )}
 
       {/* Descrição do Lembrete */}
@@ -245,6 +275,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     textAlignVertical: 'top',
+  },
+
+  restartButton: {
+    backgroundColor: '#009F4D',
+    padding: 10,
+    marginTop: 20,
+    marginHorizontal: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  restartButtonText: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 
   editButton: {

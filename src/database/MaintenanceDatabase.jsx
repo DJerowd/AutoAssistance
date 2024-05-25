@@ -82,6 +82,18 @@ export const updateMaintenance = (maintenance, vehicleId) => {
     });
 };
 
+{/* Resetar Progreeso de Lembrete */}
+export const resetMaintenance = (maintenance, vehicleId) => {
+    db.transaction(tx => {
+        tx.executeSql(
+            `UPDATE maintenances SET kilometers = 0, months = 0 WHERE id =? AND vehicleId =?;`,
+            [maintenance.id, vehicleId],
+            (_, resultSet) => console.log('Kilometros e meses redefinidos com sucesso:', resultSet),
+            (_, error) => console.log('Erro ao redefinir kilometros e meses:', error)
+        );
+    });
+};
+
 {/* Deletar Lembrete */}
 export const deleteMaintenances = (maintenanceId, vehicleId) => {
     db.transaction(tx => {

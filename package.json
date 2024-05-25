@@ -29,7 +29,8 @@
     "react-native-mmkv": "^2.12.2",
     "react-native-modal": "^13.0.1",
     "react-native-swiper": "^1.6.0",
-    "expo-font": "~11.10.3"
+    "expo-font": "~11.10.3",
+    "expo-notifications": "~0.27.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

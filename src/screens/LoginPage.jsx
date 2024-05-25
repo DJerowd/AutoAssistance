@@ -2,6 +2,7 @@ import { React, useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert, Image } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
+import IconI from 'react-native-vector-icons/Ionicons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchUsers } from '../database/UsersDatabase';
@@ -9,6 +10,7 @@ import { fetchUsers } from '../database/UsersDatabase';
 const LoginPage = ({ navigation }) => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordShown, setPasswordShown] = useState(false);
   const [error, setError] = useState('');
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState('');
@@ -75,14 +77,10 @@ const LoginPage = ({ navigation }) => {
     <View style={styles.container}>
 
       {/* Logo */}
-      <View style={{ top: 20 }}>
-        <Image
-            source={require('../assets/Logo.png')}
-            style={styles.image}
-        />
-        <Text style={{ fontFamily: 'HardRace', fontSize: 57, alignSelf: 'center', bottom: 30}}>Auto</Text>
-        <Text style={{ fontFamily: 'HardRace', fontSize: 24, alignSelf: 'center', bottom: 54}}>Assistance</Text>
-      </View>
+      <Image
+          source={require('../assets/Logo.png')}
+          style={styles.image}
+      />
 
 {/* Nome de Usuário */}
       <View style={styles.input}>
@@ -96,14 +94,17 @@ const LoginPage = ({ navigation }) => {
       </View>
 
 {/* Senha */}
-      <View style={styles.input}>
+      <View style={styles.input} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
         <TextInput
           style={styles.textInput}
           value={password}
           placeholder="Senha"
-          secureTextEntry
+          secureTextEntry={!passwordShown}
           onChangeText={setPassword}
         />
+        <TouchableOpacity width={'14%'} onPress={() => setPasswordShown(!passwordShown)}>
+          <IconI name={passwordShown ? "eye" : "eye-off"} size={30} marginRight={10} color="#6A6A6A" />
+        </TouchableOpacity>
       </View>
 
 {/* Botão de Realizar Login */}
@@ -141,9 +142,10 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    height: 160,
-    width: 200,
+    height: 260,
+    width: 260,
     alignSelf: 'center',
+    marginBottom: 20,
   },
 
   text: {

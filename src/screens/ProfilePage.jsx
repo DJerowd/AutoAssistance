@@ -1,5 +1,6 @@
-import { React, useEffect, useState } from 'react';
+import { React, useCallback, useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -23,15 +24,20 @@ const ProfilePage = ({ navigation }) => {
         }
       };
       fetchUser();
-   }, []);
+    }, []);
 
-   {/* Carregar os Veículos do Usuário Ativo Após Carregar o ID de Usuário */}
-   useEffect(() => {
-    if (user && user.id) {
-      fetchUserVehicles(user.id).then(setVehicles).catch(console.error);
-      setLoading(false);
-    }
-  }, [user]);
+    {/* Carregar os Veículos do Usuário Ativo Após Carregar o ID de Usuário */}
+    useFocusEffect(
+      useCallback(() => {
+        const fetchAndSetVehicles = async () => {
+          if (user && user.id) {
+            fetchUserVehicles(user.id).then(setVehicles).catch(console.error);
+            setLoading(false);
+          }
+        };
+        fetchAndSetVehicles();
+      }, [user])
+    );
 
   const formatPhoneNumber = (phoneNumber) => {
     if (!phoneNumber || phoneNumber.length!== 11) return phoneNumber; // Verifica se o número tem o comprimento correto

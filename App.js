@@ -2,6 +2,7 @@ import { React, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'react-native';
+import * as Notifications from 'expo-notifications';
 
 import StartPage from './src/screens/StartPage.jsx';
 import LoginPage from './src/screens/LoginPage';
@@ -25,6 +26,12 @@ import { initVehiclesDB } from './src/database/VehiclesDatabase.jsx';
 import { initUsersDB } from './src/database/UsersDatabase.jsx';
 
 const Stack = createStackNavigator();
+
+Notifications.requestPermissionsAsync().then(({ status }) => {
+  if (status!== 'granted') {
+    alert('Permissões de notificação não concedidas.');
+  }
+});
 
 const App = () => {
 

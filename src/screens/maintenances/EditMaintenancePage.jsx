@@ -139,24 +139,21 @@ const EditMaintenancePage = ({ route, navigation }) => {
       <View style={styles.linha}>
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
-            style={[styles.repeatCheckbox, isRepeat && styles.checkedCheckbox]}
+            style={[styles.repeatCheckbox, JSON.parse(isRepeat) && styles.checkedCheckbox]}
             onPress={() => setIsRepeat(!isRepeat)}
           >
-            <Text style={[styles.checkboxLabel, isRepeat && styles.checkedCheckboxLabel]}>Repetir</Text>
+            <Text style={[styles.checkboxLabel, JSON.parse(isRepeat) && styles.checkedCheckboxLabel]}>Repetir</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
-            style={[styles.repeatCheckbox, !isRepeat && styles.checkedCheckbox]}
+            style={[styles.repeatCheckbox, !JSON.parse(isRepeat) && styles.checkedCheckbox]}
             onPress={() => setIsRepeat(!isRepeat)}
           >
-            <Text style={[styles.checkboxLabel, !isRepeat && styles.checkedCheckboxLabel]}>Não Repetir</Text>
+            <Text style={[styles.checkboxLabel, !JSON.parse(isRepeat) && styles.checkedCheckboxLabel]}>Não Repetir</Text>
           </TouchableOpacity>
         </View>
       </View>
-
-      {/* <
-      
 
 
       {/* Estado de Notificação */}

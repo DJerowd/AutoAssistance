@@ -163,10 +163,14 @@ const styles = StyleSheet.create({
   },
 
   item: {
-    borderColor: '#6A6A6A55',
+    backgroundColor: '#6A6A6A0f',
+    borderColor: '#000000',
     borderWidth: 1,
+    borderRadius: 10,
     paddingHorizontal: 20,
     paddingVertical: 10,
+    marginVertical: 4,
+    marginHorizontal: 10,
     flexDirection: 'row',
     alignItems: 'center',
   },
