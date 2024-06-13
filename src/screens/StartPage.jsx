@@ -1,21 +1,9 @@
 import { React, useEffect, useState } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Image, ImageBackground, ActivityIndicator } from 'react-native';
 import Swiper from 'react-native-swiper';
-import { useFonts } from 'expo-font';
 
 
 const StartPage = ({ navigation }) => {
-  const [loading, setLoading] = useState(true);
-  const [fontsLoaded] = useFonts({
-    'HardRace': require('../assets/fonts/HardRace.otf'),
-  });
-
-  {/* Verificar se as Fontes Foram Carregadas */}
-  useEffect(() => {
-    if (fontsLoaded) {
-      setLoading(false);
-    }
-  }, [fontsLoaded]);
 
   {/* Navegação para a Página Inicial */}
   const handleItemPress = (item) => {
@@ -29,21 +17,14 @@ const StartPage = ({ navigation }) => {
     { id: 3, image: require('../assets/ad3.jpg'), legend: 'Melhore a segurança no transito e vida util do veículo.' },
   ];
   
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <View style={{height: '100%', alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={{color: '#6A6A6A', fontWeight: '500', fontSize: 32, margin: 10}}>Carregando...</Text>
-        <ActivityIndicator size="100" color="#6A6A6A" style={{margin: 10}} />
-        </View>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
 
-      <Text style={{ fontFamily: 'HardRace', fontSize: 30, marginVertical: 10 }}>Auto Assistance</Text>
+      <Image
+          source={require('../assets/Auto-Assistance.png')}
+          style={styles.title}
+      />
 
       {/* Página de Rolagem */}  
       <View style={styles.swiperContainer}>
@@ -101,6 +82,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+
+  title: {
+    width: "98%",
+    height: 20,
+    marginVertical: 20,
   },
 
   buttonsContainer: {

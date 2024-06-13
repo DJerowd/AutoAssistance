@@ -1,7 +1,6 @@
 import { React, useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert, Image } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
 import IconI from 'react-native-vector-icons/Ionicons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,18 +13,7 @@ const LoginPage = ({ navigation }) => {
   const [error, setError] = useState('');
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [fontsLoaded] = useFonts({
-    'HardRace': require('../assets/fonts/HardRace.otf'),
-  });
   
-  {/* Verificar se as Fontes Foram Carregadas */}
-  useEffect(() => {
-    if (fontsLoaded) {
-      setLoading(false);
-    }
-  }, [fontsLoaded]);
-
   {/* Carregar o Usuário Ativo */}
   useEffect(() => {
       const fetchUser = async () => {
